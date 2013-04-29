@@ -16,7 +16,7 @@ define(['widgets/NavBar'], function(NavBar) {
 			create: function() {}
 		};
 		
-		this.bind('load', function() {
+		this.bind('loaded', function() {
 			self.navbar.render();
 		});
 		

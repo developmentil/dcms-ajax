@@ -1,4 +1,4 @@
-define(['libs/util', 'libs/EventEmitter'], function(util, EventEmitter) {
+define(['libs/util', 'SignalsEmitter'], function(util, SignalsEmitter) {
 	
 	function PlugIn(name, options) {
 		PlugIn.super_.call(this);
@@ -12,7 +12,7 @@ define(['libs/util', 'libs/EventEmitter'], function(util, EventEmitter) {
 		
 		this._init();
 	};
-	util.inherits(PlugIn, EventEmitter);
+	util.inherits(PlugIn, SignalsEmitter);
 	
 	function classExtend(ctor, superCtor) {
 		util.inherits(ctor, superCtor);
@@ -31,46 +31,54 @@ define(['libs/util', 'libs/EventEmitter'], function(util, EventEmitter) {
 	
 	PlugIn.prototype.load = function(callback) {
 		var self = this;
-		this.emit('load.pre');
 		
-		try {		
-			this._load(function(err) {
-				if(err) return callback(err);
+		this.emitAsync('loaded.pre', function(err) {
+			if(err) return callback(err);
+			
+			try {
+				self._load(function(err) {
+					if(err) return callback(err);
 
-				self._loadBinds();
-				self.emit('load');
+					self.emitAsync('loaded', function(err) {
+						if(err) return callback(err);
+					
+						self._loadBinds();
 
-				self._loaded = true;
-				self.emit('load.post');
-
-				callback(null);
-			});
-		} catch(err) {
-			return callback(err);
-		}
+						self._loaded = true;
+						self.emitAsync('loaded.post', callback);
+					});
+				});
+			} catch(err) {
+				return callback(err);
+			}
+		});
 		
 		return this;
 	};
 	
 	PlugIn.prototype.unload = function(callback) {
 		var self = this;
-		this.emit('unload.pre');
 		
-		try {	
-			this._unload(function(err) {
-				if(err) return callback(err);
+		this.emitAsync('unloaded.pre', function(err) {
+			if(err) return callback(err);
+			
+			try {	
+				this._unload(function(err) {
+					if(err) return callback(err);
 
-				self._unloadBinds();
-				self.emit('unload');
-
-				self._loaded = false;
-				self.emit('unload.post');
-
-				callback(null);
-			});
-		} catch(err) {
-			return callback(err);
-		}
+					self.emitAsync('unloaded', function(err) {
+						if(err) return callback(err);
+						
+						self._unloadBinds();
+						
+						self._loaded = false;
+						self.emitAsync('unloaded.post', callback);
+					});
+				});
+			} catch(err) {
+				return callback(err);
+			}
+		});
 		
 		return this;
 	};
@@ -97,7 +105,7 @@ define(['libs/util', 'libs/EventEmitter'], function(util, EventEmitter) {
 			delete this._binds[event][index];
 			
 			if(this._loaded)
-				DA.off(event, listener);
+				DA.removeListener(event, listener);
 		}
 		
 		return this;
@@ -128,7 +136,7 @@ define(['libs/util', 'libs/EventEmitter'], function(util, EventEmitter) {
 	PlugIn.prototype._unloadBinds = function() {
 		for(var event in this._binds) {
 			for(var i in this._binds[event]) {
-				DA.off(event, this._binds[event][i]);
+				DA.removeListener(event, this._binds[event][i]);
 			}
 		}
 	};

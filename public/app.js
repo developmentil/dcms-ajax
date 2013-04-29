@@ -9,12 +9,16 @@ requirejs.config({
 
 requirejs(['dcms-ajax'], function(DA) {
 
-	DA.on('init', function() {
-		console.log('DA.init');
+	DA.on('initiated', function(callback) {
+		console.log('DA.initiated');
+		
+		callback();
 	});
 	
-	DA.on('load', function() {
-		console.log('DA.load');
+	DA.on('loaded', function(callback) {
+		console.log('DA.loaded');
+		
+		callback();
 	});
 	
 //	DA.registry.set('plugins.auth', {
@@ -26,5 +30,5 @@ requirejs(['dcms-ajax'], function(DA) {
 	
 	DA.registry.push('modules', 'pages');
 	
-	DA.app();
+	DA.bootstrap();
 });

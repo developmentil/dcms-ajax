@@ -1,4 +1,4 @@
-define(['libs/util', 'libs/EventEmitter'], function(util, EventEmitter) {
+define(['libs/util', 'SignalsEmitter'], function(util, SignalsEmitter) {
 	
 	function Widget(options) {
 		Widget.super_.call(this);
@@ -6,7 +6,7 @@ define(['libs/util', 'libs/EventEmitter'], function(util, EventEmitter) {
 		this.options = options || {};
 		this._elm = null;
 	};
-	util.inherits(Widget, EventEmitter);
+	util.inherits(Widget, SignalsEmitter);
 	
 	function classExtend(ctor, superCtor) {
 		util.inherits(ctor, superCtor);
