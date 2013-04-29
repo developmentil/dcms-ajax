@@ -29,14 +29,10 @@ define([
 				if(err) throw err;
 				
 				$(function() {
-					DA.emitAsync('bootstrap', function(err) {
+					DA.app.run();
+					
+					DA.emitAsync('runned', function(err) {
 						if(err) throw err;
-							
-						DA.app.run();
-						
-						DA.emitAsync('runned', function(err) {
-							if(err) throw err;
-						});
 					});
 				});
 			});
