@@ -1,4 +1,4 @@
-define(function() {
+define(['widgets/NavBar'], function(NavBar) {
 	
 	function PlugIn() {
 		PlugIn.super_.apply(this, arguments);
@@ -6,9 +6,19 @@ define(function() {
 	DA.PlugIn.extend(PlugIn);
 	
 	PlugIn.prototype._load = function(callback) {
+		var self = this;
+		DA.registry.set('layout.menus.main', []);
+		
+		this.navbar = new NavBar();
+		this.navbar.create('body');
+		
 		DA.tabs = {
 			create: function() {}
 		};
+		
+		this.bind('load', function() {
+			self.navbar.render();
+		});
 		
 		callback(null);
 	};

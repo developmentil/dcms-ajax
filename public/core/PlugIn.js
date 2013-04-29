@@ -33,17 +33,21 @@ define(['libs/util', 'libs/EventEmitter'], function(util, EventEmitter) {
 		var self = this;
 		this.emit('load.pre');
 		
-		this._load(function(err) {
-			if(err) return callback(err);
-			
-			self._loadBinds();
-			self.emit('load');
+		try {		
+			this._load(function(err) {
+				if(err) return callback(err);
 
-			self._loaded = true;
-			self.emit('load.post');
-			
-			callback(null);
-		});
+				self._loadBinds();
+				self.emit('load');
+
+				self._loaded = true;
+				self.emit('load.post');
+
+				callback(null);
+			});
+		} catch(err) {
+			return callback(err);
+		}
 		
 		return this;
 	};
@@ -52,17 +56,21 @@ define(['libs/util', 'libs/EventEmitter'], function(util, EventEmitter) {
 		var self = this;
 		this.emit('unload.pre');
 		
-		this._unload(function(err) {
-			if(err) return callback(err);
-			
-			self._unloadBinds();
-			self.emit('unload');
+		try {	
+			this._unload(function(err) {
+				if(err) return callback(err);
 
-			self._loaded = false;
-			self.emit('unload.post');
-			
-			callback(null);
-		});
+				self._unloadBinds();
+				self.emit('unload');
+
+				self._loaded = false;
+				self.emit('unload.post');
+
+				callback(null);
+			});
+		} catch(err) {
+			return callback(err);
+		}
 		
 		return this;
 	};
@@ -111,7 +119,7 @@ define(['libs/util', 'libs/EventEmitter'], function(util, EventEmitter) {
 	
 	PlugIn.prototype._loadBinds = function() {
 		for(var event in this._binds) {
-			for(var i in this._binds) {
+			for(var i in this._binds[event]) {
 				DA.on(event, this._binds[event][i]);
 			}
 		}
@@ -119,7 +127,7 @@ define(['libs/util', 'libs/EventEmitter'], function(util, EventEmitter) {
 	
 	PlugIn.prototype._unloadBinds = function() {
 		for(var event in this._binds) {
-			for(var i in this._binds) {
+			for(var i in this._binds[event]) {
 				DA.off(event, this._binds[event][i]);
 			}
 		}

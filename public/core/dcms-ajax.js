@@ -1,7 +1,7 @@
 define([
 	'libs/util', 'libs/EventEmitter', 'libs/async',
-	'Registry', 'Router', 'PlugIn', 'Module'
-], function(util, EventEmitter, async, Registry, Router, PlugIn, Module) {
+	'Registry', 'Router', 'PlugIn', 'Module', 'Widget'
+], function(util, EventEmitter, async, Registry, Router, PlugIn, Module, Widget) {
 	
 	var DA = 
 	window.DA = new EventEmitter();
@@ -15,24 +15,7 @@ define([
 	
 	DA.PlugIn = PlugIn;
 	DA.Module = Module;
-	
-	
-	/*** Plugins ***/
-	
-	
-	
-	/*** Widgets ***/
-	
-//	DA.Widget = function(options) {
-//		DA.Widget.super_.call(this);
-//		
-//		this.options = options;
-//	};
-//	util.inherits(DA.Widget, EventEmitter);
-//	
-//	DA.Widget.prototype.render = function() {
-//		return $('<div />');
-//	};
+	DA.Widget = Widget;
 	
 	
     /*** APP ***/

@@ -2,7 +2,8 @@ requirejs.config({
     baseUrl: 'core',
     paths: {
         plugins: '../plugins',
-        widgets: '../widgets'
+        widgets: '../widgets',
+        modules: '../modules'
     }
 });
 
