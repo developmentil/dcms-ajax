@@ -13,24 +13,27 @@ define(function() {
 		return this._elm;
 	};
 	
-	Widget.prototype.render = function() {
+	Widget.prototype._render = function(options) {
 		var self = this;
 		this._elm.empty();
 		
-		$.each(this.options.items || [], function(i, item) {
-			var li = $('<li />').appendTo(self._elm),
-			a = $('<a href="#" />').appendTo(li);
-			
-			a.text(item.label || item)
-			.click(function(e) {
-				e.preventDefault();
+		for(var i in options.items) {
+			(function(item) {
 				
-				if(item.click)
-					item.click(e);
-			});
-		});
-		
-		return this;
+				var li = $('<li />').appendTo(self._elm),
+				a = $('<a />').appendTo(li)
+				.attr('href', item.url || '#')
+				.text(item.label || item);
+
+				if(item.click) {
+					a.click(function(e) {
+						e.preventDefault();
+						item.click(e);
+					});
+				}
+				
+			})(options.items[i]);
+		}
 	};
 	
 	return Widget;

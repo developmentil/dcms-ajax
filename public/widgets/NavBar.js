@@ -19,20 +19,20 @@ define(['widgets/Nav'], function(Nav) {
 		this.nav.create(this._inner);
 		
 		return this._elm;
-	}
+	};
 	
-	Widget.prototype.render = function() {
+	Widget.prototype._render = function(options) {
 		var self = this;
 		
 		this._inner.children('a.brand').remove();
 		
-		if(this.options.brand) {
+		if(options.brand) {
 			var brand = $('<a class="brand" />')
-			.href(this.options.brand.url || '#!/')
-			.appendTo(this._inner)
-			.text(this.options.brand);
+			.attr('href', options.brand.url || '#/')
+			.prependTo(this._inner)
+			.text(options.brand);
 	
-			if(this.options.brand.click) {
+			if(options.brand.click) {
 				brand.click(function(e) {
 					e.preventDefault();
 					self.options.brand.click(e);
@@ -40,9 +40,7 @@ define(['widgets/Nav'], function(Nav) {
 			}
 		}
 		
-		this.nav.render();
-		
-		return this;
+		this.nav.render(options);
 	};
 	
 	return Widget;

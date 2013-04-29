@@ -1,27 +1,19 @@
 define(['widgets/NavBar'], function(NavBar) {
-	
-	function PlugIn() {
-		PlugIn.super_.apply(this, arguments);
+	DA.registry.set('layout.menus.main', []);
+		
+	var navbar = new NavBar();
+	navbar.create('body');
+		
+	DA.tabs = {
+		create: function() {}
 	};
-	DA.PlugIn.extend(PlugIn);
-	
-	PlugIn.prototype._load = function(callback) {
-		var self = this;
-		DA.registry.set('layout.menus.main', []);
 		
-		this.navbar = new NavBar();
-		this.navbar.create('body');
-		
-		DA.tabs = {
-			create: function() {}
-		};
-		
-		this.bind('loaded', function() {
-			self.navbar.render();
+	DA.on('runned', function(callback) {
+		navbar.render({
+			brand: DA.registry.get('layout.brand'),
+			items: DA.registry.get('layout.menus.main')
 		});
-		
-		callback(null);
-	};
-	
-	return PlugIn;
+
+		callback();
+	});
 });

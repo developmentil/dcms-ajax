@@ -1,7 +1,7 @@
 define([
-	'libs/util', 'libs/async',
-	'SignalsEmitter', 'Registry', 'Router', 'PlugIn', 'Module', 'Widget'
-], function(util, async, SignalsEmitter, Registry, Router, PlugIn, Module, Widget) {
+	'jquery', 'libs/async', 'libs/sammy',
+	'SignalsEmitter', 'Registry', 'Router', 'Widget'
+], function($, async, Sammy, SignalsEmitter, Registry, Router, Widget) {
 	
 	var DA = 
 	window.DA = new SignalsEmitter();
@@ -9,31 +9,32 @@ define([
 	
 	/*** INIT ***/
 	
-	DA.PlugIn = PlugIn;
-	DA.Module = Module;
 	DA.Widget = Widget;
 	
+	DA.app = Sammy();
 	DA.registry = new Registry();
 	DA.router = new Router();
 	
 	DA.registry.set('plugins', {});
-	DA.plugins = {};
+	DA.registry.set('modules', []);
 	
 	
     /*** Bootstrap ***/
 	
 	DA.bootstrap = function() {
-		_requirePlugIns(function(err) {
+		_requireAll(function(err) {
 			if(err) throw err;
 			
 			DA.emitAsync('initiated', function(err) {
 				if(err) throw err;
 				
 				$(function() {
-					_loadPlugIns(function(err) {
+					DA.emitAsync('bootstrap', function(err) {
 						if(err) throw err;
-
-						DA.emitAsync('loaded', function(err) {
+							
+						DA.app.run();
+						
+						DA.emitAsync('runned', function(err) {
 							if(err) throw err;
 						});
 					});
@@ -42,37 +43,26 @@ define([
 		});
 	};
 	
-	DA.requirePlugIn = function(name, options, callback) {
-		requirejs(['plugins/' + name], function(plugin) {
-			DA.plugins[name] = new plugin(name, options);
-			
+	DA.require = function(name, callback) {
+		requirejs([name], function() {
 			callback(null);
 		}, callback);
 	};
 	
-	function _requirePlugIns(callback) {
-		var plugins = DA.registry.get('plugins'),
-		tasks = [];
+	function _requireAll(callback) {
+		var paths = [];
 		
-		$.each(plugins, function(name, options) {
-			tasks.push(function(callback) {
-				DA.requirePlugIn(name, options, callback);
-			});
+		$.each(DA.registry.get('plugins'), function(name) {
+			paths.push('plugins/' + name);
 		});
 		
-		async.parallel(tasks, callback);
-	}
-	
-	function _loadPlugIns(callback) {
-		var tasks = [];
-				
-		$.each(DA.plugins, function(name, plugin) {
-			tasks.push(function(callback) {
-				plugin.load(callback);
-			});
+		$.each(DA.registry.get('modules'), function(i, name) {
+			paths.push('modules/' + name);
 		});
-
-		async.parallel(tasks, callback);
+		
+		requirejs(paths, function() {
+			callback(null);
+		}, callback);
 	}
 	
 	return DA;

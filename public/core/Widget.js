@@ -31,8 +31,18 @@ define(['libs/util', 'SignalsEmitter'], function(util, SignalsEmitter) {
 		return this._elm;
 	};
 	
-	Widget.prototype.render = function() {	
+	Widget.prototype.render = function(options) {
+		options = $.extend({}, this.options, options || {});
+		
+		this._render(options);
 		return this;
+	};
+	
+	
+	/*** Protected Methods ***/
+	
+	Widget.prototype._render = function(options) {
+		
 	};
 	
 	return Widget;

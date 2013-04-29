@@ -25,7 +25,16 @@ define(function() {
 	};
 	
 	Registry.prototype.get = function(path) {
-		return $.extend({}, _get(this._data, path)[0]);
+		var val = _get(this._data, path)[0];
+		
+		if(typeof val === 'object') {
+			if(!Array.isArray(val))
+				return $.extend({}, val);
+			else
+				return val.slice();
+		}
+		
+		return val;
 	};
 	
 	Registry.prototype.set = function(path, value) {
@@ -35,6 +44,24 @@ define(function() {
 		var obj = _get(this._data, path);
 		
 		obj[1][obj[2]] = value;
+		return this;
+	};
+	
+	Registry.prototype.extend = function(path, deep, value) {
+		if(typeof value === 'undefined') {
+			value = deep;
+			deep = false;
+			
+			if(typeof value === 'undefined')
+				value = {};
+		}
+		
+		var obj = _get(this._data, path);
+		
+		if(typeof obj[1][obj[2]] === 'undefined')
+			obj[1][obj[2]] = {};
+		
+		$.extend(deep || false, obj[1][obj[2]], value);
 		return this;
 	};
 	
