@@ -8,7 +8,7 @@ define(['widgets/NavBar'], function(NavBar) {
 		create: function() {}
 	};
 		
-	DA.on('runned', function(callback) {
+	DA.when('runned', function(callback) {
 		navbar.render({
 			brand: DA.registry.get('layout.brand'),
 			items: DA.registry.get('layout.menus.main')

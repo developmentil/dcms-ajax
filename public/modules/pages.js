@@ -3,7 +3,7 @@ define(function() {
 	api = '/pages',
 	uri = '#' + api;
 	
-	DA.on('initiated', function(callback) {
+	DA.when('initiated', function(callback) {
 		DA.registry.push('layout.menus.main', 20, {
 			label: name,
 			url: uri
@@ -51,7 +51,7 @@ define(function() {
 		
 		browserTabs.push(browserTabs);
 		
-		tab.on('load', function(callback) {
+		tab.when('load', function(callback) {
 			browser.load(callback);
 		});
 		
@@ -64,7 +64,7 @@ define(function() {
 		var id = this.params.id,
 		tab = DA.tabs.create(name, uri);
 		
-		tab.on('load', function(callback) {
+		tab.when('load', function(callback) {
 			DA.api({
 				url: api + '/' + id + '/get',
 				success: function(entity) {

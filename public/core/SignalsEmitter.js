@@ -22,6 +22,7 @@ define(['libs/signals'], function(signals) {
 	};
 	
 	proto.on = proto.addListener;
+	proto.when = proto.addListener;
 	
 	proto.once = function(event, listener, priority) {
 		return this.getSignal(event)
@@ -58,7 +59,7 @@ define(['libs/signals'], function(signals) {
 		return this;
 	};
 	
-	proto.emitAsync = function(event) {
+	proto.trigger = function(event) {
 		var signal = this.getSignal(event),
 		args = Array.prototype.slice.call(arguments, 1),
 		callback = args.pop();

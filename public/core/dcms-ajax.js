@@ -25,13 +25,13 @@ define([
 		_requireAll(function(err) {
 			if(err) throw err;
 			
-			DA.emitAsync('initiated', function(err) {
+			DA.trigger('initiated', function(err) {
 				if(err) throw err;
 				
 				$(function() {
 					DA.app.run();
 					
-					DA.emitAsync('runned', function(err) {
+					DA.trigger('runned', function(err) {
 						if(err) throw err;
 					});
 				});
