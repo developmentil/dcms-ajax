@@ -1,4 +1,4 @@
-define(['libs/signals'], function(signals) {
+define(['core/libs/signals'], function(signals) {
 	
 	function SignalsEmitter() {
 		this._signals = {};

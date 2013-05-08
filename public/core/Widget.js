@@ -1,4 +1,4 @@
-define(['libs/util', 'SignalsEmitter'], function(util, SignalsEmitter) {
+define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter) {
 	
 	function Widget(options) {
 		Widget.super_.call(this);

@@ -1,7 +1,7 @@
 define([
-	'jquery', 'libs/async', 'libs/sammy',
-	'SignalsEmitter', 'Registry', 'Widget'
-], function($, async, Sammy, SignalsEmitter, Registry, Widget) {
+	'jquery', 'core/libs/sammy',
+	'core/SignalsEmitter', 'core/Registry', 'core/Widget'
+], function($, Sammy, SignalsEmitter, Registry, Widget) {
 	
 	var DA = 
 	window.DA = new SignalsEmitter();
@@ -14,15 +14,19 @@ define([
 	DA.app = Sammy();
 	DA.registry = new Registry();
 	
+	DA.plugins = {};
 	DA.registry.set('plugins', {});
 	DA.registry.set('modules', []);
+	
 	
 	
     /*** Bootstrap ***/
 	
 	DA.bootstrap = function() {
 		_requireAll(function(err) {
-			if(err) throw err;
+			if(err) {
+				throw err;
+			}
 			
 			DA.trigger('initiated', function(err) {
 				if(err) throw err;
@@ -55,11 +59,49 @@ define([
 	};
 	
 	function _requireAll(callback) {
-		var paths = [];
-		
-		$.each(DA.registry.get('plugins'), function(name) {
-			paths.push('plugins/' + name);
+		_requirePlugins(function(err) {
+			if(err) return callback(err);
+			
+			_requireModules(callback);
 		});
+	}
+	
+	function _requirePlugins(callback) {
+		var plugins = DA.registry.get('plugins'),
+		paths = [], names = [];
+		
+		$.each(plugins, function(name, options) {
+			if(options._path === false)
+				return;
+			
+			paths.push(options._path || 'plugins/' + name);
+			names.push(name);
+		});
+		
+		requirejs(paths, function() {
+			var args = arguments;
+			
+			$.each(names, function(i, name) {
+				DA.plugins[name] = args[i];
+			});
+			
+			try {
+				$.each(plugins, function(name, options) {
+					if(!options || !DA.plugins[name])
+						return;
+
+					DA.plugins[name](DA, options);
+				});
+			} catch(err) {
+				return callback(err);
+			}
+			
+			callback(null);
+		}, callback);
+	}
+	
+	function _requireModules(callback) {
+		var paths = [];
 		
 		$.each(DA.registry.get('modules'), function(i, name) {
 			paths.push('modules/' + name);

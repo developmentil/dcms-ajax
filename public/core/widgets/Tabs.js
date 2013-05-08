@@ -1,4 +1,4 @@
-define(['widgets/Nav'], function(Nav) {
+define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);

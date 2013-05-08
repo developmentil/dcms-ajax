@@ -1,4 +1,4 @@
-define(function() {
+define(['core/dcms-ajax'], function(DA) {
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
