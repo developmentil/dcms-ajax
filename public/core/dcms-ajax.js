@@ -13,7 +13,7 @@ define([
 	
 	DA.app = Sammy();
 	DA.registry = new Registry();
-	DA.router = new Router();
+//	DA.router = new Router();
 	
 	DA.registry.set('plugins', {});
 	DA.registry.set('modules', []);
@@ -29,10 +29,20 @@ define([
 				if(err) throw err;
 				
 				$(function() {
-					DA.app.run();
+					DA.app.after(function() {
+						DA.emit('render');			
+					});
+	
+					DA.app.get('#/', function() {
+						DA.trigger('index', function(err) {
+							if(err) throw err;
+						});
+					});
 					
 					DA.trigger('runned', function(err) {
 						if(err) throw err;
+						
+						DA.app.run('#/');
 					});
 				});
 			});

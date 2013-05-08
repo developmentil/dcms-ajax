@@ -6,10 +6,10 @@ define(['widgets/Nav'], function(Nav) {
 		this.nav = new Nav(this.options);
 	};
 	DA.Widget.extend(Widget);
+	var proto = Widget.prototype;
 	
 	
-	
-	Widget.prototype.create = function(container) {
+	proto.create = function(container) {
 		this._elm = $('<div class="navbar" />');
 		if(container)
 			this._elm.appendTo(container);
@@ -21,7 +21,7 @@ define(['widgets/Nav'], function(Nav) {
 		return this._elm;
 	};
 	
-	Widget.prototype._render = function(options) {
+	proto._render = function(options) {
 		var self = this;
 		
 		this._inner.children('a.brand').remove();

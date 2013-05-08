@@ -3,10 +3,11 @@ define(['libs/util', 'SignalsEmitter'], function(util, SignalsEmitter) {
 	function Widget(options) {
 		Widget.super_.call(this);
 		
-		this.options = options || {};
+		this.options = $.extend({}, this.defaults, options || {});
 		this._elm = null;
 	};
 	util.inherits(Widget, SignalsEmitter);
+	var proto = Widget.prototype;
 	
 	function classExtend(ctor, superCtor) {
 		util.inherits(ctor, superCtor);
@@ -21,9 +22,14 @@ define(['libs/util', 'SignalsEmitter'], function(util, SignalsEmitter) {
 	};
 	
 	
+	/*** Static Vars ***/
+	
+	proto.defaults = {};
+	
+	
 	/*** Public Methods ***/
 	
-	Widget.prototype.create = function(container) {
+	proto.create = function(container) {
 		this._elm = $('<div class="widget" />');
 		if(container)
 			this._elm.appendTo(container);
@@ -31,7 +37,7 @@ define(['libs/util', 'SignalsEmitter'], function(util, SignalsEmitter) {
 		return this._elm;
 	};
 	
-	Widget.prototype.render = function(options) {
+	proto.render = function(options) {
 		options = $.extend({}, this.options, options || {});
 		
 		this._render(options);
@@ -41,7 +47,7 @@ define(['libs/util', 'SignalsEmitter'], function(util, SignalsEmitter) {
 	
 	/*** Protected Methods ***/
 	
-	Widget.prototype._render = function(options) {
+	proto._render = function(options) {
 		
 	};
 	
