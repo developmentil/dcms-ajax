@@ -1,7 +1,7 @@
 define([
 	'jquery', 'libs/async', 'libs/sammy',
-	'SignalsEmitter', 'Registry', 'Router', 'Widget'
-], function($, async, Sammy, SignalsEmitter, Registry, Router, Widget) {
+	'SignalsEmitter', 'Registry', 'Widget'
+], function($, async, Sammy, SignalsEmitter, Registry, Widget) {
 	
 	var DA = 
 	window.DA = new SignalsEmitter();
@@ -13,7 +13,6 @@ define([
 	
 	DA.app = Sammy();
 	DA.registry = new Registry();
-//	DA.router = new Router();
 	
 	DA.registry.set('plugins', {});
 	DA.registry.set('modules', []);
