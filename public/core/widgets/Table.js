@@ -27,6 +27,18 @@ define(['core/dcms-ajax'], function(DA) {
 		return this._elm;
 	};
 	
+	proto.eachColumn = function(columns, each) {
+		$.each(columns, function(i, column) {
+			if(typeof column === 'string')
+				column = {label: column};
+
+			if(!column.name)
+				column.name = i;
+			
+			each(column, i);
+		});
+	};
+	
 	proto._render = function(options) {
 		var self = this, tr;
 		this._elm.empty();
@@ -35,14 +47,11 @@ define(['core/dcms-ajax'], function(DA) {
 			this._thead = $('<thead />').appendTo(this._elm);
 			tr = $('<tr />').appendTo(this._thead);
 			
-			$.each(options.columns, function(name, column) {
-				if(column.name)
-					name = column.name;
-				
+			this.eachColumn(options.columns, function(column) {
 				var td = column.label ? $('<th />').text(column.label) : $('<td />');
 				
 				td.appendTo(tr)
-				.attr('data-name', name);
+				.attr('data-name', column.name);
 			});
 		}
 		
@@ -56,18 +65,15 @@ define(['core/dcms-ajax'], function(DA) {
 				tr = $('<tr />').appendTo(self._tbody)
 				.attr('data-id', id);
 				
-				$.each(options.columns, function(name, column) {
-					if(column.name)
-						name = column.name;
-
-					var value = row[name],
+				self.eachColumn(options.columns, function(column) {
+					var value = row[column.name],
 					
 					td = $('<td />').appendTo(tr);
 					
 					if(typeof column.render === 'function')
 						column.render(td, value, row);
 					else
-						column.text(value);
+						td.text(value);
 				});
 			})(options.rows[i]);
 		}
