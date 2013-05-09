@@ -11,7 +11,8 @@ define(['core/dcms-ajax', 'core/widgets/Table'], function(DA, Table) {
 		limit: 20,
 		offset: 0,
 		fields: {},
-		entities: []
+		entities: [],
+		tableClass: 'table-hover table-condensed'
 	}, proto.defaults);
 	
 	
@@ -32,7 +33,7 @@ define(['core/dcms-ajax', 'core/widgets/Table'], function(DA, Table) {
 		return this._elm;
 	};
 	
-	proto.get.reload = function(callback) {
+	proto.reload = function(callback) {
 		this.options.entities = [{
 			_id: '1234567890abcedf',
 			name: 'My nice name',
@@ -45,6 +46,7 @@ define(['core/dcms-ajax', 'core/widgets/Table'], function(DA, Table) {
 	
 	proto._getTableOptions = function(options) {
 		return $.extend(options.table || {}, {
+			className: options.tableClass,
 			columns: options.fields,
 			rows: options.entities
 		});

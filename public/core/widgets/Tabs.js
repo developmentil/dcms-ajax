@@ -1,32 +1,37 @@
-define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
+define(['core/dcms-ajax', 'core/widgets/Nav', 'core/widgets/Tab'], function(DA, Nav, Tab) {
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
+		
+		this._tabs = [];
 	};
 	DA.Widget.extend(Widget);
 	var proto = Widget.prototype;
 	
 	proto.defaults = {
 		id: 'tabs',
-		items: [],
 		navClass: 'nav-tabs'
 	};
 	
 	proto.createTab = function(tab) {
-		if(typeof tab !== 'object')
-			tab = {label: tab};
-		
-		tab = $.extend({
-			active: true
-		}, tab);
-		
-		this.options.items.push(tab);
-		if(tab.active) {
-			for(var i in this.options.items)
-				this.options.items[i].active = false;
-			
-			tab.active = true;
+		if(!(tab instanceof Tab)) {
+			if(typeof tab !== 'object')
+				tab = {label: tab};
+
+			tab = $.extend({
+				label: 'Tab',
+				active: true,
+				id: this.options.id + '-tab' + Math.floor(Math.random() * 1000)
+			}, tab);
+
+			tab = new Tab(tab);
 		}
+		
+		tab.create(this._content);
+		this._tabs.push(tab);
+		
+		if(tab.options.active)
+			this.setActive(tab);
 		
 		return tab;
 	};
@@ -51,36 +56,35 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 		return this._elm;
 	};
 	
+	proto.setActive = function(tab) {
+		for(var i in this._tabs)
+			this._tabs[i].options.active = false;
+
+		tab.options.active = true;
+		return this;
+	};
+	
 	proto._getNavOptions = function(options) {
+		var items = [];
+		
+		for(var i in this._tabs) {
+			var item = this._tabs[i].options;
+			
+			item.url = '#' + item.id;
+			item.toggle = 'tab';
+			
+			items.push(item);
+		}
+		
 		return $.extend(options.nav || {}, {
-			items: options.items,
+			items: items,
 			className: options.navClass
 		});
 	};
 	
-	proto._render = function(options) {
-		var self = this;
-		
-		this._content.empty();
-		$.each(options.items, function(i, item) {
-			var id = item.id || (options.id + '-tab-' + i),
-			
-			pane = $('<div class="tab-pane" />')
-			.attr('id', id)
-					.appendTo(self._content);
-			
-			item.url = '#' + id;
-			item.toggle = 'tab';
-	
-			if(item.active)
-				pane.addClass('active');
-	
-			if(item.className)
-				pane.addClass(item.className);
-			
-			if(item.content)
-				pane.append(item.content);
-		});
+	proto._render = function(options) {		
+		for(var i in this._tabs)
+			this._tabs[i].render();
 		
 		this.nav.render(this._getNavOptions(options));
 	};

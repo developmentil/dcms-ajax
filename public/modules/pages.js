@@ -15,49 +15,52 @@ define(function() {
 	var browserTabs = [];
 	
 	DA.app.get(uri, function() {
-		var tab = DA.tabs.createTab(name)//,
-//		browser = new Browser({
-//			api: api,
-//			limit: 20,
-//			columns: [{
-//				name: '_id',
-//				label: '#',
-//				render: function(tag, value, entity) {
-//					tag.append(
-//						$('<a href="_blank" />')
-//						.href('/pages/' + value)
-//						.text(value)
-//					);
-//				}
-//			}, {
-//				name: 'title',
-//				label: 'Title'
-//			}, {
-//				type: 'actions',
-//				mainAction: function(entity) {
-//					return {
-//						label: 'Edit',
-//						href: uri + '/' + entity._id + '/edit'
-//					};
-//				},
-//				actions: [function(entity) {
-//					return {
-//						label: 'Delete',
-//						href: uri + '/' + entity._id + '/delete'
-//					};
-//				}]
-//			}]
-//		});
-//		
-//		browserTabs.push(browserTabs);
-//		
+		var tab = DA.tabs.createTab(name),
+		
+		browser = new DA.Widget.Browser({
+			api: api,
+			limit: 20,
+			fields: {
+				_id: {
+					name: '_id',
+					label: '#',
+					render: function(tag, value, entity) {
+						tag.append(
+							$('<a href="_blank" />')
+							.href('/pages/' + value)
+							.text(value)
+						);
+					}
+				},
+				title: 'Title',
+				_actions: {
+					type: 'actions',
+					mainAction: function(entity) {
+						return {
+							label: 'Edit',
+							href: uri + '/' + entity._id + '/edit'
+						};
+					},
+					actions: [function(entity) {
+						return {
+							label: 'Delete',
+							href: uri + '/' + entity._id + '/delete'
+						};
+					}]
+				}
+			}
+		});
+		
+		browser.create(tab.element());
+		browserTabs.push(tab);
+		
 //		tab.when('load', function(callback) {
 //			browser.load(callback);
 //		});
-//		
-//		tab.on('render', function(container) {
-//			browser.render(container);
-//		});
+		
+		tab.on('render', function(container) {
+			browser.render(container);
+		});
 	});
 	
 	DA.app.get(uri, '/:id/edit', function(e) {

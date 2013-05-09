@@ -61,8 +61,6 @@ define(['core/dcms-ajax'], function(DA) {
 		var self = this, tr;
 		this._elm.empty();
 		
-		this._tbody = $('<tbody />').appendTo(this._elm);
-		
 		if(options.columns) {
 			this._thead = $('<thead />').appendTo(this._elm);
 			tr = $('<tr />').appendTo(this._thead);

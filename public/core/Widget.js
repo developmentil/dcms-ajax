@@ -37,10 +37,16 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		return this._elm;
 	};
 	
+	proto.element = function() {
+		return this._elm;
+	};
+	
 	proto.render = function(options) {
 		options = $.extend({}, this.options, options || {});
 		
 		this._render(options);
+		this.emit('render', options);
+		
 		return this;
 	};
 	
