@@ -2,8 +2,6 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
-		
-		this.nav = new Nav(this.options);
 	};
 	DA.Widget.extend(Widget);
 	var proto = Widget.prototype;
@@ -16,6 +14,8 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 		
 		this._inner = $('<div class="navbar-inner" />')
 				.appendTo(this._elm);
+		
+		this.nav = new Nav(this.options);
 		this.nav.create(this._inner);
 		
 		return this._elm;

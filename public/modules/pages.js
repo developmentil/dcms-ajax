@@ -17,7 +17,7 @@ define(function() {
 	DA.app.get(uri, function() {
 		var tab = DA.tabs.createTab(name)//,
 //		browser = new Browser({
-//			api: uri,
+//			api: api,
 //			limit: 20,
 //			columns: [{
 //				name: '_id',

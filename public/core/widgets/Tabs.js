@@ -42,16 +42,20 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 		if(this.options.className)
 			this._elm.addClass(this.options.className);
 		
-		this.nav = new Nav($.extend(this.options.nav || {}, {
-			items: this.options.items,
-			className: this.options.navClass
-		}));
+		this.nav = new Nav(this._getNavOptions(this.options));
 		this.nav.create(this._elm);
 		
 		this._content = $('<div class="tab-content" />')
 				.appendTo(this._elm);
 		
 		return this._elm;
+	};
+	
+	proto._getNavOptions = function(options) {
+		return $.extend(options.nav || {}, {
+			items: options.items,
+			className: options.navClass
+		});
 	};
 	
 	proto._render = function(options) {
@@ -78,7 +82,7 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 				pane.append(item.content);
 		});
 		
-		this.nav.render(options);
+		this.nav.render(this._getNavOptions(options));
 	};
 	
 	return Widget;

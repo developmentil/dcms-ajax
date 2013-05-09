@@ -1,8 +1,9 @@
 define([
 	'core/dcms-ajax',
 	'core/plugins/layout',
-	'core/widgets/Nav', 'core/widgets/NavBar', 'core/widgets/Tabs', 'core/widgets/Table'
-], function(DA, layout, Nav, NavBar, Tabs, Table) {
+	'core/widgets/Nav', 'core/widgets/NavBar', 'core/widgets/Tabs', 
+	'core/widgets/Table', 'core/widgets/Browser'
+], function(DA, layout, Nav, NavBar, Tabs, Table, Browser) {
 	
 	DA.registry.set('plugins.layout', {
 		_path: false
@@ -13,6 +14,7 @@ define([
 	DA.Widget.NavBar = NavBar;
 	DA.Widget.Tabs = Tabs;
 	DA.Widget.Table = Table;
+	DA.Widget.Browser = Browser;
 	
 	return DA;
 });
