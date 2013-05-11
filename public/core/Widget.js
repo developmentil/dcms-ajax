@@ -42,7 +42,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	};
 	
 	proto.render = function(options) {
-		options = $.extend({}, this.options, options || {});
+		options = $.extend(this.options, options || {});
 		
 		this._render(options);
 		this.emit('render', options);

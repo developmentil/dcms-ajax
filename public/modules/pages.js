@@ -27,7 +27,7 @@ define(function() {
 					render: function(tag, value, entity) {
 						tag.append(
 							$('<a href="_blank" />')
-							.href('/pages/' + value)
+							.attr('href', '/pages/' + value)
 							.text(value)
 						);
 					}
@@ -53,13 +53,10 @@ define(function() {
 		
 		browser.create(tab.element());
 		browserTabs.push(tab);
+		browser.reload();
 		
-//		tab.when('load', function(callback) {
-//			browser.load(callback);
-//		});
-		
-		tab.on('render', function(container) {
-			browser.render(container);
+		tab.on('render', function() {
+			browser.render();
 		});
 	});
 	

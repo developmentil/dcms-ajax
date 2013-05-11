@@ -3,8 +3,9 @@ define([
 	'core/plugins/layout',
 	'core/widgets/Nav', 'core/widgets/NavBar', 
 	'core/widgets/Tabs', 'core/widgets/Tab', 
-	'core/widgets/Table', 'core/widgets/Browser'
-], function(DA, layout, Nav, NavBar, Tabs, Tab, Table, Browser) {
+	'core/widgets/Table', 'core/widgets/Browser',
+	'core/widgets/Pagination'
+], function(DA, layout, Nav, NavBar, Tabs, Tab, Table, Browser, Pagination) {
 	
 	DA.registry.set('plugins.layout', {
 		_path: false
@@ -17,6 +18,7 @@ define([
 	DA.Widget.Tab = Tab;
 	DA.Widget.Table = Table;
 	DA.Widget.Browser = Browser;
+	DA.Widget.Pagination = Pagination;
 	
 	return DA;
 });
