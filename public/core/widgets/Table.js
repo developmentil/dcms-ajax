@@ -1,4 +1,5 @@
-define(['core/dcms-ajax'], function(DA) {
+define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
+	i18n = i18n.widgets.Table;
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
@@ -108,8 +109,8 @@ define(['core/dcms-ajax'], function(DA) {
 	
 	proto._defineColumnBoolean = function(column, i) {
 		column = $.extend({
-			trueLabel: 'Yes',
-			falseLabel: 'No',
+			trueLabel: i18n.Yes,
+			falseLabel: i18n.No,
 			trueClass: 'text-success',
 			falseClass: 'text-error'
 		}, column);
@@ -132,7 +133,7 @@ define(['core/dcms-ajax'], function(DA) {
 	};
 	
 	proto._renderActions = function(td, value, row) {
-		var actionLabel = 'Action', group = td;
+		var actionLabel = i18n.Action, group = td;
 		if(this.actions) {
 			group = $('<div class="btn-group" />').appendTo(td);
 		}

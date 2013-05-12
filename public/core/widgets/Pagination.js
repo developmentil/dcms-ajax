@@ -1,4 +1,5 @@
-define(['core/dcms-ajax'], function(DA) {
+define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
+	i18n = i18n.widgets.Pagination;
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
@@ -12,8 +13,8 @@ define(['core/dcms-ajax'], function(DA) {
 		displayLimit: 5,
 		hidePrevious: false,
 		hideNext: false,
-		previousLabel: '«',
-		nextLabel: '»'
+		previousLabel: i18n.previousArrow,
+		nextLabel: i18n.nextArrow
 	};
 	
 	proto.create = function(container) {		
