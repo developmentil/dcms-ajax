@@ -59,34 +59,6 @@ define(['core/dcms-ajax',
 		return this._elm;
 	};
 	
-	proto.reload = function(noRender, callback) {
-		if(typeof noRender !== 'boolean') {
-			callback = noRender;
-			noRender = false;
-		}
-		callback = callback || $.noop;
-		
-		$.extend(this.options, {
-			entities: [{
-				_id: '1234567890abcedf',
-				name: 'My nice name',
-				title: 'My Page Title' + Math.random(),
-				createdAt: new Date()
-			}],
-			entitiesCount: 100
-		});
-		
-		var self = this;
-		this.trigger('reload', function(err) {
-			if(err) return callback(err);
-			
-			if(!noRender)
-				self.render();
-			
-			callback();
-		});
-	};
-	
 	proto._getTableOptions = function(options) {
 		return $.extend(options.table || {}, {
 			sort: options.sort,
@@ -102,6 +74,20 @@ define(['core/dcms-ajax',
 			pages: options.entitiesCount && options.limit ? Math.ceil(options.entitiesCount / options.limit) : null,
 			current: options.limit ? 1 + Math.ceil(options.offset / options.limit) : 1
 		});
+	};
+	
+	proto._load = function(callback) {
+		$.extend(this.options, {
+			entities: [{
+				_id: '1234567890abcedf',
+				name: 'My nice name',
+				title: 'My Page Title' + Math.random(),
+				createdAt: new Date()
+			}],
+			entitiesCount: 100
+		});
+		
+		callback(null);
 	};
 	
 	proto._render = function(options) {

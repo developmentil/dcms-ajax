@@ -53,7 +53,10 @@ define(function() {
 		
 		browser.create(tab.element());
 		browserTabs.push(tab);
-		browser.reload();
+		
+		tab.when('load', function(callback) {
+			browser.load(true, callback);
+		});
 		
 		tab.on('render', function() {
 			browser.render();

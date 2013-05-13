@@ -3,8 +3,10 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	function Widget(options) {
 		Widget.super_.call(this);
 		
-		this.options = $.extend({}, this.defaults, options || {});
 		this._elm = null;
+		this._markAsLoaded = false;
+		
+		this.options = $.extend({}, this.defaults, options || {});
 	};
 	util.inherits(Widget, SignalsEmitter);
 	var proto = Widget.prototype;
@@ -37,11 +39,49 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		return this._elm;
 	};
 	
+	proto.reload = function(noRender, callback) {
+		this._markAsLoaded = false;
+		
+		return this.load.apply(this, arguments);
+	};
+	
+	proto.load = function(noRender, callback) {
+		if(typeof noRender !== 'boolean') {
+			callback = noRender;
+			noRender = false;
+		}
+		callback = callback || $.noop;
+		
+		if(this._markAsLoaded) {
+			if(!noRender)
+				this.render();
+
+			callback();
+			return;
+		}
+		
+		var self = this;
+		this._load(function(err) {
+			if(err) return callback(err);
+			
+			self.trigger('load', function(err) {
+				if(err) return callback(err);
+				
+				self._markAsLoaded = true;
+
+				if(!noRender)
+					self.render();
+
+				callback();
+			});
+		});
+	};
+	
 	proto.element = function() {
 		return this._elm;
 	};
 	
-	proto.render = function(options) {
+	proto.render = function(options) {		
 		options = $.extend(this.options, options || {});
 		
 		this._render(options);
@@ -52,6 +92,10 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	
 	
 	/*** Protected Methods ***/
+	
+	proto._load = function(callback) {
+		callback(new Error('Not implemented'));
+	};
 	
 	proto._render = function(options) {
 		

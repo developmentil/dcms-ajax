@@ -1,4 +1,6 @@
-define(['core/dcms-ajax', 'core/widgets/Nav', 'core/widgets/Tab'], function(DA, Nav, Tab) {
+define(['core/dcms-ajax', 'core/libs/async', 
+	'core/widgets/Nav', 'core/widgets/Tab'
+], function(DA, async, Nav, Tab) {
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
@@ -29,6 +31,7 @@ define(['core/dcms-ajax', 'core/widgets/Nav', 'core/widgets/Tab'], function(DA, 
 		
 		tab.create(this._content);
 		this._tabs.push(tab);
+		this._markAsLoaded = false;
 		
 		if(tab.options.active)
 			this.setActive(tab);
@@ -80,6 +83,19 @@ define(['core/dcms-ajax', 'core/widgets/Nav', 'core/widgets/Tab'], function(DA, 
 			items: items,
 			className: options.navClass
 		});
+	};
+	
+	proto._load = function(callback) {
+		var tasks = [];
+		for(var i in this._tabs) {
+			(function(tab) {
+				tasks.push(function(callback) {
+					tab.load(callback);
+				});
+			})(this._tabs[i]);
+		}
+		
+		async.parallel(tasks, callback);
 	};
 	
 	proto._render = function(options) {		

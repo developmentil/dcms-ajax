@@ -26,6 +26,10 @@ define(['core/dcms-ajax'], function(DA) {
 		return this._elm;
 	};
 	
+	proto._load = function(callback) {
+		callback(null);
+	};
+	
 	proto._render = function(options) {
 		if(options.active)
 			this._elm.addClass('active');

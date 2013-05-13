@@ -19,7 +19,7 @@ define(['core/widgets/NavBar', 'core/widgets/Tabs'], function(NavBar, Tabs) {
 					items: DA.registry.get('layout.menus.main')
 				});
 
-				DA.tabs.render();
+				DA.tabs.load();
 			});
 
 			callback();
