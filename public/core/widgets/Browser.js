@@ -15,6 +15,7 @@ define(['core/dcms-ajax',
 		entitiesCount: null,
 		fields: {},
 		entities: [],
+		sort: [],
 		tableClass: 'table-hover table-condensed',
 		paginationClass: 'pagination-centered'
 	};
@@ -35,6 +36,17 @@ define(['core/dcms-ajax',
 		
 		this.table = new Table(this._getTableOptions(this.options));
 		this.table.create(this._elm);
+		this.table.when('sort', function(columnName, value) {
+			if(!self.options.sort[columnName])
+				self.options.sort = {};
+			
+			self.options.sort[columnName] = value;
+			self.reload();
+		});
+		this.table.when('unsort', function(columnName) {
+			delete self.options.sort[columnName];
+			self.reload();
+		});
 		
 		this.pagination = new Pagination(this._getPaginationOptions(this.options));
 		this.pagination.create(this._elm);
@@ -47,22 +59,37 @@ define(['core/dcms-ajax',
 		return this._elm;
 	};
 	
-	proto.reload = function() {
-		this.render({
+	proto.reload = function(noRender, callback) {
+		if(typeof noRender !== 'boolean') {
+			callback = noRender;
+			noRender = false;
+		}
+		callback = callback || $.noop;
+		
+		$.extend(this.options, {
 			entities: [{
 				_id: '1234567890abcedf',
 				name: 'My nice name',
-				title: 'My Page Title',
+				title: 'My Page Title' + Math.random(),
 				createdAt: new Date()
 			}],
 			entitiesCount: 100
 		});
-	
-		this.emit('reload');
+		
+		var self = this;
+		this.trigger('reload', function(err) {
+			if(err) return callback(err);
+			
+			if(!noRender)
+				self.render();
+			
+			callback();
+		});
 	};
 	
 	proto._getTableOptions = function(options) {
 		return $.extend(options.table || {}, {
+			sort: options.sort,
 			className: options.tableClass,
 			columns: options.fields,
 			rows: options.entities

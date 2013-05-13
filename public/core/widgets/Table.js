@@ -9,6 +9,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	
 	proto.defaults = {
 		className: 'table-hover',
+		sort: false,
 		columns: null,
 		idField: '_id',
 		rows: []
@@ -35,6 +36,23 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 			
 			each(column, i);
 		});
+	};
+	
+	proto.isSorted = function(columnName) {
+		if(typeof columnName === 'undefined')
+			return this.options.sort ? true : false;
+		
+		return (this.options.sort && this.options.sort[columnName]) || 0;
+	};
+	
+	proto.sort = function(columnName, value) {
+		this.emit('sort', columnName, value);
+		return this;
+	};
+	
+	proto.unsort = function(columnName) {
+		this.emit('unsort', columnName);
+		return this;
 	};
 	
 	proto._defineColumn = function(column, i) {
@@ -67,9 +85,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 			tr = $('<tr />').appendTo(this._thead);
 			
 			this.eachColumn(options.columns, function(column) {
-				var td = column.label ? $('<th />').text(column.label) : $('<td />');
-				
-				td.appendTo(tr)
+				self._columnLabelRender(column)
+				.appendTo(tr)
 				.attr('data-name', column.name);
 			});
 		}
@@ -105,6 +122,39 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 				}
 			})(options.rows[i]);
 		}
+	};
+	
+	proto._columnLabelRender = function(column) {
+		if(!column.label)
+			return $('<td />');
+		
+		var self = this, th = $('<th />'),
+		columnName = column.name,
+		sorted = this.isSorted(columnName);
+		
+		if(this.options.sort && !column.disableSort) {
+			if(sorted) {
+				$('<i />').appendTo(th)
+				.addClass(sorted > 0 ? 'icon-arrow-up' : 'icon-arrow-down');
+			}
+	
+			$('<a href="#" />').appendTo(th)
+			.text(column.label)
+			.click(function(e) {
+				e.preventDefault();
+				
+				if(!sorted)
+					self.sort(columnName, 1);
+				else if(sorted > 0)
+					self.sort(columnName, -1);
+				else
+					self.unsort(columnName);
+			});
+		} else {
+			th.text(column.label);
+		}
+		
+		return th;
 	};
 	
 	proto._defineColumnBoolean = function(column, i) {
