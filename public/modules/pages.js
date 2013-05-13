@@ -63,41 +63,56 @@ define(function() {
 		});
 	});
 	
-	DA.app.get(uri, '/:id/edit', function(e) {
+	DA.app.get(uri + '/:id/edit', function(e) {
 		var id = this.params.id,
-		tab = DA.tabs.create(name, uri);
+		tab = DA.tabs.create(name, uri),
+		
+		form = new Form({
+			action: uri + '/' + id + '/edit',
+			data: {},
+			fieldsets: [
+				new FieldSet({
+					controls: [{
+						name: 'title',
+						label: 'Title',
+						class: 'input-xlarge'
+					}, {
+						type: 'htmleditor',
+						name: 'content',
+						label: 'Content'
+					}]
+				})
+			]
+		});
+
+		form.create(tab.element());
 		
 		tab.when('load', function(callback) {
 			DA.api({
 				url: api + '/' + id + '/get',
 				success: function(entity) {
-					tab.ajaxForm = new AjaxForm({
-						api: api + '/' + id + '/edit',
-						entity: entity,
-						fieldsets: [
-							new FieldSet({
-								controls: [{
-									name: 'title',
-									label: 'Title',
-									class: 'input-xlarge'
-								}, {
-									type: 'htmleditor',
-									name: 'content',
-									label: 'Content'
-								}]
-							})
-						]
-					});
-					
+					form.options.data = entity;
 					callback(null);
 				},
 				error: callback
 			});
 		});
 		
-		tab.on('render', function(container) {
-			tab.ajaxForm.render(container);
+		tab.on('render', function() {
+			form.render();
 		});
+	});
+	
+	DA.app.post(uri, '/:id/edit', function(e) {
+		DA.api({
+			url: api + '/' + this.params.id + '/edit',
+			data: this.data,
+			success: function() {
+				// TODO close tab
+			}
+		});
+		
+		return false;
 	});
 	
 	DA.app.get(uri, '/:id/delete', function(e) {
