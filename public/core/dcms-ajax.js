@@ -33,7 +33,7 @@ define([
 				
 				$(function() {
 					DA.app.after(function() {
-						DA.emit('render');			
+						DA.emit('app.after');			
 					});
 	
 					DA.app.get('#/', function() {
