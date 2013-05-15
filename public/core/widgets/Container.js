@@ -9,7 +9,7 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 	var proto = Widget.prototype;
 	
 	proto.insert = function(widget) {
-		widget.create(this._elm);
+		widget.create(this._container);
 		this._children.push(widget);
 		
 		return widget;
@@ -50,6 +50,12 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 	proto._render = function(options) {
 		this.eachChild(function(widget) {
 			widget.render();
+		});
+	};
+	
+	proto._destroy = function() {
+		this.eachChild(function(widget) {
+			widget.destroy();
 		});
 	};
 	

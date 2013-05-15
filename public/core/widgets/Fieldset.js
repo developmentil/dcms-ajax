@@ -18,7 +18,7 @@ define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 		var legend = this._elm.children('legend');
 		if(options.legend) {
 			if(!legend.length)
-				legend = $('<legend />').appendTo(this._elm);
+				legend = $('<legend />').prependTo(this._elm);
 			
 			legend.text(options.legend);
 		} else if(legend.length)
