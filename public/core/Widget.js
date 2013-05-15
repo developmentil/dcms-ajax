@@ -39,6 +39,15 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		return this._elm;
 	};
 	
+	proto.destroy = function() {
+		this._destroy();
+		
+		this._elm.remove();
+		this._elm = null;
+		
+		return this;
+	};
+	
 	proto.reload = function(noRender, callback) {
 		this._markAsLoaded = false;
 		
@@ -98,6 +107,10 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	};
 	
 	proto._render = function(options) {
+		
+	};
+	
+	proto._destroy = function() {
 		
 	};
 	
