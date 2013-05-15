@@ -1,4 +1,4 @@
-define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
+define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(ControlsContainer, Fieldset) {
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
@@ -9,18 +9,30 @@ define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 	proto.defaults = $.extend({
 		action: '',
 		method: 'post',
-		fieldsets: []
+		fieldsets: [],
+		fieldset: Fieldset
 	}, proto.defaults);
 	
 	proto.create = function() {
 		var elm = Widget.super_.prototype.create.apply(this, arguments);
 		
 		for(var i in this.options.fieldsets) {
-			this.insert(this.options.fieldsets[i]);
+			this.insertFieldset(this.options.fieldsets[i]);
 		}
 		this.options.fieldsets = [];
 		
 		return elm;
+	};
+	
+	proto.insertFieldset = function(fieldset) {
+		if(!(fieldset instanceof Fieldset)) {
+			if(typeof fieldset.wrapper === 'undefined')
+				fieldset.wrapper = this.options.wrapper;
+				
+			fieldset = new this.options.fieldset(fieldset);
+		}
+			
+		return this.insert(fieldset);
 	};
 	
 	proto._create = function() {		
