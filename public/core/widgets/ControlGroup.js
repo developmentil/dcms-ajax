@@ -1,19 +1,19 @@
-define(['core/widgets/Container'], function(Container) {
+define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 	
 	function Widget(controls) {
 		if(!Array.isArray(controls))
 			controls = [controls];
 		
-		Widget.super_.call(this, controls[0].options);
-		
-		this._controls = controls;
+		Widget.super_.call(this, $.extend({
+			controls: controls
+		}, controls[0].options));
 	};
-	Container.extend(Widget);
+	ControlsContainer.extend(Widget);
 	var proto = Widget.prototype;
 	
-	proto.defaults = {
+	proto.defaults = $.extend({
 		label: null
-	};
+	}, proto.defaults);
 	
 	proto.create = function(container) {
 		this._elm = $('<div class="control-group" />');
@@ -29,8 +29,10 @@ define(['core/widgets/Container'], function(Container) {
 		if(this.options.wrapperClass)
 			this._elm.addClass(this.options.wrapperClass);
 		
-		for(var i in this._controls)
-			this.insert(this._controls[i]);
+		for(var i in this.options.controls) {
+			this.insert(this.options.controls[i]);
+		}
+		this.options.controls = [];
 		
 		return this._elm;
 	};

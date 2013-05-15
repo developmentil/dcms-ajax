@@ -4,6 +4,8 @@ define(['core/dcms-ajax',
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
+		
+		this._controls = {};
 	};
 	Container.extend(Widget);
 	var proto = Widget.prototype;
@@ -38,12 +40,27 @@ define(['core/dcms-ajax',
 		if(!(control instanceof DA.Widget)) {
 			control = Control.create(control);
 		}
+		
+		if(control instanceof Control) {
+			if(control.options.name)
+				this._controls[control.options.name] = control;
 
-		if(this.options.wrapper && control instanceof Control) {
-			control = new this.options.wrapper(control);
+			if(this.options.wrapper) {
+				control = new this.options.wrapper(control);
+			}
 		}
 		
 		return Widget.super_.prototype.insert.call(this, control);
+	};
+	
+	proto.remove = function(control) {
+		if(!Widget.super_.prototype.remove.apply(this, arguments))
+			return false;
+		
+		if(control.options.name)
+			delete this._controls[control.options.name];
+		
+		return this;
 	};
 	
 	proto._create = function() {
