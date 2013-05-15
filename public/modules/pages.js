@@ -65,38 +65,34 @@ define(function() {
 	
 	DA.app.get(uri + '/:id/edit', function(e) {
 		var id = this.params.id,
-		tab = DA.tabs.create(name, uri),
+		tab = DA.tabs.createTab(name),
 		
-		form = new Form({
+		form = new DA.Widget.FormHorizontal({
 			action: uri + '/' + id + '/edit',
 			data: {},
-			fieldsets: [
-				new FieldSet({
-					controls: [{
-						name: 'title',
-						label: 'Title',
-						class: 'input-xlarge'
-					}, {
-						type: 'htmleditor',
-						name: 'content',
-						label: 'Content'
-					}]
-				})
-			]
+			controls: [{
+				name: 'title',
+				label: 'Title',
+				class: 'input-xlarge'
+			}, {
+				type: 'htmleditor',
+				name: 'content',
+				label: 'Content'
+			}]
 		});
 
 		form.create(tab.element());
 		
-		tab.when('load', function(callback) {
-			DA.api({
-				url: api + '/' + id + '/get',
-				success: function(entity) {
-					form.options.data = entity;
-					callback(null);
-				},
-				error: callback
-			});
-		});
+//		tab.when('load', function(callback) {
+//			DA.api({
+//				url: api + '/' + id + '/get',
+//				success: function(entity) {
+//					form.options.data = entity;
+//					callback(null);
+//				},
+//				error: callback
+//			});
+//		});
 		
 		tab.on('render', function() {
 			form.render();

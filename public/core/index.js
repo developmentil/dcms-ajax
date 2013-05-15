@@ -11,11 +11,12 @@ define([
 	'core/widgets/Pagination',
 	
 	'core/widgets/Container', 'core/widgets/Control',
-	'core/widgets/Fieldset', 'core/widgets/Form', 'core/widgets/ControlGroup',
+	'core/widgets/Fieldset', 'core/widgets/Form', 
+	'core/widgets/FormHorizontal', 'core/widgets/ControlGroup',
 	
 	'core/widgets/Input'
 ], function(DA, layout, Nav, NavBar, Tabs, Tab, Table, Browser, Pagination, 
-			Container, Control, Fieldset, Form, ControlGroup, Input) {
+			Container, Control, Fieldset, Form, FormHorizontal, ControlGroup, Input) {
 	
 	DA.registry.set('plugins.layout', {
 		_path: false
@@ -36,6 +37,7 @@ define([
 	DA.Widget.Control = Control;
 	DA.Widget.Fieldset = Fieldset;
 	DA.Widget.Form = Form;
+	DA.Widget.FormHorizontal = FormHorizontal;
 	DA.Widget.ControlGroup = ControlGroup;
 	
 	DA.Widget.Input = Input;

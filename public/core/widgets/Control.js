@@ -36,7 +36,7 @@ define(['core/dcms-ajax'], function(DA) {
 	};
 	
 	proto._create = function() {
-		return $('input');
+		return $('<input />');
 	};
 	
 	proto._load = function(callback) {

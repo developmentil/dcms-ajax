@@ -16,7 +16,7 @@ define(['core/widgets/Control'], function(Control) {
 	};
 	
 	proto._create = function() {
-		return $('input')
+		return $('<input />')
 				.attr('type', this.options.type);
 	};
 	

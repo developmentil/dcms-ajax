@@ -1,7 +1,12 @@
 define(['core/widgets/Container'], function(Container) {
 	
 	function Widget(controls) {
-		Widget.super_.call(this, !Array.isArray(controls) ? controls.options : controls[0].options);
+		if(!Array.isArray(controls))
+			controls = [controls];
+		
+		Widget.super_.call(this, controls[0].options);
+		
+		this._controls = controls;
 	};
 	Container.extend(Widget);
 	var proto = Widget.prototype;
@@ -15,13 +20,17 @@ define(['core/widgets/Container'], function(Container) {
 		if(container)
 			this._elm.appendTo(container);
 		
-		this._container = $('<div class="controls" />').appendTo(this._elm);
+		this._container = $('<div class="controls" />')
+				.appendTo(this._elm);
 		
 		if(this.options.wrapperId)
 			this._elm.attr('id', this.options.wrapperId);
 		
 		if(this.options.wrapperClass)
 			this._elm.addClass(this.options.wrapperClass);
+		
+		for(var i in this._controls)
+			this.insert(this._controls[i]);
 		
 		return this._elm;
 	};
@@ -30,7 +39,7 @@ define(['core/widgets/Container'], function(Container) {
 		var label = this._elm.children('label');
 		if(options.label) {
 			if(!label.length)
-				label = $('<label />').prependTo(this._elm);
+				label = $('<label class="control-label" />').prependTo(this._elm);
 			
 			label.text(options.label);
 		} else if(label.length)
