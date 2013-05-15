@@ -1,4 +1,6 @@
-define(['core/widgets/Container', 'core/widgets/Control'], function(Container, Control) {
+define(['core/dcms-ajax', 
+	'core/widgets/Container', 'core/widgets/Control'
+], function(DA, Container, Control) {
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
@@ -33,14 +35,12 @@ define(['core/widgets/Container', 'core/widgets/Control'], function(Container, C
 	};
 	
 	proto.insert = function(control) {
-		if(!(control instanceof Widget)) {
-			if(!(control instanceof Control)) {
-				control = Control.create(control);
-			}
+		if(!(control instanceof DA.Widget)) {
+			control = Control.create(control);
+		}
 
-			if(this.options.wrapper && !(control instanceof this.options.wrapper)) {
-				control = new this.options.wrapper(control);
-			}
+		if(this.options.wrapper && control instanceof Control) {
+			control = new this.options.wrapper(control);
 		}
 		
 		return Widget.super_.prototype.insert.call(this, control);
