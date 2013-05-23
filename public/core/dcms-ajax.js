@@ -1,3 +1,12 @@
+/** @license
+ * DCMS-Ajax <http://www.dcms.co.il/>
+ * Copyright (C) Development IL - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Author: Moshe Simantov
+ * Version: 0.1.0 - Build: 1
+ */
+
 define([
 	'jquery', 'core/libs/sammy',
 	'core/SignalsEmitter', 'core/Registry', 'core/Widget'

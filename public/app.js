@@ -11,7 +11,7 @@ requirejs.config({
 });
 
 requirejs([
-	'dcms-ajax', 'jquery', 'bootstrap'
+	'dcms-ajax', 'bootstrap'
 ], function(DA) {
 
 	DA.registry.set('layout.brand', 'Demo CMS');
