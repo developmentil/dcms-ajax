@@ -5,9 +5,7 @@ define(['core/widgets/NavBar', 'core/widgets/Tabs'], function(NavBar, Tabs) {
 		DA.layout = {
 			navbar: new NavBar()
 		};
-		DA.tabs = new Tabs({
-			navClass: 'nav-pills'
-		});
+		DA.tabs = new Tabs();
 
 		DA.layout.navbar.create('body');
 		DA.tabs.create('body');

@@ -182,59 +182,28 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		}
 	};
 	
-	proto._renderActions = function(td, value, row) {
-		var actionLabel = i18n.Action, group = td;
-		if(this.actions) {
-			group = $('<div class="btn-group" />').appendTo(td);
-		}
+	proto._renderWidget = function(td, value, row) {
+		var widget = this.instance,
+		options = this.options || {};
+
+		if(typeof options === 'function')
+			options = options(row, value);
 		
-		if(this.action) {
-			var action = this.action;
-			if(typeof action === 'function')
-				action = action(row, value);
+		if(!widget) {
+			widget = this.widget;
 			
-			var button = $('<a class="btn" />')
-			.appendTo(group)
-			.text(action.label || actionLabel)
-			.attr('href', action.url || '#');
-	
-			if(action.click) {
-				button.click(function(e) {
-					e.preventDefault();
-					action.click(e);
-				});
-			}
+			if(typeof widget === 'string')
+				widget = DA.Widget[widget];
+			if(!widget)
+				throw new Error('Invalid widget: ' + this.widget);
 			
-			if(this.actions) {
-				$('<button class="btn dropdown-toggle" data-toggle="dropdown" type="button" />')
-				.append('<span class="caret" />')
-				.appendTo(group);
-			}
+			widget = this.instance = new widget(options);
+			widget.create(td);
+			
+			widget.render();
 		} else {
-			$('<button class="btn dropdown-toggle" data-toggle="dropdown" type="button" />')
-			.text(this.actionsLabel || this.label || actionLabel)
-			.append(' <span class="caret" />')
-			.appendTo(group);
-		}
-		
-		if(this.actions) {
-			var ul = $('<ul class="dropdown-menu" />').appendTo(group);
-			$.each(this.actions, function(i, action) {
-				if(typeof action === 'function')
-					action = action(row, value);
-				
-				var li = $('<li />').appendTo(ul),
-				a = $('<a tabindex="-1" />').appendTo(li)
-				.text(action.label || actionLabel)
-				.attr('href', action.url || '#');
-		
-				if(action.click) {
-					a.click(function(e) {
-						e.preventDefault();
-						action.click(e);
-					});
-				}
-			});
+			widget.create(td);
+			widget.render(options);
 		}
 	};
 	

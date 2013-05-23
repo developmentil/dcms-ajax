@@ -3,6 +3,8 @@ define([
 	
 	'core/plugins/layout',
 	
+	'core/widgets/ButtonGroup',
+	
 	'core/widgets/Nav', 'core/widgets/NavBar', 
 	
 	'core/widgets/Tabs', 'core/widgets/Tab', 
@@ -15,13 +17,15 @@ define([
 	'core/widgets/FormHorizontal', 'core/widgets/ControlGroup',
 	
 	'core/widgets/Input'
-], function(DA, layout, Nav, NavBar, Tabs, Tab, Table, Browser, Pagination, 
+], function(DA, layout, ButtonGroup, Nav, NavBar, Tabs, Tab, Table, Browser, Pagination, 
 			Container, Control, Fieldset, Form, FormHorizontal, ControlGroup, Input) {
 	
 	DA.registry.set('plugins.layout', {
 		_path: false
 	});
 	DA.plugins.layout = layout;
+	
+	DA.Widget.ButtonGroup = ButtonGroup;
 	
 	DA.Widget.Nav = Nav;
 	DA.Widget.NavBar = NavBar;
