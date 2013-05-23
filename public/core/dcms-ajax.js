@@ -28,6 +28,42 @@ define([
 	DA.registry.set('modules', []);
 	
 	
+	/*** Api ***/
+	
+	 DA.api = function(options) {
+        options = $.extend({
+            type: 'GET',
+            dataType: 'json',
+            success: $.noop, //function(data, statusCode, textStatus, jqXHR) {}
+            error: $.noop //function(statusCode, textStatus, jqXHR, errorThrown) {},
+        }, options);
+
+        return $.ajax($.extend({}, options, {
+            success: function(data, textStatus, jqXHR) {
+                if(!data || typeof data.status !== 'number') {
+					if(console && console.error)
+                        console.error("Api Error: Invalid format");
+					
+					return options.error(-1, (data && data.msg) || textStatus, jqXHR);
+				} else if(typeof data.data === 'undefined') {
+                    if(console && console.error)
+                        console.error("Api Error: " + data.status + " " + (data.msg || textStatus));
+					
+                    return options.error(data.status || -1, data.msg || textStatus, jqXHR);
+                }
+
+                return options.success(data.data, data.status, data.msg, jqXHR);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                return options.error(textStatus || -1, null, {
+                    jqXHR: jqXHR,
+                    errorThrown: errorThrown
+                });
+            }
+        }));
+    };
+	
+	
 	
     /*** Bootstrap ***/
 	

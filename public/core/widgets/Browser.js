@@ -12,7 +12,7 @@ define(['core/dcms-ajax',
 		api: null,
 		limit: 20,
 		offset: 0,
-		entitiesCount: null,
+		count: null,
 		fields: {},
 		entities: [],
 		sort: [],
@@ -71,23 +71,42 @@ define(['core/dcms-ajax',
 	proto._getPaginationOptions = function(options) {
 		return $.extend(options.pagination || {}, {
 			className: options.paginationClass,
-			pages: options.entitiesCount && options.limit ? Math.ceil(options.entitiesCount / options.limit) : null,
+			pages: options.count && options.limit ? Math.ceil(options.count / options.limit) : null,
 			current: options.limit ? 1 + Math.ceil(options.offset / options.limit) : 1
 		});
 	};
 	
 	proto._load = function(callback) {
-		$.extend(this.options, {
-			entities: [{
-				_id: '1234567890abcedf',
-				name: 'My nice name',
-				title: 'My Page Title' + Math.random(),
-				createdAt: new Date()
-			}],
-			entitiesCount: 100
-		});
+		if(!this.options.api) {
+			callback(null);
+			return;
+		}
 		
-		callback(null);
+		var self = this,
+				
+		options = {
+			data: {
+				limit: this.options.limit,
+				offset: this.options.offset,
+				sort: this.options.sort
+			}
+		};
+		
+		if(typeof this.options.api === 'string') {
+			options.url = this.options.api;
+		} else {
+			$.extend(true, options, this.options.api);
+		}
+		
+		options.success = function(data) {
+			$.extend(self.options, data);
+			
+			callback(null);
+		};
+		
+		options.error = callback;
+		
+		DA.api(options);
 	};
 	
 	proto._render = function(options) {
