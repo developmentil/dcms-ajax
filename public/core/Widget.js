@@ -33,6 +33,25 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		return new widget(options);
 	};
 	
+	Widget.configElm = function(elm, options) {		
+		if(options.id)
+			elm.attr('id', options.id);
+		
+		if(options.className)
+			elm.addClass(options.className);
+		
+		if(options.css)
+			elm.css(options.css);
+		
+		if(options.attr)
+			elm.attr(options.attr);
+		
+		if(options.bind)
+			elm.bind(options.bind);
+		
+		return elm;
+	};
+	
 	
 	/*** Static Vars ***/
 	
@@ -130,11 +149,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		if(!elm)
 			elm = $('<div class="widget" />');
 		
-		if(this.options.id)
-			elm.attr('id', this.options.id);
-		
-		if(this.options.className)
-			elm.addClass(this.options.className);
+		Widget.configElm(elm, this.options);
 		
 		return elm;
 	};

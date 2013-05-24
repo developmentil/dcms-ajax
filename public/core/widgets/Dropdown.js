@@ -14,10 +14,7 @@ define(['core/dcms-ajax'], function(DA) {
 	};
 	
 	Widget.renderItem = function(item, ul) {
-		var li = $('<li />').appendTo(ul);
-
-		if(item.className)
-			li.addClass(item.className);
+		var li = DA.Widget.configElm($('<li />'), item).appendTo(ul);
 
 		if(item.divider) {
 			li.addClass('divider');

@@ -8,16 +8,29 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 	DA.Widget.extend(Widget);
 	var proto = Widget.prototype;
 	
+	proto.defaults = {
+		children: []
+	};
+	
 	proto.create = function() {
 		var elm = Widget.super_.prototype.create.apply(this, arguments);
 		
 		if(!this._container)
 			this._container = elm;
 		
+		for(var i in this.options.children) {
+			this.insert(this.options.children[i]);
+		}
+		this.options.children = [];
+		
 		return elm;
 	};
 	
 	proto.insert = function(widget) {
+		if(!(widget instanceof DA.Widget)) {
+			widget = DA.Widget.create(widget);
+		}
+		
 		widget.create(this._container, this);
 		this._children.push(widget);
 		

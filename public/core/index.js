@@ -3,6 +3,7 @@ define([
 	
 	'core/plugins/layout',
 	
+	'core/widgets/Toolbar', 
 	'core/widgets/Button', 'core/widgets/ButtonGroup',
 	
 	'core/widgets/Nav', 
@@ -20,7 +21,8 @@ define([
 	
 	'core/widgets/Input'
 ], function(
-		DA, layout, Button, ButtonGroup, 
+		DA, layout, 
+		Toolbar, Button, ButtonGroup, 
 		Nav, Dropdown, NavBar, Tabs, Tab, 
 		Table, Browser, Pagination, 
 		Container, 
@@ -32,6 +34,7 @@ define([
 	});
 	DA.plugins.layout = layout;
 	
+	DA.Widget.Toolbar = Toolbar;
 	DA.Widget.Button = Button;
 	DA.Widget.ButtonGroup = ButtonGroup;
 	

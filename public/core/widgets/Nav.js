@@ -25,15 +25,13 @@ define(['core/dcms-ajax', 'core/widgets/Dropdown'], function(DA, Dropdown) {
 		for(var i in options.items) {
 			(function(item) {
 				var li = $('<li />').appendTo(self._elm),
-				a = $('<a />').appendTo(li)
+				
+				a = DA.Widget.configElm($('<a />'), item).appendTo(li)
 				.attr('href', item.url || '#')
 				.text(item.label || item);
 
 				if(item.active)
 					li.addClass('active');
-
-				if(item.className)
-					li.addClass(item.className);
 
 				if(item.toggle)
 					a.attr('data-toggle', item.toggle);
