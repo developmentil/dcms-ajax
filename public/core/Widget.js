@@ -4,6 +4,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		Widget.super_.call(this);
 		
 		this._elm = null;
+		this._parent = null;
 		this._markAsLoaded = false;
 		
 		this.options = $.extend({}, this.defaults, options || {});
@@ -31,8 +32,10 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	
 	/*** Public Methods ***/
 	
-	proto.create = function(container) {
-		this._elm = $('<div class="widget" />');
+	proto.create = function(container, parent) {
+		this._parent = parent || null;
+		
+		this._elm = this._create(container, parent);
 		if(container)
 			this._elm.appendTo(container);
 		
@@ -44,6 +47,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		
 		this._elm.remove();
 		this._elm = null;
+		this._parent = null;
 		
 		return this;
 	};
@@ -106,11 +110,24 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		callback(new Error('Not implemented'));
 	};
 	
-	proto._render = function(options) {
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<div class="widget" />');
 		
+		if(this.options.id)
+			elm.attr('id', this.options.id);
+		
+		if(this.options.className)
+			elm.addClass(this.options.className);
+		
+		return elm;
 	};
 	
 	proto._destroy = function() {
+		
+	};
+	
+	proto._render = function(options) {
 		
 	};
 	

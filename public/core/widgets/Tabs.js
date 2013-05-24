@@ -39,32 +39,27 @@ define(['core/dcms-ajax', 'core/libs/async',
 		return tab;
 	};
 	
-	proto.create = function(container) {
-		this._elm = $('<div class="tabbable" />');
-		if(container)
-			this._elm.appendTo(container);
-		
-		if(this.options.id)
-			this._elm.attr('id', this.options.id);
-		
-		if(this.options.className)
-			this._elm.addClass(this.options.className);
-		
-		this.nav = new Nav(this._getNavOptions(this.options));
-		this.nav.create(this._elm);
-		
-		this._content = $('<div class="tab-content" />')
-				.appendTo(this._elm);
-		
-		return this._elm;
-	};
-	
 	proto.setActive = function(tab) {
 		for(var i in this._tabs)
 			this._tabs[i].options.active = false;
 
 		tab.options.active = true;
 		return this;
+	};
+	
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<div class="tabbable" />');
+		
+		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
+		
+		this.nav = new Nav(this._getNavOptions(this.options));
+		this.nav.create(elm);
+		
+		this._content = $('<div class="tab-content" />')
+				.appendTo(elm);
+		
+		return elm;
 	};
 	
 	proto._getNavOptions = function(options) {

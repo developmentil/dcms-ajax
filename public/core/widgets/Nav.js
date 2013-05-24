@@ -10,18 +10,11 @@ define(['core/dcms-ajax'], function(DA) {
 		items: []
 	};
 	
-	proto.create = function(container) {		
-		this._elm = $('<ul class="nav" />');
-		if(container)
-			this._elm.appendTo(container);
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<ul class="nav" />');
 		
-		if(this.options.id)
-			this._elm.attr('id', this.options.id);
-		
-		if(this.options.className)
-			this._elm.addClass(this.options.className);
-		
-		return this._elm;
+		return Widget.super_.prototype._create.call(this, container, parent, elm);
 	};
 	
 	proto._render = function(options) {

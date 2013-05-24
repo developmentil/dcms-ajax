@@ -10,8 +10,11 @@ define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 		legend: null
 	}, proto.defaults);
 	
-	proto._create = function() {
-		return $('<fieldset />');
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<fieldset />');
+		
+		return Widget.super_.prototype._create.call(this, container, parent, elm);
 	};
 	
 	proto._render = function(options) {

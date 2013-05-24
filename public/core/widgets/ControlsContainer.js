@@ -15,25 +15,15 @@ define(['core/dcms-ajax',
 		controls: []
 	};
 	
-	proto.create = function(container) {
-		this._elm = this._create();
-		if(container)
-			this._elm.appendTo(container);
-		if(!this._container)
-			this._container = this._elm;
-		
-		if(this.options.id)
-			this._elm.attr('id', this.options.id);
-		
-		if(this.options.className)
-			this._elm.addClass(this.options.className);
+	proto.create = function() {
+		var elm = Widget.super_.prototype.create.apply(this, arguments);
 		
 		for(var i in this.options.controls) {
 			this.insert(this.options.controls[i]);
 		}
 		this.options.controls = [];
 		
-		return this._elm;
+		return elm;
 	};
 	
 	proto.insert = function(control) {
@@ -63,8 +53,11 @@ define(['core/dcms-ajax',
 		return this;
 	};
 	
-	proto._create = function() {
-		return $('<div />');
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<div />');
+		
+		return Widget.super_.prototype._create.call(this, container, parent, elm);
 	};
 	
 	return Widget;

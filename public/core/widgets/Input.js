@@ -15,9 +15,15 @@ define(['core/widgets/Control'], function(Control) {
 		value: null
 	};
 	
-	proto._create = function() {
-		return $('<input />')
-				.attr('type', this.options.type);
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<input />');
+		
+		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
+		
+		elm.attr('type', this.options.type);
+		
+		return elm;
 	};
 	
 	return Widget;

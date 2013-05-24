@@ -15,26 +15,20 @@ define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 		label: null
 	}, proto.defaults);
 	
-	proto.create = function(container) {
-		this._elm = $('<div class="control-group" />');
-		if(container)
-			this._elm.appendTo(container);
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<div class="control-group" />');
 		
 		this._container = $('<div class="controls" />')
-				.appendTo(this._elm);
+				.appendTo(elm);
 		
 		if(this.options.wrapperId)
-			this._elm.attr('id', this.options.wrapperId);
+			elm.attr('id', this.options.wrapperId);
 		
 		if(this.options.wrapperClass)
-			this._elm.addClass(this.options.wrapperClass);
+			elm.addClass(this.options.wrapperClass);
 		
-		for(var i in this.options.controls) {
-			this.insert(this.options.controls[i]);
-		}
-		this.options.controls = [];
-		
-		return this._elm;
+		return elm;
 	};
 	
 	proto._render = function(options) {

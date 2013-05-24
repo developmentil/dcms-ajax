@@ -8,8 +8,17 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 	DA.Widget.extend(Widget);
 	var proto = Widget.prototype;
 	
+	proto.create = function() {
+		var elm = Widget.super_.prototype.create.apply(this, arguments);
+		
+		if(!this._container)
+			this._container = elm;
+		
+		return elm;
+	};
+	
 	proto.insert = function(widget) {
-		widget.create(this._container);
+		widget.create(this._container, this);
 		this._children.push(widget);
 		
 		return widget;
@@ -44,7 +53,7 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 			});
 		});
 		
-		async.serial(tasks, callback);
+		async.series(tasks, callback);
 	};
 	
 	proto._render = function(options) {

@@ -17,22 +17,6 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		nextLabel: i18n.nextArrow
 	};
 	
-	proto.create = function(container) {		
-		this._elm = $('<div class="pagination" />');
-		if(container)
-			this._elm.appendTo(container);
-		
-		if(this.options.id)
-			this._elm.attr('id', this.options.id);
-		
-		if(this.options.className)
-			this._elm.addClass(this.options.className);
-		
-		this._elm.hide();
-		
-		return this._elm;
-	};
-	
 	proto.current = function(page) {
 		if(typeof page === 'undefined')
 			return this.options.current;
@@ -65,6 +49,16 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	
 	proto.hasPrev = function() {
 		return (this.options.current > 1);
+	};
+	
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<div class="pagination" />');
+		
+		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
+		
+		elm.hide();		
+		return elm;
 	};
 	
 	proto._render = function(options) {

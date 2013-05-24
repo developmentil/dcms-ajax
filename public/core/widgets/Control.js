@@ -18,28 +18,33 @@ define(['core/dcms-ajax'], function(DA) {
 		value: null
 	};
 	
-	proto.create = function(container) {
-		this._elm = this._create();
-		if(container)
-			this._elm.appendTo(container);
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<input />');
 		
-		if(this.options.id)
-			this._elm.attr('id', this.options.id);
+		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
 		
 		if(this.options.name)
-			this._elm.attr('name', this.options.name);
+			elm.attr('name', this.options.name);
 		
-		if(this.options.className)
-			this._elm.addClass(this.options.className);
-		
-		return this._elm;
-	};
-	
-	proto._create = function() {
-		return $('<input />');
+		return elm;
 	};
 	
 	proto._load = function(callback) {
+		var name = this.options.name,
+		parent = this._parent;
+
+		while(parent) {
+			if(parent.options.entity) {
+				if(typeof parent.options.entity[name] !== 'undefined')
+					this.options.value = parent.options.entity[name];
+				
+				break;
+			}
+			
+			parent = parent._parent;
+		}
+		
 		callback(null);
 	};
 	

@@ -35,10 +35,47 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 		return this.insert(fieldset);
 	};
 	
-	proto._create = function() {		
-		return $('<form />')
-				.attr('action', this.options.action)
-				.attr('method', this.options.method);
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<form />');
+		
+		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
+		
+		elm.attr('action', this.options.action)
+		.attr('method', this.options.method);
+		
+		return elm;
+	};
+	
+	proto._load = function(callback) {
+		var self = this;
+		
+		Widget.super_.prototype._load.call(this, function(err) {
+			if(err) return callback(err);
+		
+			if(!self.options.api) {
+				callback(null);
+				return;
+			}
+
+			var options = {};
+
+			if(typeof self.options.api === 'string') {
+				options.url = self.options.api;
+			} else {
+				$.extend(true, options, self.options.api);
+			}
+
+			options.success = function(data) {
+				$.extend(self.options, data);
+
+				callback(null);
+			};
+
+			options.error = callback;
+
+			DA.api(options);
+		});
 	};
 	
 	return Widget;

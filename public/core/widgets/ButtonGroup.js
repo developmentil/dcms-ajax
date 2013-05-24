@@ -7,12 +7,11 @@ define(['core/dcms-ajax'], function(DA) {
 	var proto = Widget.prototype;
 	
 	
-	proto.create = function(container) {
-		this._elm = $('<div class="btn-group" />');
-		if(container)
-			this._elm.appendTo(container);
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<div class="btn-group" />');
 		
-		return this._elm;
+		return Widget.super_.prototype._create.call(this, container, parent, elm);
 	};
 	
 	proto._render = function(options) {

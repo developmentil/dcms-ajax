@@ -7,18 +7,17 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 	var proto = Widget.prototype;
 	
 	
-	proto.create = function(container) {
-		this._elm = $('<div class="navbar" />');
-		if(container)
-			this._elm.appendTo(container);
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<div class="navbar" />');
 		
 		this._inner = $('<div class="navbar-inner" />')
-				.appendTo(this._elm);
+				.appendTo(elm);
 		
 		this.nav = new Nav(this.options);
-		this.nav.create(this._inner);
+		this.nav.create(this._inner, this);
 		
-		return this._elm;
+		return elm;
 	};
 	
 	proto._render = function(options) {

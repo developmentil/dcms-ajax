@@ -15,20 +15,6 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		rows: []
 	};
 	
-	proto.create = function(container) {		
-		this._elm = $('<table class="table" />');
-		if(container)
-			this._elm.appendTo(container);
-		
-		if(this.options.id)
-			this._elm.attr('id', this.options.id);
-		
-		if(this.options.className)
-			this._elm.addClass(this.options.className);
-		
-		return this._elm;
-	};
-	
 	proto.eachColumn = function(columns, each) {
 		var self = this;
 		$.each(columns, function(i, column) {
@@ -53,6 +39,13 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	proto.unsort = function(columnName) {
 		this.emit('unsort', columnName);
 		return this;
+	};
+	
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<table class="table" />');
+		
+		return Widget.super_.prototype._create.call(this, container, parent, elm);
 	};
 	
 	proto._defineColumn = function(column, i) {

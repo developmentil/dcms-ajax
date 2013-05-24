@@ -20,22 +20,16 @@ define(['core/dcms-ajax',
 		paginationClass: 'pagination-centered'
 	};
 	
-	
-	proto.create = function(container) {
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<div class="browser" />');
+		
+		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
+		
 		var self = this;
 		
-		this._elm = $('<div class="browser" />');
-		if(container)
-			this._elm.appendTo(container);
-		
-		if(this.options.id)
-			this._elm.attr('id', this.options.id);
-		
-		if(this.options.className)
-			this._elm.addClass(this.options.className);
-		
 		this.table = new Table(this._getTableOptions(this.options));
-		this.table.create(this._elm);
+		this.table.create(elm, this);
 		this.table.when('sort', function(columnName, value) {
 			if(!self.options.sort[columnName])
 				self.options.sort = {};
@@ -49,14 +43,14 @@ define(['core/dcms-ajax',
 		});
 		
 		this.pagination = new Pagination(this._getPaginationOptions(this.options));
-		this.pagination.create(this._elm);
+		this.pagination.create(elm, this);
 		
 		this.pagination.on('change', function(page) {
 			self.options.offset = (page - 1) * self.options.limit;
 			self.reload();
 		});
 		
-		return this._elm;
+		return elm;
 	};
 	
 	proto._getTableOptions = function(options) {
