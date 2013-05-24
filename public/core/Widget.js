@@ -39,6 +39,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		if(container)
 			this._elm.appendTo(container);
 		
+		this._elm.data('widget', this);
 		return this._elm;
 	};
 	

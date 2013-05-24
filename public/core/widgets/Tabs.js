@@ -1,13 +1,11 @@
 define(['core/dcms-ajax', 'core/libs/async', 
-	'core/widgets/Nav', 'core/widgets/Tab'
-], function(DA, async, Nav, Tab) {
+	'core/widgets/Container', 'core/widgets/Nav', 'core/widgets/Tab'
+], function(DA, async, Container, Nav, Tab) {
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
-		
-		this._tabs = [];
 	};
-	DA.Widget.extend(Widget);
+	Container.extend(Widget);
 	var proto = Widget.prototype;
 	
 	proto.defaults = {
@@ -15,35 +13,36 @@ define(['core/dcms-ajax', 'core/libs/async',
 		navClass: 'nav-tabs'
 	};
 	
-	proto.createTab = function(tab) {
+	proto.insert = function(tab) {
 		if(!(tab instanceof Tab)) {
-			if(typeof tab !== 'object')
-				tab = {label: tab};
-
-			tab = $.extend({
-				label: 'Tab',
-				active: true,
-				id: this.options.id + '-tab' + Math.floor(Math.random() * 1000)
-			}, tab);
-
-			tab = new Tab(tab);
+			tab = Tab.create(tab);
 		}
-		
-		tab.create(this._content);
-		this._tabs.push(tab);
-		this._markAsLoaded = false;
 		
 		if(tab.options.active)
 			this.setActive(tab);
 		
+		tab = Widget.super_.prototype.insert.call(this, tab);
+		
+		this._renderNav();
 		return tab;
 	};
 	
-	proto.setActive = function(tab) {
-		for(var i in this._tabs)
-			this._tabs[i].options.active = false;
+	proto.remove = function() {
+		Widget.super_.prototype.remove.apply(this, arguments);
+		
+		if(this._children.length > 0)
+			this.setActive(this._children[0]);
 
-		tab.options.active = true;
+		this._renderNav();		
+		return this;
+	};
+	
+	proto.setActive = function(tab) {
+		this.eachChild(function(tab) {
+			tab.active(false);
+		});
+
+		tab.active(true);
 		return this;
 	};
 	
@@ -51,28 +50,35 @@ define(['core/dcms-ajax', 'core/libs/async',
 		if(!elm)
 			elm = $('<div class="tabbable" />');
 		
-		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
-		
 		this.nav = new Nav(this._getNavOptions(this.options));
-		this.nav.create(elm);
+		this.nav.create(elm, this);
 		
-		this._content = $('<div class="tab-content" />')
+		this._container = $('<div class="tab-content" />')
 				.appendTo(elm);
 		
+		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
+		
 		return elm;
+	};
+	
+	proto._destroy = function() {
+		this.nav.destroy();
+		this.nav = null;
+		
+		Widget.super_.prototype._destroy.apply(this, arguments);
 	};
 	
 	proto._getNavOptions = function(options) {
 		var items = [];
 		
-		for(var i in this._tabs) {
-			var item = this._tabs[i].options;
+		this.eachChild(function(tab) {
+			var item = tab.options;
 			
 			item.url = '#' + item.id;
 			item.toggle = 'tab';
 			
 			items.push(item);
-		}
+		});
 		
 		return $.extend(options.nav || {}, {
 			items: items,
@@ -82,22 +88,24 @@ define(['core/dcms-ajax', 'core/libs/async',
 	
 	proto._load = function(callback) {
 		var tasks = [];
-		for(var i in this._tabs) {
-			(function(tab) {
-				tasks.push(function(callback) {
-					tab.load(callback);
-				});
-			})(this._tabs[i]);
-		}
+		
+		this.eachChild(function(tab) {
+			tasks.push(function(callback) {
+				tab.load(true, callback);
+			});
+		});
 		
 		async.parallel(tasks, callback);
 	};
 	
 	proto._render = function(options) {		
-		for(var i in this._tabs)
-			this._tabs[i].render();
+		Widget.super_.prototype._render.apply(this, arguments);
 		
-		this.nav.render(this._getNavOptions(options));
+		this._renderNav(options);
+	};
+	
+	proto._renderNav = function(options) {
+		this.nav.render(this._getNavOptions(options || this.options));
 	};
 	
 	return Widget;

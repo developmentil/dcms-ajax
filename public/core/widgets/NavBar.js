@@ -20,6 +20,11 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 		return elm;
 	};
 	
+	proto._destroy = function() {
+		this.nav.destroy();
+		this.nav = null;
+	};
+	
 	proto._render = function(options) {
 		var self = this;
 		

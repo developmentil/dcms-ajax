@@ -11,14 +11,12 @@ define(['core/widgets/NavBar', 'core/widgets/Tabs'], function(NavBar, Tabs) {
 		DA.tabs.create('body');
 
 		DA.when('runned', function(callback) {
-			DA.on('app.after', function() {
-				DA.layout.navbar.render({
-					brand: DA.registry.get('layout.brand'),
-					items: DA.registry.get('layout.menus.main')
-				});
-
-				DA.tabs.load();
+			DA.layout.navbar.render({
+				brand: DA.registry.get('layout.brand'),
+				items: DA.registry.get('layout.menus.main')
 			});
+
+			DA.tabs.load();
 
 			callback();
 		});

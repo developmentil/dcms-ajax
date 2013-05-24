@@ -21,6 +21,7 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 		widget.create(this._container, this);
 		this._children.push(widget);
 		
+		this.emit('inserted', widget);
 		return widget;
 	};
 	
@@ -34,13 +35,14 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 	
 	proto.remove = function(widget, keepLive) {
 		var i = this._children.indexOf(widget);
-		if(!(~i))
+		if(i === -1)
 			return false;
 		
-		delete this._children[i];
+		this._children.splice(i, 1);
 		if(!keepLive)
 			widget.destroy();
 		
+		this.emit('removed', widget, keepLive);
 		return this;
 	};
 	
