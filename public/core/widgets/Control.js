@@ -32,18 +32,10 @@ define(['core/dcms-ajax'], function(DA) {
 	
 	proto._load = function(callback) {
 		var name = this.options.name,
-		parent = this._parent;
+		entity = this._parent && this._parent.options.entity;
 
-		while(parent) {
-			if(parent.options.entity) {
-				if(typeof parent.options.entity[name] !== 'undefined')
-					this.options.value = parent.options.entity[name];
-				
-				break;
-			}
-			
-			parent = parent._parent;
-		}
+		if(entity && typeof entity[name] !== 'undefined')
+			this.options.value = entity[name];
 		
 		callback(null);
 	};

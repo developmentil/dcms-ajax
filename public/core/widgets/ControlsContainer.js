@@ -12,7 +12,8 @@ define(['core/dcms-ajax',
 	
 	proto.defaults = {
 		wrapper: null,
-		controls: []
+		controls: [],
+		entity: {}
 	};
 	
 	proto.create = function() {
@@ -58,6 +59,13 @@ define(['core/dcms-ajax',
 			elm = $('<div />');
 		
 		return Widget.super_.prototype._create.call(this, container, parent, elm);
+	};
+	
+	proto._load = function() {
+		if(this._parent && this._parent.options.entity)
+			this.options.entity = this._parent.options.entity;
+		
+		return Widget.super_.prototype._load.apply(this, arguments);
 	};
 	
 	return Widget;

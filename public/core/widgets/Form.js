@@ -48,34 +48,36 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 	};
 	
 	proto._load = function(callback) {
-		var self = this;
-		
-		Widget.super_.prototype._load.call(this, function(err) {
+		var self = this,
+				
+		next = function(err) {
 			if(err) return callback(err);
+			
+			Widget.super_.prototype._load.call(self, callback);
+		};
 		
-			if(!self.options.api) {
-				callback(null);
-				return;
-			}
+		if(!self.options.api) {
+			next(null);
+			return;
+		}
 
-			var options = {};
+		var options = {};
 
-			if(typeof self.options.api === 'string') {
-				options.url = self.options.api;
-			} else {
-				$.extend(true, options, self.options.api);
-			}
+		if(typeof self.options.api === 'string') {
+			options.url = self.options.api;
+		} else {
+			$.extend(true, options, self.options.api);
+		}
 
-			options.success = function(data) {
-				$.extend(self.options, data);
+		options.success = function(data) {
+			$.extend(self.options, data);
 
-				callback(null);
-			};
+			next(null);
+		};
 
-			options.error = callback;
+		options.error = next;
 
-			DA.api(options);
-		});
+		DA.api(options);
 	};
 	
 	return Widget;
