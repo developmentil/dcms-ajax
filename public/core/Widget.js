@@ -42,6 +42,11 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	/*** Public Methods ***/
 	
 	proto.create = function(container, parent) {
+		if(container instanceof Widget) {
+			parent = container;
+			container = parent._elm;
+		}
+		
 		this._parent = parent || null;
 		
 		this._elm = this._create(container, parent);

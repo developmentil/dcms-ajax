@@ -14,18 +14,23 @@ define(['core/dcms-ajax'], function(DA) {
 	};
 	
 	Widget.renderItem = function(item, ul) {
-		var li = $('<li />').appendTo(ul),
+		var li = $('<li />').appendTo(ul);
+
+		if(item.className)
+			li.addClass(item.className);
+
+		if(item.divider) {
+			li.addClass('divider');
+			return li;
+		}
 				
-		a = $('<a />').appendTo(li)
+		var a = $('<a />').appendTo(li)
 		.attr('tabindex', item.tabindex || -1)
 		.attr('href', item.url || '#')
 		.text(item.label || item);
 
 		if(item.disabled)
 			li.addClass('disabled');
-
-		if(item.className)
-			li.addClass(item.className);
 
 		if(item.click) {
 			a.click(function(e) {

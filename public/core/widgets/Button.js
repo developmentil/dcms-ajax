@@ -6,6 +6,14 @@ define(['core/dcms-ajax'], function(DA) {
 	DA.Widget.extend(Widget);
 	var proto = Widget.prototype;
 	
+	proto.defaults = {
+		type: null,
+		url: null,
+		label: null,
+		click: null,
+		toggle: null
+	};
+	
 	Widget.render = function(options, elm) {
 		var isLink = (options.url || options.type === 'link');
 		
@@ -24,7 +32,7 @@ define(['core/dcms-ajax'], function(DA) {
 		elm.text(options.label);
 
 		if(options.icon) {
-			elm.prenend(' ');
+			elm.prepend(' ');
 			
 			$('<i />')
 			.prependTo(elm)
