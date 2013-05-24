@@ -20,12 +20,25 @@ define([
 	
 	DA.Widget = Widget;
 	
-	DA.app = Sammy();
-	DA.registry = new Registry();
-	
 	DA.plugins = {};
+	
+	DA.registry = new Registry();
 	DA.registry.set('plugins', {});
 	DA.registry.set('modules', []);
+	
+	
+	/*** App ***/
+	
+	DA.app = Sammy();
+	DA.setLocation = function(location, bind) {
+		if(!bind) {
+			DA.app.trigger('redirect', {to: location});
+			DA.app.last_location = ['get', location];
+		}
+		
+		DA.app.setLocation(location);		
+		return this;
+	};
 	
 	
 	/*** Api ***/

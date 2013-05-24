@@ -2,38 +2,40 @@ define(['core/dcms-ajax'], function(DA) {
 	
 	var inverval = 0;
 	
-	function Widget(options, tabs) {
+	function Widget() {
 		Widget.super_.apply(this, arguments);
 		
-		this._tabs = tabs;
+		if(!this.options.id)
+			this.options.id = 'tab-' + (++inverval);
+		
+		if(this.options.location !== null)
+			this.options.location = DA.app.getLocation();
 	};
 	DA.Widget.extend(Widget);
 	var proto = Widget.prototype;
 	
 	Widget.create = function(options) {
-		if(typeof options !== 'object')
+		if(typeof options === 'string')
 			options = {label: options};
-
-		options = $.extend({
-			label: 'Tab',
-			active: true,
-			id: 'tab-' + (++inverval)
-		}, options);
 
 		return new Widget(options);
 	};
 	
 	proto.defaults = {
-		active: false
+		label: 'Tab',
+		active: true
 	};
 	
-	proto.active = function(flag) {
+	proto.active = function(flag, skipUi) {
 		if(typeof flag === 'undefined')
 			return (this.options.active || false);
 		
 		this.options.active = flag;
 		
-		if(!this._elm)
+		if(flag && this.options.location)
+			DA.setLocation(this.options.location);
+		
+		if(!this._elm || skipUi)
 			return this;
 		
 		if(flag)

@@ -33,16 +33,16 @@ define(['core/dcms-ajax', 'core/libs/async',
 		if(this._children.length > 0)
 			this.setActive(this._children[0]);
 
-		this._renderNav();		
+		this._renderNav();
 		return this;
 	};
 	
-	proto.setActive = function(tab) {
+	proto.setActive = function(tab, skipUi) {
 		this.eachChild(function(tab) {
-			tab.active(false);
+			tab.active(false, skipUi);
 		});
 
-		tab.active(true);
+		tab.active(true, skipUi);
 		return this;
 	};
 	
@@ -51,7 +51,17 @@ define(['core/dcms-ajax', 'core/libs/async',
 			elm = $('<div class="tabbable" />');
 		
 		this.nav = new Nav(this._getNavOptions(this.options));
-		this.nav.create(elm, this);
+		var self = this,
+		nav = this.nav.create(elm, this);
+		
+		nav.on('shown', 'a[data-toggle="tab"]', function(e) {
+			var curr = $(e.target).parent().prevAll().length;
+			
+			if(!self._children[curr])
+				return;
+			
+			self.setActive(self._children[curr], true);
+		});
 		
 		this._container = $('<div class="tab-content" />')
 				.appendTo(elm);
