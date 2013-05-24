@@ -1,9 +1,12 @@
 define({
 	root: {
 		Table: {
-			Action: 'Action',
 			Yes: 'Yes',
 			No: 'No'
+		},
+		FormActions: {
+			Save: 'Save changes',
+			Cancel: 'Cancel'
 		},
 		Pagination: {
 			previousArrow: '«',

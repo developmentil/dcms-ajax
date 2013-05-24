@@ -24,6 +24,15 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		classExtend(ctor, Widget);
 	};
 	
+	Widget.create = function(options, defWidget) {
+		var widget = options.__widget || defWidget || Widget;
+		if(typeof widget === 'string') {
+			 widget = Widget[widget] || defWidget || Widget;
+		}
+		
+		return new widget(options);
+	};
+	
 	
 	/*** Static Vars ***/
 	
@@ -64,7 +73,8 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 			callback = noRender;
 			noRender = false;
 		}
-		callback = callback || $.noop;
+		if(!callback)
+			callback = function(err) { if(err) throw err; };
 		
 		if(this._markAsLoaded) {
 			if(!noRender)

@@ -1,4 +1,4 @@
-define(['core/dcms-ajax'], function(DA) {
+define(['core/dcms-ajax', 'core/widgets/Dropdown'], function(DA, Dropdown) {
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
@@ -21,7 +21,7 @@ define(['core/dcms-ajax'], function(DA) {
 		var self = this;
 		this._elm.empty();
 		
-		// use for..in insead of $.each to ignore undefined items
+		// use for..in to ignore undefined items
 		for(var i in options.items) {
 			(function(item) {
 				var li = $('<li />').appendTo(self._elm),
@@ -40,9 +40,24 @@ define(['core/dcms-ajax'], function(DA) {
 
 				if(item.click) {
 					a.click(function(e) {
-						e.preventDefault();
+						if(!item.useDefault)
+							e.preventDefault();
+						
 						item.click(e);
 					});
+				}
+				
+				if(item.items) {
+					li.addClass('dropdown');
+					
+					a.addClass('dropdown-toggle')
+					.attr('data-toggle', 'dropdown')
+					.append(' <b class="caret" />');
+			
+					var ul = $('<ul class="dropdown-menu" />')
+							.appendTo(li);
+					
+					Dropdown.renderItems(item.items, ul);
 				}
 			})(options.items[i]);
 		}

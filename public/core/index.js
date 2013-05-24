@@ -3,9 +3,10 @@ define([
 	
 	'core/plugins/layout',
 	
-	'core/widgets/ButtonGroup',
+	'core/widgets/Button', 'core/widgets/ButtonGroup',
 	
-	'core/widgets/Nav', 'core/widgets/NavBar', 
+	'core/widgets/Nav', 
+	'core/widgets/Dropdown', 'core/widgets/NavBar', 
 	
 	'core/widgets/Tabs', 'core/widgets/Tab', 
 	
@@ -15,19 +16,27 @@ define([
 	'core/widgets/Container', 'core/widgets/Control',
 	'core/widgets/Fieldset', 'core/widgets/Form', 
 	'core/widgets/FormHorizontal', 'core/widgets/ControlGroup',
+	'core/widgets/FormActions',
 	
 	'core/widgets/Input'
-], function(DA, layout, ButtonGroup, Nav, NavBar, Tabs, Tab, Table, Browser, Pagination, 
-			Container, Control, Fieldset, Form, FormHorizontal, ControlGroup, Input) {
+], function(
+		DA, layout, Button, ButtonGroup, 
+		Nav, Dropdown, NavBar, Tabs, Tab, 
+		Table, Browser, Pagination, 
+		Container, 
+		Control, Fieldset, Form, FormHorizontal, ControlGroup, FormActions, 
+		Input) {
 	
 	DA.registry.set('plugins.layout', {
 		_path: false
 	});
 	DA.plugins.layout = layout;
 	
+	DA.Widget.Button = Button;
 	DA.Widget.ButtonGroup = ButtonGroup;
 	
 	DA.Widget.Nav = Nav;
+	DA.Widget.Dropdown = Dropdown;
 	DA.Widget.NavBar = NavBar;
 	
 	DA.Widget.Tabs = Tabs;
@@ -43,6 +52,7 @@ define([
 	DA.Widget.Form = Form;
 	DA.Widget.FormHorizontal = FormHorizontal;
 	DA.Widget.ControlGroup = ControlGroup;
+	DA.Widget.FormActions = FormActions;
 	
 	DA.Widget.Input = Input;
 	

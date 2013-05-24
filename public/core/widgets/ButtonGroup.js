@@ -1,4 +1,7 @@
-define(['core/dcms-ajax'], function(DA) {
+define([
+	'core/dcms-ajax', 
+	'core/widgets/Button', 'core/widgets/Dropdown'
+], function(DA, Button, Dropdown) {
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
@@ -11,58 +14,54 @@ define(['core/dcms-ajax'], function(DA) {
 		if(!elm)
 			elm = $('<div class="btn-group" />');
 		
-		return Widget.super_.prototype._create.call(this, container, parent, elm);
+		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
+		
+		if(this.options.action) {
+			this._button = new Button(this.options.action);
+			this._button.create(elm, this);
+		}
+		
+		if(this.options.actions) {
+			this._dropdown = new Dropdown(this.options.actions);
+			this._dropdown.create(elm, this);
+		}
+		
+		return elm;
+	};
+	
+	proto._destroy = function() {
+		if(this._button) {
+			this._button.destroy();
+			this._button = null;
+		}
+		
+		if(this._dropdown) {
+			this._dropdown.destroy();
+			this._dropdown = null;
+		}
 	};
 	
 	proto._render = function(options) {
-		this._elm.empty();
+		this._elm.children('.btn.dropdown-toggle').remove();
 		
 		if(options.action) {
-			var action = options.action;
-			
-			var button = $('<a class="btn" />')
-			.appendTo(this._elm)
-			.text(action.label)
-			.attr('href', action.url || '#');
-	
-			if(action.click) {
-				button.click(function(e) {
-					if(!action.useDefault)
-						e.preventDefault();
-					
-					return action.click.apply(this, arguments);
-				});
-			}
+			this._button.render(options.action);
 			
 			if(options.actions) {
 				$('<button class="btn dropdown-toggle" data-toggle="dropdown" type="button" />')
 				.append('<span class="caret" />')
-				.appendTo(this._elm);
+				.insertAfter(this._button._elm);
 			}
 		} else {
 			$('<button class="btn dropdown-toggle" data-toggle="dropdown" type="button" />')
 			.text(options.actionsLabel || options.label)
 			.append(' <span class="caret" />')
-			.appendTo(this._elm);
+			.insertAfter(this._button._elm);
 		}
 		
 		if(options.actions) {
-			var ul = $('<ul class="dropdown-menu" />').appendTo(this._elm);
-			$.each(options.actions, function(i, action) {
-				var li = $('<li />').appendTo(ul),
-				a = $('<a />').appendTo(li)
-				.attr('tabindex', action.tabindex || -1)
-				.text(action.label)
-				.attr('href', action.url || '#');
-		
-				if(action.click) {
-					a.click(function(e) {
-						if(!action.useDefault)
-							e.preventDefault();
-
-						return action.click.apply(this, arguments);
-					});
-				}
+			this._dropdown.render({
+				items: options.actions
 			});
 		}
 	};

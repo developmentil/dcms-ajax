@@ -9,8 +9,7 @@ define(['core/dcms-ajax'], function(DA) {
 	Widget.types = {};
 	
 	Widget.create = function(options) {
-		var Control = Widget.types[options.type] || Widget.types.default;
-		return new Control(options);
+		return DA.Widget.create(options, Widget.types[options.type] || Widget.types.default);
 	};
 	
 	proto.defaults = {
