@@ -33,7 +33,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		return new widget(options);
 	};
 	
-	Widget.configElm = function(elm, options) {		
+	Widget.configElm = function(elm, options) {
 		if(options.id)
 			elm.attr('id', options.id);
 		

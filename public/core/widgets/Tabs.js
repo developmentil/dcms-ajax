@@ -9,8 +9,9 @@ define(['core/dcms-ajax', 'core/libs/async',
 	var proto = Widget.prototype;
 	
 	proto.defaults = {
-		id: 'tabs',
-		navClass: 'nav-tabs'
+		navClass: 'nav-tabs',
+		labelMaxLength: 30,
+		closeIcon: false
 	};
 	
 	proto.insert = function(tab) {
@@ -27,11 +28,13 @@ define(['core/dcms-ajax', 'core/libs/async',
 		return tab;
 	};
 	
-	proto.remove = function() {
+	proto.remove = function(tab) {
 		Widget.super_.prototype.remove.apply(this, arguments);
 		
 		if(this._children.length > 0)
 			this.setActive(this._children[0]);
+		else if(tab.options.location)
+			DA.setLocation('#/');
 
 		this._renderNav();
 		return this;
@@ -43,6 +46,11 @@ define(['core/dcms-ajax', 'core/libs/async',
 		});
 
 		tab.active(true, skipUi);
+		return this;
+	};
+	
+	proto.renderNav = function() {
+		this._renderNav();
 		return this;
 	};
 	
@@ -79,13 +87,32 @@ define(['core/dcms-ajax', 'core/libs/async',
 	};
 	
 	proto._getNavOptions = function(options) {
-		var items = [];
+		var self = this,
+		items = [];
 		
 		this.eachChild(function(tab) {
-			var item = tab.options;
+			var item = $.extend({}, tab.options),
+			maxlen = self.options.labelMaxLength;
 			
-			item.url = '#' + item.id;
+			item.id = null;
+			item.url = '#' + tab.options.id;
 			item.toggle = 'tab';
+			
+			if(self.options.closeIcon) {
+				item.closeIcon = {
+					click: function() {
+						self.remove(tab);
+					}
+				};
+			}
+			
+			if(item.label && item.label.length > maxlen) {
+				if(!item.attr)
+					item.attr = {};
+				item.attr.title = item.label;
+				
+				item.label = item.label.substr(0, maxlen-1) + '…';
+			}
 			
 			items.push(item);
 		});

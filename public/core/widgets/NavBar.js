@@ -11,6 +11,8 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 		if(!elm)
 			elm = $('<div class="navbar" />');
 		
+		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
+		
 		this._inner = $('<div class="navbar-inner" />')
 				.appendTo(elm);
 		

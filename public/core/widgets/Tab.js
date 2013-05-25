@@ -26,6 +26,17 @@ define(['core/dcms-ajax'], function(DA) {
 		active: true
 	};
 	
+	proto.label = function(label) {
+		if(typeof label === 'undefined')
+			return this.options.label;
+		
+		this.options.label = label;
+		if(this._parent)
+			this._parent.renderNav();
+		
+		return this;
+	};
+	
 	proto.active = function(flag, skipUi) {
 		if(typeof flag === 'undefined')
 			return (this.options.active || false);

@@ -1,9 +1,9 @@
-define(['core/dcms-ajax'], function(DA) {
+define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	DA.Widget.extend(Widget);
+	Nav.extend(Widget);
 	var proto = Widget.prototype;
 	
 	Widget.renderItems = function(items, container) {
@@ -14,29 +14,7 @@ define(['core/dcms-ajax'], function(DA) {
 	};
 	
 	Widget.renderItem = function(item, ul) {
-		var li = DA.Widget.configElm($('<li />'), item).appendTo(ul);
-
-		if(item.divider) {
-			li.addClass('divider');
-			return li;
-		}
-				
-		var a = $('<a />').appendTo(li)
-		.attr('tabindex', item.tabindex || -1)
-		.attr('href', item.url || '#')
-		.text(item.label || item);
-
-		if(item.disabled)
-			li.addClass('disabled');
-
-		if(item.click) {
-			a.click(function(e) {
-				if(!item.useDefault)
-					e.preventDefault();
-				
-				item.click(e);
-			});
-		}
+		var li = Widget._createItem(item, ul);
 		
 		if(item.items) {
 			li.addClass('dropdown-submenu');
@@ -46,12 +24,22 @@ define(['core/dcms-ajax'], function(DA) {
 			
 			Widget.renderItems(item.items, submenu);
 		}
+		
+		return li;
 	};
 	
-	proto.defaults = {
-		items: []
+	Widget._createItem = function(item, ul) {
+		if(item.divider) {
+			var li = DA.Widget.configElm($('<li />'), item).appendTo(ul);
+
+			if(item.divider) {
+				li.addClass('divider');
+				return li;
+			}
+		}
+		
+		return Widget.super_._createItem.apply(Widget.super_, arguments);
 	};
-	
 	
 	proto._create = function(container, parent, elm) {
 		if(!elm)

@@ -16,6 +16,29 @@ define(['core/dcms-ajax',
 		entity: {}
 	};
 	
+	proto.data = function(key, value) {
+		switch(typeof key) {
+			case 'undefined':
+				return this.options.entity;
+		
+			case 'object':
+				$.extend(this.options.entity, key);
+				break;
+				
+			case 'boolean':
+				$.extend(key, this.options.entity, value);
+				break;
+				
+			default:
+				if(typeof value === 'undefined')
+					return this.options.entity[key];
+				
+				this.options.entity[key] = value;
+		}
+		
+		return this;
+	};
+	
 	proto.create = function() {
 		var elm = Widget.super_.prototype.create.apply(this, arguments);
 		

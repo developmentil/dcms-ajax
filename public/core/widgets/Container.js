@@ -49,7 +49,7 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 	proto.remove = function(widget, keepLive) {
 		var i = this._children.indexOf(widget);
 		if(i === -1)
-			return false;
+			throw new Error('The given widget isn\'t child of this widget');
 		
 		this._children.splice(i, 1);
 		if(!keepLive)

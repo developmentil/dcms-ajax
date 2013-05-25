@@ -3,9 +3,15 @@ define(['core/widgets/NavBar', 'core/widgets/Tabs'], function(NavBar, Tabs) {
 		DA.registry.set('layout.menus.main', []);
 
 		DA.layout = {
-			navbar: new NavBar()
+			navbar: new NavBar({
+				id: 'navbar',
+				className: 'navbar-fixed-top'
+			})
 		};
-		DA.tabs = new Tabs();
+		DA.tabs = new Tabs({
+			id: 'tabs',
+			closeIcon: true
+		});
 
 		DA.layout.navbar.create('body');
 		DA.tabs.create('body');
