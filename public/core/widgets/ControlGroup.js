@@ -37,7 +37,10 @@ define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 			if(!label.length)
 				label = $('<label class="control-label" />').prependTo(this._elm);
 			
-			label.text(options.label);
+			label
+			.attr('for', options.id || options.name)
+			.text(options.label);
+				
 		} else if(label.length)
 			label.remove();
 		

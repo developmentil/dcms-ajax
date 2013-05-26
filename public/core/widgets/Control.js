@@ -2,6 +2,9 @@ define(['core/dcms-ajax'], function(DA) {
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
+		
+		if(!this.options.id)
+			this.options.id = this.options.name;
 	};
 	DA.Widget.extend(Widget);
 	var proto = Widget.prototype;
@@ -15,6 +18,10 @@ define(['core/dcms-ajax'], function(DA) {
 	proto.defaults = {
 		name: null,
 		value: null
+	};
+	
+	proto.isVal = function(val) {
+		return (this.options.value.toString() === val.toString());
 	};
 	
 	proto._create = function(container, parent, elm) {

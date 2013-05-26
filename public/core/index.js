@@ -14,20 +14,19 @@ define([
 	'core/widgets/Table', 'core/widgets/Browser',
 	'core/widgets/Pagination',
 	
-	'core/widgets/Container', 'core/widgets/Control',
-	'core/widgets/Fieldset', 'core/widgets/Form', 
-	'core/widgets/FormHorizontal', 'core/widgets/ControlGroup',
-	'core/widgets/FormActions',
+	'core/widgets/Container', 'core/widgets/Fieldset', 
+	'core/widgets/Form', 'core/widgets/FormHorizontal', 
+	'core/widgets/ControlGroup', 'core/widgets/FormActions',
 	
-	'core/widgets/Input'
+	'core/widgets/Control', 'core/widgets/MultiControl',
+	'core/widgets/Input', 'core/widgets/Checkbox', 'core/widgets/Select'
 ], function(
 		DA, layout, 
 		Toolbar, Button, ButtonGroup, 
 		Nav, Dropdown, NavBar, Tabs, Tab, 
 		Table, Browser, Pagination, 
-		Container, 
-		Control, Fieldset, Form, FormHorizontal, ControlGroup, FormActions, 
-		Input) {
+		Container, Fieldset, Form, FormHorizontal, ControlGroup, FormActions, 
+		Control, MultiControl, Input, Checkbox, Select) {
 	
 	DA.registry.set('plugins.layout', {
 		_path: false
@@ -50,14 +49,17 @@ define([
 	DA.Widget.Pagination = Pagination;
 	
 	DA.Widget.Container = Container;
-	DA.Widget.Control = Control;
 	DA.Widget.Fieldset = Fieldset;
 	DA.Widget.Form = Form;
 	DA.Widget.FormHorizontal = FormHorizontal;
 	DA.Widget.ControlGroup = ControlGroup;
 	DA.Widget.FormActions = FormActions;
 	
+	DA.Widget.Control = Control;
+	DA.Widget.MultiControl = MultiControl;
 	DA.Widget.Input = Input;
+	DA.Widget.Checkbox = Checkbox;
+	DA.Widget.Select = Select;
 	
 	return DA;
 });
