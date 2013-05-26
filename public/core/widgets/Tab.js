@@ -23,7 +23,8 @@ define(['core/dcms-ajax'], function(DA) {
 	
 	proto.defaults = {
 		label: 'Tab',
-		active: true
+		active: true,
+		hideCloseIcon: false
 	};
 	
 	proto.label = function(label) {

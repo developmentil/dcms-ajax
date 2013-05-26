@@ -98,7 +98,7 @@ define(['core/dcms-ajax', 'core/libs/async',
 			item.url = '#' + tab.options.id;
 			item.toggle = 'tab';
 			
-			if(self.options.closeIcon) {
+			if(self.options.closeIcon && !tab.options.hideCloseIcon) {
 				item.dblclick = function() {
 					self.remove(tab);
 				};
