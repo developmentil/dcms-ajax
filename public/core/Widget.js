@@ -18,6 +18,13 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		ctor.extend = function(c) {
 			classExtend(c, ctor);
 		};
+		
+		for(var fn in superCtor) {
+			if(typeof ctor[fn] !== 'undefined')
+				continue;
+			
+			ctor[fn] = superCtor[fn];
+		}
 	};
 	
 	Widget.extend = function(ctor) {
