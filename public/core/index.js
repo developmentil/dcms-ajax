@@ -19,14 +19,15 @@ define([
 	'core/widgets/ControlGroup', 'core/widgets/FormActions',
 	
 	'core/widgets/Control', 'core/widgets/MultiControl',
-	'core/widgets/Input', 'core/widgets/Checkbox', 'core/widgets/Select'
+	'core/widgets/Input', 'core/widgets/Checkbox', 'core/widgets/Select',
+	'core/widgets/Textarea'
 ], function(
 		DA, layout, 
 		Toolbar, Button, ButtonGroup, 
 		Nav, Dropdown, NavBar, Tabs, Tab, 
 		Table, Browser, Pagination, 
 		Container, Fieldset, Form, FormHorizontal, ControlGroup, FormActions, 
-		Control, MultiControl, Input, Checkbox, Select) {
+		Control, MultiControl, Input, Checkbox, Select, Textarea) {
 	
 	DA.registry.set('plugins.layout', {
 		_path: false
@@ -60,6 +61,7 @@ define([
 	DA.Widget.Input = Input;
 	DA.Widget.Checkbox = Checkbox;
 	DA.Widget.Select = Select;
+	DA.Widget.Textarea = Textarea;
 	
 	return DA;
 });
