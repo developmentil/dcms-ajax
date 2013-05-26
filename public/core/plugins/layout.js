@@ -13,7 +13,7 @@ define(['core/widgets/NavBar', 'core/widgets/Tabs'], function(NavBar, Tabs) {
 			closeIcon: true
 		});
 
-		DA.layout.navbar.create('body');
+		var navbar = DA.layout.navbar.create('body').hide();
 		DA.tabs.create('body');
 
 		DA.when('runned', function(callback) {
@@ -21,6 +21,7 @@ define(['core/widgets/NavBar', 'core/widgets/Tabs'], function(NavBar, Tabs) {
 				brand: DA.registry.get('layout.brand'),
 				items: DA.registry.get('layout.menus.main')
 			});
+			navbar.slideDown();
 
 			DA.tabs.load();
 

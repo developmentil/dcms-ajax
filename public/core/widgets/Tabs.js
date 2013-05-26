@@ -99,10 +99,12 @@ define(['core/dcms-ajax', 'core/libs/async',
 			item.toggle = 'tab';
 			
 			if(self.options.closeIcon) {
+				item.dblclick = function() {
+					self.remove(tab);
+				};
+				
 				item.closeIcon = {
-					click: function() {
-						self.remove(tab);
-					}
+					click: item.dblclick
 				};
 			}
 			

@@ -91,6 +91,15 @@ define(['core/dcms-ajax'], function(DA) {
 				item.click(e);
 			});
 		}
+
+		if(item.dblclick) {
+			a.dblclick(function(e) {
+				if(!item.useDefault)
+					e.preventDefault();
+				
+				item.dblclick(e);
+			});
+		}
 		
 		return li;
 	};
