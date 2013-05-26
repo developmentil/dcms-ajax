@@ -6,12 +6,12 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 	ControlsContainer.extend(Widget);
 	var proto = Widget.prototype;
 	
-	proto.defaults = $.extend({
+	proto.defaults = {
 		action: '',
 		method: 'post',
 		fieldsets: [],
 		fieldset: Fieldset
-	}, proto.defaults);
+	};
 	
 	proto.create = function() {
 		var elm = Widget.super_.prototype.create.apply(this, arguments);

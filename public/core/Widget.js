@@ -13,6 +13,14 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	var proto = Widget.prototype;
 	
 	function classExtend(ctor, superCtor) {
+		if(ctor.prototype.defaults) {
+			ctor.prototype.defaults = $.extend(
+				ctor.prototype.defaults,
+				superCtor.prototype.defaults,
+				ctor.prototype.defaults
+			);
+		}
+		
 		util.inherits(ctor, superCtor);
 		
 		ctor.extend = function(c) {
