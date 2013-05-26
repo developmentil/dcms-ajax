@@ -3,7 +3,7 @@ define(['core/dcms-ajax'], function(DA) {
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 		
-		if(!this.options.id)
+		if(typeof this.options.id === 'undefined')
 			this.options.id = this.options.name;
 	};
 	DA.Widget.extend(Widget);
@@ -13,6 +13,10 @@ define(['core/dcms-ajax'], function(DA) {
 	
 	Widget.create = function(options) {
 		return DA.Widget.create(options, Widget.types[options.type] || Widget.types.default);
+	};
+	
+	Widget.escape = function(text) {
+		return $('<span />').text(text).html();
 	};
 	
 	proto.defaults = {

@@ -5,47 +5,59 @@ define([
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	Input.extend(Widget);
+	Control.extend(Widget);
 	var proto = Widget.prototype;
 	
 	Control.types.checkbox = Widget;
 	
 	proto.defaults = {
-		type: 'text',
+		type: 'checkbox',
 		name: null,
 		value: null,
+		wrapperLabel: null,
 		checkedValue: 1,
 		uncheckValue: 0
 	};
 	
 	proto._create = function(container, parent, elm) {
-		this.hidden = new Input(this._getHiddenOptions());
-		this.hidden.create(container, this);
+		var label = $('<label class="checkbox" />')
+				.attr('for', this.options.id);
 		
-		return Widget.super_.prototype._create.call(this, container, parent, elm);
+		this.hidden = new Input(this._getHiddenOptions(this.options));
+		this.hidden.create(label, this);
+		
+		this.input = new Input(this.options);
+		this.input.create(label, this);
+		
+		if(this.options.label) {
+			label.append(' ' + Widget.escape(this.options.label));
+		}
+		
+		return label;
 	};
 	
 	proto._destroy = function() {
-		Widget.super_.prototype._destroy.apply(this, arguments);
-		
 		this.hidden.destroy();
 		this.hidden = null;
+		
+		this.input.destroy();
+		this.input = null;
+		
+		Widget.super_.prototype._destroy.apply(this, arguments);
 	};
 	
 	proto._getHiddenOptions = function(options) {
 		return {
 			type: 'hidden',
+			id: null,
 			name: options.name,
 			value: options.uncheckValue
 		};
 	};
 	
 	proto._render = function(options) {
-		this.hidden.render(this._getHiddenOptions());
-				
-		this._elm
-		.attr('value', options.checkedValue)
-		.prop('checked', options.value == options.checkedValue);
+		this.hidden.render(this._getHiddenOptions(options));
+		this.input.render(options);
 	};
 	
 	return Widget;

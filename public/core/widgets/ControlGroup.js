@@ -33,13 +33,13 @@ define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 	
 	proto._render = function(options) {
 		var label = this._elm.children('label');
-		if(options.label) {
+		if(options.wrapperLabel || (options.label && options.wrapperLabel !== null)) {
 			if(!label.length)
 				label = $('<label class="control-label" />').prependTo(this._elm);
 			
 			label
 			.attr('for', options.id || options.name)
-			.text(options.label);
+			.text(options.wrapperLabel || options.label);
 				
 		} else if(label.length)
 			label.remove();
