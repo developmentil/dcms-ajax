@@ -10,6 +10,13 @@ define([
 	
 	Control.types.htmleditor = Widget;
 	
+	Widget.launchEditor = function(element, options) {
+		require(['tinymce', 'jquery-tinymce'], function() {
+			tinymce.dom.Event.domLoaded = true;
+			element.tinymce(options);
+		});
+	};
+	
 	proto.defaults = {
 		cols: null,
 		rows: null,
@@ -28,14 +35,9 @@ define([
 	};
 	
 	proto._render = function(options) {
-		var self = this;
-		
 		this._elm.val(options.value);
 		
-		require(['tinymce', 'jquery-tinymce'], function() {
-			tinymce.dom.Event.domLoaded = true;
-			self._elm.tinymce(self._getEditorOptions(options));
-		});
+		Widget.launchEditor(this._elm, this._getEditorOptions(options));
 	};
 	
 	return Widget;
