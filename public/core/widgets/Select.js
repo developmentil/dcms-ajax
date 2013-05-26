@@ -51,13 +51,14 @@ define([
 	
 	proto._renderOptions = function(options, container) {
 		for(var i in options) {
-			var val = options[i].value || i;
+			var opt = options[i].label ? options[i] : {label: options[i]},
+			val = opt.value || i;
 			
-			DA.Widget.configElm($('<option />'), options[i])
+			DA.Widget.configElm($('<option />'), opt)
 			.appendTo(container)
 			.attr('value', val)
 			.prop('selected', this.isVal(val))
-			.text(options[i].label || options[i]);
+			.text(opt.label);
 		}
 	};
 	

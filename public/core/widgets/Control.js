@@ -25,7 +25,7 @@ define(['core/dcms-ajax'], function(DA) {
 	};
 	
 	proto.isVal = function(val) {
-		return (this.options.value.toString() === val.toString());
+		return (this.options.value == val);
 	};
 	
 	proto._create = function(container, parent, elm) {
