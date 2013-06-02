@@ -53,7 +53,7 @@ define(['core/dcms-ajax', 'core/nls/index', 'core/widgets/Button'], function(DA,
 		// use for..in to ignore undefined items
 		for(var i in actions) {
 			this._elm
-			.append(Button.render(actions[i]))
+			.append(Button.create(actions[i]))
 			.append(' ');
 		}
 	};

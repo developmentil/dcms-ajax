@@ -11,8 +11,6 @@ define(['core/widgets/Control'], function(Control) {
 	
 	proto.defaults = {
 		type: 'text',
-		name: null,
-		value: null,
 		maxlength: null,
 		placeholder: null,
 		dir: null,

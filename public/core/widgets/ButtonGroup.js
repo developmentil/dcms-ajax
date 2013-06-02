@@ -47,11 +47,10 @@ define([
 	};
 	
 	proto._render = function(options) {
-		this._elm.children('.btn.dropdown-toggle').remove();
-		
 		if(options.buttons) {
+			this._elm.empty();
 			for(var i in options.buttons) {
-				Button.render(options.buttons[i], this._elm);
+				this._elm.append(Button.create(options.buttons[i]));
 			}
 		}
 		
@@ -74,6 +73,8 @@ define([
 			this._dropdown.render({
 				items: options.actions
 			});
+		} else {
+			this._elm.children('.btn.dropdown-toggle').remove();
 		}
 	};
 	

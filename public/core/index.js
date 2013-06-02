@@ -7,7 +7,9 @@ define([
 	'core/widgets/Button', 'core/widgets/ButtonGroup',
 	
 	'core/widgets/Nav', 
-	'core/widgets/Dropdown', 'core/widgets/NavBar', 
+	'core/widgets/Dropdown', 'core/widgets/NavBar',
+	
+	'core/widgets/ProgressBar', 
 	
 	'core/widgets/Tabs', 'core/widgets/Tab', 
 	
@@ -20,14 +22,18 @@ define([
 	
 	'core/widgets/Control', 'core/widgets/MultiControl',
 	'core/widgets/Input', 'core/widgets/Checkbox', 'core/widgets/Select',
-	'core/widgets/TextArea', 'core/widgets/HtmlEditor'
+	'core/widgets/TextArea', 'core/widgets/HtmlEditor',
+	'core/widgets/InputFile'
 ], function(
 		DA, layout, 
 		Toolbar, Button, ButtonGroup, 
-		Nav, Dropdown, NavBar, Tabs, Tab, 
+		Nav, Dropdown, NavBar, 
+		ProgressBar, 
+		Tabs, Tab, 
 		Table, Browser, Pagination, 
 		Container, Fieldset, Form, FormHorizontal, ControlGroup, FormActions, 
-		Control, MultiControl, Input, Checkbox, Select, TextArea, HtmlEditor) {
+		Control, MultiControl, Input, Checkbox, Select, TextArea, HtmlEditor,
+		InputFile) {
 	
 	DA.registry.set('plugins.layout', {
 		_path: false
@@ -41,6 +47,8 @@ define([
 	DA.Widget.Nav = Nav;
 	DA.Widget.Dropdown = Dropdown;
 	DA.Widget.NavBar = NavBar;
+	
+	DA.Widget.ProgressBar = ProgressBar;
 	
 	DA.Widget.Tabs = Tabs;
 	DA.Widget.Tab = Tab;
@@ -63,6 +71,7 @@ define([
 	DA.Widget.Select = Select;
 	DA.Widget.TextArea = TextArea;
 	DA.Widget.HtmlEditor = HtmlEditor;
+	DA.Widget.InputFile = InputFile;
 	
 	return DA;
 });

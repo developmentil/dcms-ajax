@@ -61,6 +61,9 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		if(options.attr)
 			elm.attr(options.attr);
 		
+		if(options.prop)
+			elm.attr(options.prop);
+		
 		if(options.bind)
 			elm.bind(options.bind);
 		

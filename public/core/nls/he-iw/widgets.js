@@ -10,5 +10,10 @@ define({
 	Pagination: {
 		previousArrow: '»',
 		nextArrow: '«'
+	},
+	InputFile: {
+		selectFile: 'בחירת קובץ...',
+		selectFiles: 'בחירת קבצים...',
+		del: 'מחק'
 	}
 });

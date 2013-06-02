@@ -14,14 +14,15 @@ define(['core/dcms-ajax'], function(DA) {
 		toggle: null
 	};
 	
-	Widget.render = function(options, elm) {
-		var isLink = (options.url || options.type === 'link');
+	Widget.create = function(options, elm) {
+		var type = options.type || (options.url ? 'link' : 'button');
 		
-		if(!elm) {
-			elm = isLink ? $('<a class="btn" />') : $('<button class="btn" />');
-		} else {
-			elm.empty();
-		}
+		if(type === 'link')
+			elm = $('<a class="btn" />').attr('href', options.url || '#');
+		else if(type === 'span' || type === 'div')
+			elm = $('<' + type + ' class="btn" />');
+		else
+			elm = $('<button class="btn" />').attr('type', options.type || 'button');
 		
 		if(options.id)
 			elm.attr('id', options.id);
@@ -37,12 +38,6 @@ define(['core/dcms-ajax'], function(DA) {
 			$('<i />')
 			.prependTo(elm)
 			.addClass(options.icon.className || options.icon);
-		}
-		
-		if(isLink) {
-			elm.attr('href', options.url || '#');
-		} else {
-			elm.attr('type', options.type || 'button');
 		}
 
 		if(options.toggle)
@@ -62,14 +57,10 @@ define(['core/dcms-ajax'], function(DA) {
 	
 	proto._create = function(container, parent, elm) {
 		if(!elm) {
-			elm = Widget.render(this.options);
+			elm = Widget.create(this.options);
 		}
 		
 		return Widget.super_.prototype._create.call(this, container, parent, elm);
-	};
-	
-	proto._render = function(options) {
-		Widget.render(options, this._elm);
 	};
 	
 	return Widget;

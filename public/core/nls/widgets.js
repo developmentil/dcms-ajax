@@ -11,6 +11,11 @@ define({
 		Pagination: {
 			previousArrow: '«',
 			nextArrow: '»'
+		},
+		InputFile: {
+			selectFile: 'Select file...',
+			selectFiles: 'Select files...',
+			del: 'Delete'
 		}
 	},
 	'he-iw': true
