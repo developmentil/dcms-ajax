@@ -3,7 +3,7 @@ define(['core/dcms-ajax'], function(DA) {
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 		
-		if(typeof this.options.id === 'undefined')
+		if(this.options.id === null)
 			this.options.id = this.options.name;
 	};
 	DA.Widget.extend(Widget, {

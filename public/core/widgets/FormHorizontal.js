@@ -7,7 +7,7 @@ define(['core/widgets/Form', 'core/widgets/ControlGroup'], function(Form, Contro
 		className: 'form-horizontal',
 		wrapper: ControlGroup
 	});
-	var proto = Widget.prototype;
+//	var proto = Widget.prototype;
 	
 	return Widget;
 });
