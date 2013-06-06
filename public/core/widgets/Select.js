@@ -1,7 +1,8 @@
 define([
 	'core/dcms-ajax', 
-	'core/widgets/Control', 'core/widgets/MultiControl'
-], function(DA, Control, MultiControl) {
+	'core/widgets/Control', 'core/widgets/MultiControl', 'core/nls/index'
+], function(DA, Control, MultiControl, i18n) {
+	i18n = i18n.widgets.Select;
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
@@ -14,8 +15,13 @@ define([
 	proto.defaults = {
 		name: null,
 		value: null,
+		api: null,
 		options: [],
-		optionGroups: []
+		optionGroups: [],
+		required: null,
+		defaultValue: '',
+		defaultLabel: i18n.defaultLabel,
+		defaultOption: {}
 	};
 	
 	proto._create = function(container, parent, elm) {
@@ -24,9 +30,26 @@ define([
 		
 		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
 		
-		elm.attr('type', this.options.type);
+		if(this.options.required !== null)
+			elm.prop('required', this.options.required);
 		
 		return elm;
+	};
+	
+	proto._load = function(callback) {
+		var self = this;
+		
+		Widget.super_.prototype._load.call(this, function(err) {
+			if(!self.options.api || err)
+				return callback(err);
+			
+			DA.api(self.options.api, function(err, data) {
+				if(err) return callback(err);
+				
+				$.extend(self.options, data);console.log(self.options, data);
+				callback(null);
+			});
+		});
 	};
 	
 	proto._render = function(options) {
@@ -45,6 +68,19 @@ define([
 					options.optionGroups[i]
 			, group);
 		}
+		
+		if(options.required === false) {
+			var opt = $.extend({
+				label: options.defaultLabel,
+				value: options.defaultValue
+			}, options.defaultOption);
+			
+			DA.Widget.configElm($('<option />'), opt)
+			.appendTo(this._elm)
+			.attr('value', opt.value)
+			.text(opt.label);
+		}
+			
 		
 		this._renderOptions(options.options, this._elm);
 	};

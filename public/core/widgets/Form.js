@@ -61,23 +61,12 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 			return;
 		}
 
-		var options = {};
-
-		if(typeof self.options.api === 'string') {
-			options.url = self.options.api;
-		} else {
-			$.extend(true, options, self.options.api);
-		}
-
-		options.success = function(data) {
+		DA.api(self.options.api, function(err, data) {
+			if(err) return next(err);
+			
 			$.extend(self.options, data);
-
 			next(null);
-		};
-
-		options.error = next;
-
-		DA.api(options);
+		});
 	};
 	
 	return Widget;

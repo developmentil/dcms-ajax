@@ -12,6 +12,9 @@ define({
 			previousArrow: '«',
 			nextArrow: '»'
 		},
+		Select: {
+			defaultLabel: '-- none --'
+		},
 		InputFile: {
 			selectFile: 'Select file...',
 			selectFiles: 'Select files...',
