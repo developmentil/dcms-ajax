@@ -208,7 +208,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	};
 	
 	proto._renderWidget = function(td, value, row) {
-		var widget = this.instance,
+		var widget = row.__instance || this.instance,
 		options = this.options || {};
 
 		if(typeof options === 'function')
@@ -222,13 +222,13 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 			if(!widget)
 				throw new Error('Invalid widget: ' + this.widget);
 			
-			widget = this.instance = new widget(options);
+			widget = row.__instance = new widget(options);
 			widget.create(td);
 			
 			widget.render();
 		} else {
-			widget.create(td);
-			widget.render(options);
+			widget.create(td)
+			.render(options);
 		}
 	};
 	

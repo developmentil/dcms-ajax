@@ -44,6 +44,29 @@ define([
 	};
 	
 	
+	/*** UI ***/
+	
+	DA.ui = {
+		error: function(options, callback) {
+			callback(alert('Error: ' + options));
+		},
+		alert: function(options, callback) {
+			callback(alert(options));
+		},
+		confirm: function(options, callback) {
+			callback(confirm(options));
+		},
+		prompt: function(options, callback) {
+			if(typeof options === 'string')
+				options = {content: options, defaultValue: ''};
+			else
+				options = $({content: 'DEFAULT CONTENT', defaultValue: ''}, options);
+				
+			callback(prompt(options.content, options.defaultValue));
+		}
+	};
+	
+	
 	/*** Api ***/
 	
 	 DA.api = function(options, callback) {

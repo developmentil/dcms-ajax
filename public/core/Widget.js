@@ -147,6 +147,14 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		return this._elm;
 	};
 	
+	proto.options = function(options) {
+		if(options === undefined)
+			return $.extend({}, this.options);
+		
+		$.extend(this.options, options || {});
+		return this;
+	};
+	
 	proto.render = function(options) {		
 		options = $.extend(this.options, options || {});
 		
