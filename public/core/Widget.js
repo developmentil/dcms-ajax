@@ -13,25 +13,26 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	var proto = Widget.prototype;
 	
 	function classExtend(ctor, superCtor, defaults) {
-		if(defaults || ctor.prototype.defaults) {
-			ctor.prototype.defaults = $.extend(
-				ctor.prototype.defaults || defaults,
-				superCtor.prototype.defaults,
-				defaults || ctor.prototype.defaults
-			);
-		}
+		if(ctor.prototype.defaults)
+			defaults = $.extend(ctor.prototype.defaults, defaults || {});
 		
 		util.inherits(ctor, superCtor);
+		
+		if(defaults) {
+			ctor.prototype.defaults = $.extend(
+					defaults, 
+					superCtor.prototype.defaults, 
+					defaults
+			);
+		}
 		
 		ctor.extend = function(c, defaults) {
 			classExtend(c, ctor, defaults);
 		};
 		
 		for(var fn in superCtor) {
-			if(typeof ctor[fn] !== 'undefined')
-				continue;
-			
-			ctor[fn] = superCtor[fn];
+			if(typeof ctor[fn] === 'undefined')
+				ctor[fn] = superCtor[fn];
 		}
 	};
 	
@@ -73,7 +74,14 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	
 	/*** Static Vars ***/
 	
-	proto.defaults = {};
+	proto.defaults = {
+		id: null,
+		className: null,
+		css: null,
+		attr: null,
+		prop: null,
+		bind: null
+	};
 	
 	
 	/*** Public Methods ***/
