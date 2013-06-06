@@ -21,6 +21,21 @@ define(['core/dcms-ajax'], function(DA) {
 		return new Widget(options);
 	};
 	
+	Widget.find = function(target) {
+		if(!target)
+			return null;
+		
+		var tab = $(target).closest('.tab-pane');
+		if(!tab.length)
+			return null;
+		
+		var widget = tab.data('widget');
+		if(!widget || !(widget instanceof Widget))
+			return null;
+				
+		return widget;
+	};
+	
 	proto.defaults = {
 		label: 'Tab',
 		active: true,

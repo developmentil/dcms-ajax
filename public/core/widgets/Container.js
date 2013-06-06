@@ -60,11 +60,14 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 	};
 	
 	proto._load = function(callback) {
-		var tasks = [];
+		var self = this, tasks = [];
 		
 		this.eachChild(function(widget) {
 			tasks.push(function(callback) {
-				widget.load(true, callback);
+				if(self._markAsLoaded === null)
+					widget.reload(true, callback);
+				else
+					widget.load(true, callback);
 			});
 		});
 		

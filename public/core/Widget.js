@@ -5,7 +5,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		
 		this._elm = null;
 		this._parent = null;
-		this._markAsLoaded = false;
+		this._markAsLoaded = null;
 		
 		this.options = $.extend({}, this.defaults, options || {});
 	};
@@ -105,7 +105,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	};
 	
 	proto.reload = function(noRender, callback) {
-		this._markAsLoaded = false;
+		this._markAsLoaded = null;
 		
 		return this.load.apply(this, arguments);
 	};

@@ -14,6 +14,24 @@ define(['core/dcms-ajax', 'core/libs/async',
 		closeIcon: false
 	};
 	
+	proto.refreshTarget = function(target) {
+		var tab = Tab.find(target);
+		if(tab) {
+			tab.reload();
+		}
+		
+		return this;
+	};
+	
+	proto.removeTarget = function(target) {
+		var tab = Tab.find(target);
+		if(tab) {
+			this.remove(tab);
+		}
+		
+		return this;
+	};
+	
 	proto.insert = function(tab) {
 		if(!(tab instanceof Tab)) {
 			tab = Tab.create(tab);
