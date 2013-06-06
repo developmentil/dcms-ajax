@@ -11,6 +11,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		className: 'table-hover',
 		sort: false,
 		columns: null,
+		columnsAlign: 'center',
 		idField: '_id',
 		rows: []
 	};
@@ -22,6 +23,18 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 			
 			each(column, i);
 		});
+	};
+	
+	proto.getValue = function(entity, key) {
+		var keys = key.split('.');
+		for(var i = 0; i < keys.length; i++) {
+			if(typeof entity !== 'object')
+				return null;
+			
+			entity = entity[keys[i]];
+		}
+		
+		return entity;
 	};
 	
 	proto.isSorted = function(columnName) {
@@ -54,6 +67,9 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 
 		if(!column.name)
 			column.name = i;
+		
+		if(column.align === undefined)
+			column.align = this.options.columnsAlign;
 		
 		if(column.type) {
 			var type = column.type.charAt(0).toUpperCase() + column.type.slice(1),
@@ -97,20 +113,32 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 				if(options.columns) {
 					// render columns only
 					self.eachColumn(options.columns, function(column) {
-						var value = row[column.name],
+						var value = self.getValue(row, column.name),
 
 						td = $('<td />').appendTo(tr);
+						if(column.align)
+							td.css('textAlign', column.align);
+		
+						if(column.className)
+							td.addClass(column.className);
 
 						if(typeof column.render === 'function')
 							column.render(td, value, row);
-						else
-							td.text(value);
+						else {
+							if(column.nullText)
+								td.text(value || column.nullText);
+							else
+								td.text(value);
+						}
 					});
 				} else {
 					// render all row props
 					for(var j in row) {
-						$('<td />').appendTo(tr)
+						var td = $('<td />').appendTo(tr)
 						.text(row[j]);
+				
+						if(options.columnsAlign)
+							td.css('textAlign', options.columnsAlign);
 					}
 				}
 			})(options.rows[i]);
@@ -124,6 +152,12 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		var self = this, th = $('<th />'),
 		columnName = column.name,
 		sorted = this.isSorted(columnName);
+
+		if(column.align)
+			th.css('textAlign', column.align);
+		
+		if(column.className)
+			th.addClass(column.className);
 		
 		if(this.options.sort && !column.disableSort) {
 			if(sorted) {
@@ -162,14 +196,12 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	};
 	
 	proto._renderBoolean = function(td, value, row) {
-		if(value) {
+		if(value && value !== '0' && value !== 'false') {
 			td.text(this.trueLabel);
-			if(this.trueClass)
-				td.addClass(this.trueClass);
 			if(this.trueClass)
 				td.addClass(this.trueClass);
 		} else {
-			td.text(this.trueLabel);
+			td.text(this.falseLabel);
 			if(this.falseClass)
 				td.addClass(this.falseClass);
 		}
