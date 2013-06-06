@@ -18,5 +18,5 @@ define({
 			del: 'Delete'
 		}
 	},
-	'he-iw': true
+	'he-IL': true
 });

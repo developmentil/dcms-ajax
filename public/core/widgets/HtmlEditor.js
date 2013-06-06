@@ -24,14 +24,17 @@ define([
 		plugins: [
 			"advlist autolink lists link image charmap print preview anchor",
 			"searchreplace visualblocks code fullscreen",
-			"insertdatetime media table contextmenu paste"
+			"insertdatetime media table contextmenu paste directionality"
 		],
-		toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+		toolbar: "insertfile undo redo | styleselect | bold italic | ltr rtl | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
 		editor: {}
 	};
 	
 	proto._getEditorOptions = function(options) {
-		return $.extend({}, options, options.editor);
+		return $.extend({
+			language: DA.registry.get('locale'),
+			directionality: DA.registry.get('dir')
+		}, options, options.editor);
 	};
 	
 	proto._render = function(options) {

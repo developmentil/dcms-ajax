@@ -23,6 +23,9 @@ define([
 	DA.plugins = {};
 	
 	DA.registry = new Registry();
+	DA.registry.set('locale', requirejs.s.contexts._.config.locale);
+	DA.registry.set('dir', 'ltr');
+	
 	DA.registry.set('plugins', {});
 	DA.registry.set('modules', []);
 	
