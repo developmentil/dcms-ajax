@@ -8,10 +8,6 @@ define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 	});
 	var proto = Widget.prototype;
 	
-	proto.defaults = $.extend({
-		legend: null
-	}, proto.defaults);
-	
 	proto._create = function(container, parent, elm) {
 		if(!elm)
 			elm = $('<fieldset />');
