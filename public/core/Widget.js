@@ -12,19 +12,19 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	util.inherits(Widget, SignalsEmitter);
 	var proto = Widget.prototype;
 	
-	function classExtend(ctor, superCtor) {
-		if(ctor.prototype.defaults) {
+	function classExtend(ctor, superCtor, defaults) {
+		if(defaults || ctor.prototype.defaults) {
 			ctor.prototype.defaults = $.extend(
-				ctor.prototype.defaults,
+				ctor.prototype.defaults || defaults,
 				superCtor.prototype.defaults,
-				ctor.prototype.defaults
+				defaults || ctor.prototype.defaults
 			);
 		}
 		
 		util.inherits(ctor, superCtor);
 		
-		ctor.extend = function(c) {
-			classExtend(c, ctor);
+		ctor.extend = function(c, defaults) {
+			classExtend(c, ctor, defaults);
 		};
 		
 		for(var fn in superCtor) {
@@ -35,8 +35,8 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		}
 	};
 	
-	Widget.extend = function(ctor) {
-		classExtend(ctor, Widget);
+	Widget.extend = function(ctor, defaults) {
+		classExtend(ctor, Widget, defaults);
 	};
 	
 	Widget.create = function(options, defWidget) {

@@ -5,19 +5,17 @@ define([
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	Control.extend(Widget);
-	var proto = Widget.prototype;
-	
-	Control.types.checkbox = Widget;
-	
-	proto.defaults = {
+	Control.extend(Widget, {
 		type: 'checkbox',
 		name: null,
 		value: null,
 		wrapperLabel: null,
 		checkedValue: 1,
 		uncheckValue: 0
-	};
+	});
+	var proto = Widget.prototype;
+	
+	Control.types.checkbox = Widget;
 	
 	proto._create = function(container, parent, elm) {
 		var label = $('<label class="checkbox" />')

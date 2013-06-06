@@ -6,7 +6,12 @@ define(['core/dcms-ajax'], function(DA) {
 		if(typeof this.options.id === 'undefined')
 			this.options.id = this.options.name;
 	};
-	DA.Widget.extend(Widget);
+	DA.Widget.extend(Widget, {
+		name: null,
+		value: null,
+		required: null,
+		emptyValue: ''
+	});
 	var proto = Widget.prototype;
 	
 	Widget.types = {};
@@ -19,13 +24,13 @@ define(['core/dcms-ajax'], function(DA) {
 		return $('<span />').text(text).html();
 	};
 	
-	proto.defaults = {
-		name: null,
-		value: null
-	};
-	
 	proto.isVal = function(val) {
 		return (this.options.value == val);
+	};
+	
+	proto.isSend = function() {
+		return (this.options.name && this._elm && 
+					(this.options.required !== false || this._elm.val() != this.options.emptyValue));
 	};
 	
 	proto._create = function(container, parent, elm) {
@@ -34,8 +39,16 @@ define(['core/dcms-ajax'], function(DA) {
 		
 		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
 		
-		if(this.options.name)
-			elm.attr('name', this.options.name);
+		if(this.options.required !== null)
+			elm.prop('required', this.options.required);
+		
+		var self = this;
+		elm.bind('change.isSend', function() {			
+			if(self.isSend())
+				elm.attr('name', self.options.name);
+			else
+				elm.removeAttr('name');
+		});
 		
 		return elm;
 	};
@@ -51,7 +64,8 @@ define(['core/dcms-ajax'], function(DA) {
 	};
 	
 	proto._render = function(options) {
-		this._elm.val(options.value);
+		this._elm.val(options.value)
+				.trigger('change.isSend');
 	};
 	
 	return Widget;

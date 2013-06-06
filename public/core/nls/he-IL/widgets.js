@@ -12,7 +12,7 @@ define({
 		nextArrow: '«'
 	},
 	Select: {
-		defaultLabel: '-- ללא --'
+		emptyLabel: '-- ללא --'
 	},
 	InputFile: {
 		selectFile: 'בחירת קובץ...',

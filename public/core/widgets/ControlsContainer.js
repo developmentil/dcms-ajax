@@ -7,14 +7,12 @@ define(['core/dcms-ajax',
 		
 		this._controls = {};
 	};
-	Container.extend(Widget);
-	var proto = Widget.prototype;
-	
-	proto.defaults = {
+	Container.extend(Widget, {
 		wrapper: null,
 		controls: [],
 		entity: {}
-	};
+	});
+	var proto = Widget.prototype;
 	
 	proto.data = function(key, value) {
 		switch(typeof key) {

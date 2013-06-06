@@ -5,14 +5,12 @@ define(['core/dcms-ajax', 'core/libs/async',
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	Container.extend(Widget);
-	var proto = Widget.prototype;
-	
-	proto.defaults = {
+	Container.extend(Widget, {
 		navClass: 'nav-tabs',
 		labelMaxLength: 30,
 		closeIcon: false
-	};
+	});
+	var proto = Widget.prototype;
 	
 	proto.refreshTarget = function(target) {
 		var tab = Tab.find(target);

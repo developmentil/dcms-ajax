@@ -5,12 +5,10 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 		
 		this._children = [];
 	};
-	DA.Widget.extend(Widget);
-	var proto = Widget.prototype;
-	
-	proto.defaults = {
+	DA.Widget.extend(Widget, {
 		children: []
-	};
+	});
+	var proto = Widget.prototype;
 	
 	proto.create = function() {
 		var elm = Widget.super_.prototype.create.apply(this, arguments);

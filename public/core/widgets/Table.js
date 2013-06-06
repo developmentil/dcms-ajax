@@ -4,17 +4,15 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	DA.Widget.extend(Widget);
-	var proto = Widget.prototype;
-	
-	proto.defaults = {
+	DA.Widget.extend(Widget, {
 		className: 'table-hover',
 		sort: false,
 		columns: null,
 		columnsAlign: 'center',
 		idField: '_id',
 		rows: []
-	};
+	});
+	var proto = Widget.prototype;
 	
 	proto.eachColumn = function(columns, each) {
 		var self = this;

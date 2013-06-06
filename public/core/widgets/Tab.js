@@ -11,7 +11,11 @@ define(['core/dcms-ajax'], function(DA) {
 		if(this.options.location !== null)
 			this.options.location = DA.app.getLocation();
 	};
-	DA.Widget.extend(Widget);
+	DA.Widget.extend(Widget, {
+		label: 'Tab',
+		active: true,
+		hideCloseIcon: false
+	});
 	var proto = Widget.prototype;
 	
 	Widget.create = function(options) {
@@ -34,12 +38,6 @@ define(['core/dcms-ajax'], function(DA) {
 			return null;
 				
 		return widget;
-	};
-	
-	proto.defaults = {
-		label: 'Tab',
-		active: true,
-		hideCloseIcon: false
 	};
 	
 	proto.label = function(label) {

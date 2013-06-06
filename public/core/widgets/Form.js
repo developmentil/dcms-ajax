@@ -3,15 +3,13 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	ControlsContainer.extend(Widget);
-	var proto = Widget.prototype;
-	
-	proto.defaults = {
+	ControlsContainer.extend(Widget, {
 		action: '',
 		method: 'post',
 		fieldsets: [],
 		fieldset: Fieldset
-	};
+	});
+	var proto = Widget.prototype;
 	
 	proto.create = function() {
 		var elm = Widget.super_.prototype.create.apply(this, arguments);

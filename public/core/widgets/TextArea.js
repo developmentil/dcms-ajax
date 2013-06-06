@@ -3,18 +3,14 @@ define(['core/widgets/Control', 'core/widgets/Input'], function(Control, Input) 
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	Input.extend(Widget);
-	var proto = Widget.prototype;
-	
-	Control.types.textarea = Widget;
-	
-	proto.defaults = {
-		name: null,
-		value: null,
+	Input.extend(Widget, {
 		cols: null,
 		rows: null,
 		wrap: null
-	};
+	});
+	var proto = Widget.prototype;
+	
+	Control.types.textarea = Widget;
 	
 	proto._create = function(container, parent, elm) {
 		if(!elm)

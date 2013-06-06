@@ -4,10 +4,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	DA.Widget.extend(Widget);
-	var proto = Widget.prototype;
-	
-	proto.defaults = {
+	DA.Widget.extend(Widget, {
 		pages: null,
 		current: 1,
 		displayLimit: 5,
@@ -15,7 +12,9 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		hideNext: false,
 		previousLabel: i18n.previousArrow,
 		nextLabel: i18n.nextArrow
-	};
+	});
+	var proto = Widget.prototype;
+	
 	
 	proto.current = function(page) {
 		if(typeof page === 'undefined')

@@ -3,22 +3,19 @@ define(['core/widgets/Control'], function(Control) {
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	Control.extend(Widget);
-	var proto = Widget.prototype;
-	
-	Control.types.default = 
-	Control.types.input = Widget;
-	
-	proto.defaults = {
+	Control.extend(Widget, {
 		type: 'text',
 		maxlength: null,
 		placeholder: null,
 		dir: null,
 		spellcheck: null,
-		required: null,
 		autocomplete: null,
 		autofocus: null
-	};
+	});
+	var proto = Widget.prototype;
+	
+	Control.types.default = 
+	Control.types.input = Widget;
 	
 	proto._create = function(container, parent, elm) {
 		if(!elm)
@@ -39,9 +36,6 @@ define(['core/widgets/Control'], function(Control) {
 		
 		if(this.options.placeholder)
 			elm.attr('placeholder', this.options.placeholder);
-		
-		if(this.options.required !== null)
-			elm.prop('required', this.options.required);
 		
 		if(this.options.autocomplete !== null)
 			elm.prop('autocomplete', this.options.autocomplete);

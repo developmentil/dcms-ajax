@@ -7,33 +7,22 @@ define([
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	MultiControl.extend(Widget);
-	var proto = Widget.prototype;
-	
-	Control.types.select = Widget;
-	
-	proto.defaults = {
-		name: null,
-		value: null,
+	MultiControl.extend(Widget, {
 		api: null,
 		options: [],
 		optionGroups: [],
-		required: null,
-		defaultValue: '',
-		defaultLabel: i18n.defaultLabel,
-		defaultOption: {}
-	};
+		emptyLabel: i18n.emptyLabel,
+		emptyOption: {}
+	});
+	var proto = Widget.prototype;
+	
+	Control.types.select = Widget;
 	
 	proto._create = function(container, parent, elm) {
 		if(!elm)
 			elm = $('<select />');
 		
-		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
-		
-		if(this.options.required !== null)
-			elm.prop('required', this.options.required);
-		
-		return elm;
+		return Widget.super_.prototype._create.call(this, container, parent, elm);
 	};
 	
 	proto._load = function(callback) {
@@ -46,7 +35,7 @@ define([
 			DA.api(self.options.api, function(err, data) {
 				if(err) return callback(err);
 				
-				$.extend(self.options, data);console.log(self.options, data);
+				$.extend(self.options, data);
 				callback(null);
 			});
 		});
@@ -71,9 +60,9 @@ define([
 		
 		if(options.required === false) {
 			var opt = $.extend({
-				label: options.defaultLabel,
-				value: options.defaultValue
-			}, options.defaultOption);
+				label: options.emptyLabel,
+				value: options.emptyValue
+			}, options.emptyOption);
 			
 			DA.Widget.configElm($('<option />'), opt)
 			.appendTo(this._elm)

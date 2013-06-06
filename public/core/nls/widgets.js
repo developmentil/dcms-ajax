@@ -13,7 +13,7 @@ define({
 			nextArrow: '»'
 		},
 		Select: {
-			defaultLabel: '-- none --'
+			emptyLabel: '-- none --'
 		},
 		InputFile: {
 			selectFile: 'Select file...',

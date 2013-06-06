@@ -4,17 +4,15 @@ define(['core/dcms-ajax', 'core/nls/index', 'core/widgets/Button'], function(DA,
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	DA.Widget.extend(Widget);
-	var proto = Widget.prototype;
-	
-	proto.defaults = {
+	DA.Widget.extend(Widget, {
 		save: {},
 		saveLabel: i18n.Save,
 		cancel: {},
 		cancelLabel: i18n.Cancel,
 		cancelClick: null,
 		actions: null
-	};
+	});
+	var proto = Widget.prototype;
 	
 	proto._create = function(container, parent, elm) {
 		if(!elm)

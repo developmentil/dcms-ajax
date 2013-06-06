@@ -3,7 +3,9 @@ define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	ControlsContainer.extend(Widget);
+	ControlsContainer.extend(Widget, {
+		legend: null
+	});
 	var proto = Widget.prototype;
 	
 	proto.defaults = $.extend({

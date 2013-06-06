@@ -3,7 +3,12 @@ define(['core/dcms-ajax'], function(DA) {
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	DA.Widget.extend(Widget);
+	DA.Widget.extend(Widget, {
+		className: 'progress-striped',
+		barClass: '',
+		percentage: 0.6,
+		bars: []
+	});
 	var proto = Widget.prototype;
 	
 	Widget.createBar = function(options) {
@@ -16,13 +21,6 @@ define(['core/dcms-ajax'], function(DA) {
 			elm.addClass(options.barClass);
 		
 		return elm;
-	};
-	
-	proto.defaults = {
-		className: 'progress-striped',
-		barClass: '',
-		percentage: 0.6,
-		bars: []
 	};
 	
 	proto._create = function(container, parent, elm) {

@@ -8,12 +8,10 @@ define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 			controls: controls
 		}, controls[0].options));
 	};
-	ControlsContainer.extend(Widget);
-	var proto = Widget.prototype;
-	
-	proto.defaults = $.extend({
+	ControlsContainer.extend(Widget, {
 		label: null
-	}, proto.defaults);
+	});
+	var proto = Widget.prototype;
 	
 	proto._create = function(container, parent, elm) {
 		if(!elm)

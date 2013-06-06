@@ -5,10 +5,7 @@ define(['core/dcms-ajax',
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	DA.Widget.extend(Widget);
-	var proto = Widget.prototype;
-	
-	proto.defaults = {
+	DA.Widget.extend(Widget, {
 		api: null,
 		limit: 20,
 		offset: 0,
@@ -18,7 +15,8 @@ define(['core/dcms-ajax',
 		sort: [],
 		tableClass: 'table-hover table-condensed',
 		paginationClass: 'pagination-centered'
-	};
+	});
+	var proto = Widget.prototype;
 	
 	proto._create = function(container, parent, elm) {
 		if(!elm)

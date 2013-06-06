@@ -5,19 +5,7 @@ define([
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	TextArea.extend(Widget);
-	var proto = Widget.prototype;
-	
-	Control.types.htmleditor = Widget;
-	
-	Widget.launchEditor = function(element, options) {
-		require(['tinymce', 'jquery-tinymce'], function() {
-			tinymce.dom.Event.domLoaded = true;
-			element.tinymce(options);
-		});
-	};
-	
-	proto.defaults = {
+	TextArea.extend(Widget, {
 		cols: null,
 		rows: null,
 		wrap: null,
@@ -28,6 +16,16 @@ define([
 		],
 		toolbar: "insertfile undo redo | styleselect | bold italic | ltr rtl | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
 		editor: {}
+	});
+	var proto = Widget.prototype;
+	
+	Control.types.htmleditor = Widget;
+	
+	Widget.launchEditor = function(element, options) {
+		require(['tinymce', 'jquery-tinymce'], function() {
+			tinymce.dom.Event.domLoaded = true;
+			element.tinymce(options);
+		});
 	};
 	
 	proto._getEditorOptions = function(options) {

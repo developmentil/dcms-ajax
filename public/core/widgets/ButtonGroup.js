@@ -6,14 +6,12 @@ define([
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	DA.Widget.extend(Widget);
-	var proto = Widget.prototype;
-	
-	proto.defaults = {
+	DA.Widget.extend(Widget, {
 		buttons: null,
 		action: null,
 		actions: null
-	};
+	});
+	var proto = Widget.prototype;
 	
 	proto._create = function(container, parent, elm) {
 		if(!elm)

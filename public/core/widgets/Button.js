@@ -3,16 +3,14 @@ define(['core/dcms-ajax'], function(DA) {
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	DA.Widget.extend(Widget);
-	var proto = Widget.prototype;
-	
-	proto.defaults = {
+	DA.Widget.extend(Widget, {
 		type: null,
 		url: null,
 		label: null,
 		click: null,
 		toggle: null
-	};
+	});
+	var proto = Widget.prototype;
 	
 	Widget.create = function(options, elm) {
 		var type = options.type || (options.url ? 'link' : 'button');

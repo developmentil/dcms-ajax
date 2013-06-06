@@ -7,7 +7,28 @@ define([
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	Control.extend(Widget);
+	Control.extend(Widget, {
+		btnClass: 'btn-success',
+		btnIcon: 'icon-upload icon-white',
+		btnLabel: null,
+		progressClass: '',
+		progressActiveClass: 'progress-striped active',
+		barClass: '',
+		barFailedClass: 'bar-danger',
+		imageMaxWidth: 80,
+		imageMaxHeight: 80,
+		percentage: 0,
+		multiple: false,
+		multipleBrackets: '[]',
+		api: '/api/files',
+		active: false,
+		failed: false,
+		plugin: {},
+		button: {},
+		progress: {},
+		file: {},
+		hidden: {}
+	});
 	var proto = Widget.prototype;
 	
 	Control.types.inputfile = Widget;
@@ -79,29 +100,6 @@ define([
 				callback(err || -1);
 			}
 		});
-	};
-	
-	proto.defaults = {
-		btnClass: 'btn-success',
-		btnIcon: 'icon-upload icon-white',
-		btnLabel: null,
-		progressClass: '',
-		progressActiveClass: 'progress-striped active',
-		barClass: '',
-		barFailedClass: 'bar-danger',
-		imageMaxWidth: 80,
-		imageMaxHeight: 80,
-		percentage: 0,
-		multiple: false,
-		multipleBrackets: '[]',
-		api: '/api/files',
-		active: false,
-		failed: false,
-		plugin: {},
-		button: {},
-		progress: {},
-		file: {},
-		hidden: {}
 	};
 	
 	proto.create = function() {

@@ -3,7 +3,9 @@ define(['core/dcms-ajax'], function(DA) {
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	DA.Widget.extend(Widget);
+	DA.Widget.extend(Widget, {
+		items: []
+	});
 	var proto = Widget.prototype;
 	
 	Widget.renderItems = function(items, container) {
@@ -34,10 +36,6 @@ define(['core/dcms-ajax'], function(DA) {
 		}
 		
 		return li;
-	};
-	
-	proto.defaults = {
-		items: []
 	};
 	
 	Widget._createItem = function(item, ul) {
