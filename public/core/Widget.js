@@ -121,7 +121,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 			noRender = false;
 		}
 		if(!callback)
-			callback = function(err) { if(err) throw err; };
+			callback = function(err) { if(err) DA.error('Error on loading wigdet', err); };
 		
 		if(this._markAsLoaded) {
 			if(!noRender)

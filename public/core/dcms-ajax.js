@@ -34,18 +34,36 @@ define([
 	
 	DA.app = Sammy();
 	
+	DA.error = function(message, original_error) {
+		DA.app.error(message, original_error);
+		return this;
+	};
+	
 	DA.getLocation = function() {
 		return DA.app.getLocation();
 	};
 	
+	DA.realLocation = function(location) {
+		if(!location)
+			return DA.getLocation();
+		
+		if(location[0] === '/' || location.match(/^(\w+:)?\/\//))
+			return location;
+		
+		if(location[0] === '#')
+			location = window.location.search + location;
+		
+		return window.location.pathname + location;
+	};
+	
 	DA.setLocation = function(location, bind) {
 		var options = {
-			location: location, 
+			location: DA.realLocation(location),
 			bind: bind
 		};
 		
 		DA.trigger('setLocation', options, function(err) {
-			if(err) return console.error(err);
+			if(err) return DA.error('Error when setLocation', err);
 			
 			if(!options.bind) {
 				DA.app.trigger('redirect', {to: options.location});

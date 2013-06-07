@@ -60,17 +60,16 @@ define(['core/dcms-ajax', 'core/widgets/Container'], function(DA, Container) {
 		
 		this.options.active = flag;
 		
+		if(flag && this.options.location)
+			DA.setLocation(this.options.location);
+		
 		if(!this._elm || skipUi)
 			return this;
 		
-		if(flag) {
+		if(flag)
 			this._elm.addClass('active');
-			
-			if(this.options.location)
-				DA.setLocation(this.options.location);
-		} else {
+		else
 			this._elm.removeClass('active');
-		}
 		
 		return this;
 	};
