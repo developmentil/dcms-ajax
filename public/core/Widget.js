@@ -128,7 +128,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 				this.render();
 
 			callback();
-			return;
+			return this;
 		}
 		
 		var self = this;
@@ -146,6 +146,8 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 				callback();
 			});
 		});
+		
+		return this;
 	};
 	
 	proto.element = function() {
@@ -173,7 +175,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	/*** Protected Methods ***/
 	
 	proto._load = function(callback) {
-		callback(new Error('Not implemented'));
+		callback(null);
 	};
 	
 	proto._create = function(container, parent, elm) {

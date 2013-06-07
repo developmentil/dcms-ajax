@@ -33,13 +33,28 @@ define([
 	/*** App ***/
 	
 	DA.app = Sammy();
+	
+	DA.getLocation = function() {
+		return DA.app.getLocation();
+	};
+	
 	DA.setLocation = function(location, bind) {
-		if(!bind) {
-			DA.app.trigger('redirect', {to: location});
-			DA.app.last_location = ['get', location];
-		}
+		var options = {
+			location: location, 
+			bind: bind
+		};
 		
-		DA.app.setLocation(location);		
+		DA.trigger('setLocation', options, function(err) {
+			if(err) return console.error(err);
+			
+			if(!options.bind) {
+				DA.app.trigger('redirect', {to: options.location});
+				DA.app.last_location = ['get', options.location];
+			}
+
+			DA.app.setLocation(options.location);	
+		});
+			
 		return this;
 	};
 	

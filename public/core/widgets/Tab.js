@@ -1,4 +1,4 @@
-define(['core/dcms-ajax'], function(DA) {
+define(['core/dcms-ajax', 'core/widgets/Container'], function(DA, Container) {
 	
 	var inverval = 0;
 	
@@ -8,19 +8,22 @@ define(['core/dcms-ajax'], function(DA) {
 		if(!this.options.id)
 			this.options.id = 'tab-' + (++inverval);
 		
-		if(this.options.location !== null)
-			this.options.location = DA.app.getLocation();
+		if(this.options.location === true)
+			this.options.location = DA.getLocation();
 	};
-	DA.Widget.extend(Widget, {
+	Container.extend(Widget, {
 		label: 'Tab',
 		active: true,
-		hideCloseIcon: false
+		hideCloseIcon: false,
+		location: null
 	});
 	var proto = Widget.prototype;
 	
 	Widget.create = function(options) {
 		if(typeof options === 'string')
-			options = {label: options};
+			options = {label: options, location: true};
+		else if(options.location === undefined)
+			options.location = true;
 
 		return new Widget(options);
 	};
@@ -57,16 +60,17 @@ define(['core/dcms-ajax'], function(DA) {
 		
 		this.options.active = flag;
 		
-		if(flag && this.options.location)
-			DA.setLocation(this.options.location);
-		
 		if(!this._elm || skipUi)
 			return this;
 		
-		if(flag)
+		if(flag) {
 			this._elm.addClass('active');
-		else
+			
+			if(this.options.location)
+				DA.setLocation(this.options.location);
+		} else {
 			this._elm.removeClass('active');
+		}
 		
 		return this;
 	};
@@ -78,12 +82,10 @@ define(['core/dcms-ajax'], function(DA) {
 		return Widget.super_.prototype._create.call(this, container, parent, elm);
 	};
 	
-	proto._load = function(callback) {
-		callback(null);
-	};
-	
 	proto._render = function(options) {
 		this.active(options.active);
+		
+		Widget.super_.prototype._render.apply(this, arguments);
 	};
 	
 	return Widget;

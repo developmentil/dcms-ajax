@@ -12,6 +12,7 @@ define(['core/dcms-ajax', 'core/libs/async',
 	});
 	var proto = Widget.prototype;
 	
+	
 	proto.refreshTarget = function(target) {
 		var tab = Tab.find(target);
 		if(tab) {
@@ -28,6 +29,27 @@ define(['core/dcms-ajax', 'core/libs/async',
 		}
 		
 		return this;
+	};
+	
+	proto.findByLocation = function(location) {
+		var tabs = [];
+		
+		this.eachChild(function(tab) {
+			if(tab.options.location === location)
+				tabs.push(tab);
+		});
+		
+		return tabs;
+	};
+	
+	proto.refreshByLocation = function(location) {
+		var tabs = this.findByLocation(location);
+		
+		$.each(tabs, function(i, tab) {
+			tab.reload();
+		});
+		
+		return tabs;
 	};
 	
 	proto.insert = function(tab) {
@@ -48,7 +70,7 @@ define(['core/dcms-ajax', 'core/libs/async',
 		Widget.super_.prototype.remove.apply(this, arguments);
 		
 		if(this._children.length > 0)
-			this.setActive(this._children[0]);
+			this.setActive(this._children[this._children.length-1]);
 		else if(tab.options.location)
 			DA.setLocation('#/');
 

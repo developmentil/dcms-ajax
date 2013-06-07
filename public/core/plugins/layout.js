@@ -15,6 +15,18 @@ define(['core/widgets/NavBar', 'core/widgets/Tabs'], function(NavBar, Tabs) {
 
 		var navbar = DA.layout.navbar.create('body').hide();
 		DA.tabs.create('body');
+		
+		DA.when('setLocation', function(options, callback) {
+			if(options.bind === 'tabs') {
+				var tabs = DA.tabs.refreshByLocation(options.location);
+				if(tabs.length) {
+					options.bind = false;
+					DA.tabs.setActive(tabs[tabs.length-1]);
+				}
+			}
+			
+			callback(null);
+		});
 
 		DA.when('runned', function(callback) {
 			DA.layout.navbar.render({
