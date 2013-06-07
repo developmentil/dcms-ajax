@@ -54,7 +54,7 @@ define(['core/dcms-ajax'], function(DA) {
 			
 			$('<i />')
 			.prependTo(a)
-			.addClass(item.icon.className || item.icon);
+			.addClass(item.icon.class || item.icon);
 		}
 
 		if(item.closeIcon) {
@@ -62,7 +62,7 @@ define(['core/dcms-ajax'], function(DA) {
 			
 			var closeIcon = $('<i class="close" />')
 			.appendTo(a)
-			.addClass(item.closeIcon.className || 'close')
+			.addClass(item.closeIcon.class || 'close')
 			.append(item.closeIcon.html || '&times;');
 	
 			if(item.closeIcon.click) {

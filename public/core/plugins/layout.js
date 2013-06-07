@@ -5,7 +5,7 @@ define(['core/widgets/NavBar', 'core/widgets/Tabs'], function(NavBar, Tabs) {
 		DA.layout = {
 			navbar: new NavBar({
 				id: 'navbar',
-				className: 'navbar-fixed-top'
+				class: 'navbar-fixed-top'
 			})
 		};
 		DA.tabs = new Tabs({

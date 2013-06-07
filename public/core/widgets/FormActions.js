@@ -36,7 +36,7 @@ define(['core/dcms-ajax', 'core/nls/index', 'core/widgets/Button'], function(DA,
 			if(options.save) {
 				actions.push($.extend({
 					type: 'submit',
-					className: 'btn-primary',
+					class: 'btn-primary',
 					label: options.saveLabel
 				}, options.save));
 			}

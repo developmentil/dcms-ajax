@@ -148,7 +148,7 @@ define([
 		return $.extend(true, {
 			type: 'span',
 			label: options.btnLabel || (options.multiple ? i18n.selectFiles : i18n.selectFile),
-			className: options.btnClass,
+			class: options.btnClass,
 			icon: options.btnIcon
 		}, options.button);
 	};
@@ -157,7 +157,7 @@ define([
 		return $.extend(true, {
 			type: 'file',
 			name: this.getInputName(),
-			className: 'file-input',
+			class: 'file-input',
 			prop: {
 				multiple: options.multiple
 			}
@@ -166,7 +166,7 @@ define([
 	
 	proto._getProgressOptions = function(options) {
 		return $.extend(true, {
-			className: (!options.active ? options.progressClass : options.progressActiveClass),
+			class: (!options.active ? options.progressClass : options.progressActiveClass),
 			barClass: (!options.failed ? options.barClass : options.barFailedClass),
 			percentage: options.percentage
 		}, options.progress);
@@ -236,7 +236,7 @@ define([
 				.appendTo(elm);
 		
 		Button.create({
-			className: 'btn-danger btn-mini',
+			class: 'btn-danger btn-mini',
 			icon: 'icon-trash icon-white',
 			label: i18n.del,
 			click: function() {

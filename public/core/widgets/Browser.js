@@ -54,7 +54,7 @@ define(['core/dcms-ajax',
 	proto._getTableOptions = function(options) {
 		return $.extend(options.table || {}, {
 			sort: options.sort,
-			className: options.tableClass,
+			class: options.tableClass,
 			columns: options.fields,
 			rows: options.entities
 		});
@@ -62,7 +62,7 @@ define(['core/dcms-ajax',
 	
 	proto._getPaginationOptions = function(options) {
 		return $.extend(options.pagination || {}, {
-			className: options.paginationClass,
+			class: options.paginationClass,
 			pages: options.count && options.limit ? Math.ceil(options.count / options.limit) : null,
 			current: options.limit ? 1 + Math.ceil(options.offset / options.limit) : 1
 		});

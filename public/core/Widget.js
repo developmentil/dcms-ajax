@@ -57,8 +57,8 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		if(options.id)
 			elm.attr('id', options.id);
 		
-		if(options.className)
-			elm.addClass(options.className);
+		if(options.class)
+			elm.addClass(options.class);
 		
 		if(options.bind)
 			elm.bind(options.bind);
@@ -84,7 +84,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	
 	proto.defaults = {
 		id: null,
-		className: null,
+		class: null,
 		css: null,
 		attr: null,
 		prop: null,

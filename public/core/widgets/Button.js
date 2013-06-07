@@ -25,8 +25,8 @@ define(['core/dcms-ajax'], function(DA) {
 		if(options.id)
 			elm.attr('id', options.id);
 		
-		if(options.className)
-			elm.addClass(options.className);
+		if(options.class)
+			elm.addClass(options.class);
 		
 		elm.text(options.label);
 
@@ -35,7 +35,7 @@ define(['core/dcms-ajax'], function(DA) {
 			
 			$('<i />')
 			.prependTo(elm)
-			.addClass(options.icon.className || options.icon);
+			.addClass(options.icon.class || options.icon);
 		}
 
 		if(options.toggle)

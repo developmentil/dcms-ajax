@@ -4,7 +4,7 @@ define(['core/widgets/Form', 'core/widgets/ControlGroup'], function(Form, Contro
 		Widget.super_.apply(this, arguments);
 	};
 	Form.extend(Widget, {
-		className: 'form-horizontal',
+		class: 'form-horizontal',
 		wrapper: ControlGroup
 	});
 //	var proto = Widget.prototype;

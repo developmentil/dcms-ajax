@@ -165,7 +165,7 @@ define(['core/dcms-ajax', 'core/libs/async',
 		
 		return $.extend(options.nav || {}, {
 			items: items,
-			className: options.navClass
+			class: options.navClass
 		});
 	};
 	

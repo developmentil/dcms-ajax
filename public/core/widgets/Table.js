@@ -5,7 +5,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		Widget.super_.apply(this, arguments);
 	};
 	DA.Widget.extend(Widget, {
-		className: 'table-hover',
+		class: 'table-hover',
 		sort: false,
 		columns: null,
 		columnsAlign: 'center',
@@ -119,8 +119,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 						if(column.align)
 							td.css('textAlign', column.align);
 		
-						if(column.className)
-							td.addClass(column.className);
+						if(column.class)
+							td.addClass(column.class);
 
 						if(typeof column.render === 'function')
 							column.render(td, value, row);
@@ -156,8 +156,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		if(column.align)
 			th.css('textAlign', column.align);
 		
-		if(column.className)
-			th.addClass(column.className);
+		if(column.class)
+			th.addClass(column.class);
 		
 		if(this.options.sort && !column.disableSort) {
 			if(sorted) {

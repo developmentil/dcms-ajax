@@ -4,7 +4,7 @@ define(['core/dcms-ajax'], function(DA) {
 		Widget.super_.apply(this, arguments);
 	};
 	DA.Widget.extend(Widget, {
-		className: 'progress-striped',
+		class: 'progress-striped',
 		barClass: '',
 		percentage: 0.6,
 		bars: []
