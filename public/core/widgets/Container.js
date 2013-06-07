@@ -73,6 +73,8 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 	};
 	
 	proto._render = function(options) {
+		Widget.super_.prototype._render.apply(this, arguments);
+		
 		this.eachChild(function(widget) {
 			widget.render();
 		});

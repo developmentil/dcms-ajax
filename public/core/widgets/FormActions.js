@@ -26,6 +26,7 @@ define(['core/dcms-ajax', 'core/nls/index', 'core/widgets/Button'], function(DA,
 	};
 	
 	proto._render = function(options) {
+		Widget.super_.prototype._render.apply(this, arguments);
 		this._elm.empty();
 		
 		var actions = options.actions;

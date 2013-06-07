@@ -183,7 +183,7 @@ define([
 	
 	proto._render = function(options) {	
 		var self = this;	
-		Widget.super_.prototype._render.apply(this, arguments);
+		Widget.renderElm(this._elm, options);
 		
 		this.button.render(this._getButtonOptions(options));
 		this.progress.render(this._getProgressOptions(options));

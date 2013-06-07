@@ -49,6 +49,7 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 	};
 	
 	proto._render = function(options) {
+		Widget.renderElm(this._elm, options);
 		this._elm.empty();
 		
 		Widget.renderItems(options.items, this._elm);

@@ -36,7 +36,7 @@ define([
 	};
 	
 	proto._render = function(options) {
-		this._elm.val(options.value);
+		Widget.super_.prototype._render.apply(this, arguments);
 		
 		Widget.launchEditor(this._elm, this._getEditorOptions(options));
 	};

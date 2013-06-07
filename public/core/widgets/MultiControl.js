@@ -13,9 +13,5 @@ define(['core/widgets/Control'], function(Control) {
 		return (~this.options.value.indexOf(val));
 	};
 	
-	proto._render = function() {
-		throw new Error('Unimplement method');
-	};
-	
 	return Widget;
 });

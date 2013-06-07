@@ -25,6 +25,18 @@ define(['core/dcms-ajax'], function(DA) {
 		return $('<span />').text(text).html();
 	};
 	
+	Widget.renderElm = function(elm, options) {
+		elm = Widget.super_.renderElm.apply(this, arguments);
+		
+		if(options.disabled !== null)
+			elm.prop('disabled', options.disabled);
+		
+		if(options.required !== null)
+			elm.prop('required', options.required);
+		
+		return elm;
+	};
+	
 	proto.isVal = function(val) {
 		return (this.options.value == val);
 	};
@@ -69,13 +81,7 @@ define(['core/dcms-ajax'], function(DA) {
 	};
 	
 	proto._render = function(options) {
-		Widget.super_.prototype._render.apply(this, arguments);
-		
-		if(options.disabled !== null)
-			this._elm.prop('disabled', options.disabled);
-		
-		if(options.required !== null)
-			this._elm.prop('required', options.required);
+		Widget.renderElm(this._elm, options);
 		
 		this._elm.val(options.value)
 				.trigger('change.isSend');

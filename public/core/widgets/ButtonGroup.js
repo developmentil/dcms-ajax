@@ -45,6 +45,8 @@ define([
 	};
 	
 	proto._render = function(options) {
+		Widget.super_.prototype._render.apply(this, arguments);
+		
 		if(options.buttons) {
 			this._elm.empty();
 			for(var i in options.buttons) {

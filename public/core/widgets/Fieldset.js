@@ -25,7 +25,7 @@ define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 		} else if(legend.length)
 			legend.remove();
 		
-		Widget.super_.prototype._render.call(this, options);
+		Widget.super_.prototype._render.apply(this, arguments);
 	};
 	
 	return Widget;

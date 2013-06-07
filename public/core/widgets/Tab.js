@@ -82,9 +82,9 @@ define(['core/dcms-ajax', 'core/widgets/Container'], function(DA, Container) {
 	};
 	
 	proto._render = function(options) {
-		this.active(options.active);
-		
 		Widget.super_.prototype._render.apply(this, arguments);
+		
+		this.active(options.active);
 	};
 	
 	return Widget;

@@ -7,7 +7,8 @@ define([
 	};
 	Control.extend(Widget, {
 		type: 'checkbox',
-		wrapperLabel: null,
+		label: null,
+		wrapperLabel: false,
 		checkedValue: 1,
 		uncheckValue: 0
 	});
@@ -56,7 +57,7 @@ define([
 	proto._getHiddenOptions = function(options) {
 		return {
 			type: 'hidden',
-			id: null,
+			id: false,
 			name: options.name,
 			value: options.uncheckValue,
 			disabled: (options.required === false)
@@ -67,11 +68,9 @@ define([
 		this.hidden.render(this._getHiddenOptions(options));
 		
 		this.input.render(options);
-		this.input.prop('checked', this.isVal(options.checkedValue));
+		this.input._elm.prop('checked', this.isVal(options.checkedValue));
 		
-		if(options.label) {
-			this._span.text(options.label);
-		}
+		this._span.text(options.label || '');
 	};
 	
 	return Widget;

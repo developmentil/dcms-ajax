@@ -110,6 +110,7 @@ define(['core/dcms-ajax'], function(DA) {
 	};
 	
 	proto._render = function(options) {
+		Widget.super_.prototype._render.apply(this, arguments);
 		this._elm.empty();
 		
 		Widget.renderItems(options.items, this._elm);

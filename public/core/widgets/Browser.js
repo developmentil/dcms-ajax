@@ -102,6 +102,8 @@ define(['core/dcms-ajax',
 	};
 	
 	proto._render = function(options) {
+		Widget.super_.prototype._render.apply(this, arguments);
+		
 		this.table.render(this._getTableOptions(options));
 		this.pagination.render(this._getPaginationOptions(options));
 	};

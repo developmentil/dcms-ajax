@@ -28,6 +28,7 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 	};
 	
 	proto._render = function(options) {
+		Widget.super_.prototype._render.apply(this, arguments);
 		var self = this;
 		
 		this._inner.children('a.brand').remove();

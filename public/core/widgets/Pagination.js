@@ -61,6 +61,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	};
 	
 	proto._render = function(options) {
+		Widget.super_.prototype._render.apply(this, arguments);
 		this._elm.empty().show();
 		
 		if(!options.pages) {

@@ -42,6 +42,7 @@ define([
 	};
 	
 	proto._render = function(options) {
+		Widget.renderElm(this._elm, options);
 		this._elm.empty();
 		
 		for(var i in options.optionGroups) {
@@ -70,8 +71,8 @@ define([
 			.text(opt.label);
 		}
 			
-		
 		this._renderOptions(options.options, this._elm);
+		this._elm.trigger('change.isSend');
 	};
 	
 	proto._renderOptions = function(options, container) {

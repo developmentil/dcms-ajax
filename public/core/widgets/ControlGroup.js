@@ -9,6 +9,7 @@ define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 		}, controls[0].options));
 	};
 	ControlsContainer.extend(Widget, {
+		wrapperLabel: null,
 		label: null
 	});
 	var proto = Widget.prototype;
@@ -31,7 +32,7 @@ define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 	
 	proto._render = function(options) {
 		var label = this._elm.children('label');
-		if(options.wrapperLabel || (options.label && options.wrapperLabel !== null)) {
+		if(options.wrapperLabel || (options.label && options.wrapperLabel !== false)) {
 			if(!label.length)
 				label = $('<label class="control-label" />').prependTo(this._elm);
 			
@@ -42,7 +43,9 @@ define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 		} else if(label.length)
 			label.remove();
 		
-		Widget.super_.prototype._render.call(this, options);
+		this.eachChild(function(widget) {
+			widget.render();
+		});
 	};
 	
 	return Widget;

@@ -47,20 +47,18 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	};
 	
 	Widget.configElm = function(elm, options) {
+		elm = Widget.createElm(elm, options);
+		elm = Widget.renderElm(elm, options);
+		
+		return elm;
+	};
+	
+	Widget.createElm = function(elm, options) {
 		if(options.id)
 			elm.attr('id', options.id);
 		
 		if(options.className)
 			elm.addClass(options.className);
-		
-		if(options.css)
-			elm.css(options.css);
-		
-		if(options.attr)
-			elm.attr(options.attr);
-		
-		if(options.prop)
-			elm.attr(options.prop);
 		
 		if(options.bind)
 			elm.bind(options.bind);
@@ -69,9 +67,6 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	};
 	
 	Widget.renderElm = function(elm, options) {
-		if(options.className)
-			elm.addClass(options.className);
-		
 		if(options.css)
 			elm.css(options.css);
 		
@@ -198,7 +193,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		if(!elm)
 			elm = $('<div class="widget" />');
 		
-		Widget.configElm(elm, this.options);
+		Widget.createElm(elm, this.options);
 		
 		return elm;
 	};
