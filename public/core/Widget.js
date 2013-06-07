@@ -57,6 +57,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		if(options.id)
 			elm.attr('id', options.id);
 		
+		elm.data('optionsClass', options.class || '');
 		if(options.class)
 			elm.addClass(options.class);
 		
@@ -69,6 +70,15 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	Widget.renderElm = function(elm, options) {
 		if(options.css)
 			elm.css(options.css);
+		
+		var oldClass = elm.data('optionsClass');
+		if(options.class !== oldClass) {
+			elm.removeClass(oldClass);
+			elm.data('optionsClass', options.class || '');
+			
+			if(options.class)
+				elm.addClass(options.class);
+		}
 		
 		if(options.attr)
 			elm.attr(options.attr);

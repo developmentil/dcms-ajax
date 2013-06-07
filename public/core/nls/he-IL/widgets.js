@@ -8,8 +8,8 @@ define({
 		Cancel: 'ביטול'
 	},
 	Pagination: {
-		previousArrow: '»',
-		nextArrow: '«'
+		previousArrow: '«',
+		nextArrow: '»'
 	},
 	Select: {
 		emptyLabel: '-- ללא --'
