@@ -7,8 +7,6 @@ define([
 	};
 	Control.extend(Widget, {
 		type: 'checkbox',
-		name: null,
-		value: null,
 		wrapperLabel: null,
 		checkedValue: 1,
 		uncheckValue: 0
@@ -17,21 +15,32 @@ define([
 	
 	Control.types.checkbox = Widget;
 	
+	proto.sendVal = function() {
+		if(this.input && this.input.prop('checked'))
+			return this.options.checkedValue;
+		
+		if(this.hidden)
+			return this.options.uncheckValue;
+		
+		return null;
+	};
+	
 	proto._create = function(container, parent, elm) {
-		var label = $('<label class="checkbox" />')
-				.attr('for', this.options.id);
-		
-		this.hidden = new Input(this._getHiddenOptions(this.options));
-		this.hidden.create(label, this);
-		
-		this.input = new Input(this.options);
-		this.input.create(label, this);
-		
-		if(this.options.label) {
-			label.append(' ' + Widget.escape(this.options.label));
+		if(!elm) {
+			elm = $('<label class="checkbox" />')
+					.attr('for', this.options.id);
 		}
 		
-		return label;
+		this.hidden = new Input(this._getHiddenOptions(this.options));
+		this.hidden.create(elm, this);
+		
+		this.input = new Input(this.options);
+		this.input.create(elm, this);
+		
+		elm.append(' ');
+		this._span = $('<span />').appendTo(elm);
+		
+		return elm;
 	};
 	
 	proto._destroy = function() {
@@ -49,13 +58,20 @@ define([
 			type: 'hidden',
 			id: null,
 			name: options.name,
-			value: options.uncheckValue
+			value: options.uncheckValue,
+			disabled: (options.required === false)
 		};
 	};
 	
 	proto._render = function(options) {
 		this.hidden.render(this._getHiddenOptions(options));
+		
 		this.input.render(options);
+		this.input.prop('checked', this.isVal(options.checkedValue));
+		
+		if(options.label) {
+			this._span.text(options.label);
+		}
 	};
 	
 	return Widget;

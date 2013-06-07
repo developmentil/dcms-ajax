@@ -68,6 +68,22 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		return elm;
 	};
 	
+	Widget.renderElm = function(elm, options) {
+		if(options.className)
+			elm.addClass(options.className);
+		
+		if(options.css)
+			elm.css(options.css);
+		
+		if(options.attr)
+			elm.attr(options.attr);
+		
+		if(options.prop)
+			elm.attr(options.prop);
+		
+		return elm;
+	};
+	
 	
 	/*** Static Vars ***/
 	
@@ -192,7 +208,7 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 	};
 	
 	proto._render = function(options) {
-		
+		Widget.renderElm(this._elm, options);
 	};
 	
 	return Widget;

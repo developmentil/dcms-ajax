@@ -9,6 +9,7 @@ define(['core/dcms-ajax'], function(DA) {
 	DA.Widget.extend(Widget, {
 		name: null,
 		value: null,
+		disabled: null,
 		required: null,
 		emptyValue: ''
 	});
@@ -28,9 +29,16 @@ define(['core/dcms-ajax'], function(DA) {
 		return (this.options.value == val);
 	};
 	
+	proto.sendVal = function() {
+		if(!this._elm)
+			return null;
+		
+		return this._elm.val();
+	};
+	
 	proto.isSend = function() {
 		return (this.options.name && this._elm && 
-					(this.options.required !== false || this._elm.val() != this.options.emptyValue));
+					(this.options.required !== false || this.sendVal() != this.options.emptyValue));
 	};
 	
 	proto._create = function(container, parent, elm) {
@@ -38,9 +46,6 @@ define(['core/dcms-ajax'], function(DA) {
 			elm = $('<input />');
 		
 		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
-		
-		if(this.options.required !== null)
-			elm.prop('required', this.options.required);
 		
 		var self = this;
 		elm.bind('change.isSend', function() {			
@@ -64,6 +69,14 @@ define(['core/dcms-ajax'], function(DA) {
 	};
 	
 	proto._render = function(options) {
+		Widget.super_.prototype._render.apply(this, arguments);
+		
+		if(options.disabled !== null)
+			this._elm.prop('disabled', options.disabled);
+		
+		if(options.required !== null)
+			this._elm.prop('required', options.required);
+		
 		this._elm.val(options.value)
 				.trigger('change.isSend');
 	};
