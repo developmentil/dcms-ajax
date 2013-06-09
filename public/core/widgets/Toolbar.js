@@ -6,7 +6,9 @@ define(['core/dcms-ajax', 'core/widgets/Container'
 		
 		this._controls = {};
 	};
-	Container.extend(Widget);
+	Container.extend(Widget, {
+		glue: ' '
+	});
 	var proto = Widget.prototype;
 	
 	proto._create = function(container, parent, elm) {
