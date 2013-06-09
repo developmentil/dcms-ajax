@@ -17,7 +17,7 @@ define([
 	'core/widgets/Pagination',
 	
 	'core/widgets/Container', 'core/widgets/Fieldset', 
-	'core/widgets/Form', 'core/widgets/FormHorizontal', 
+	'core/widgets/Form', 'core/widgets/FormHorizontal' , 'core/widgets/FormInline', 
 	'core/widgets/ControlGroup', 'core/widgets/FormActions',
 	
 	'core/widgets/Control', 'core/widgets/MultiControl',
@@ -26,13 +26,17 @@ define([
 	'core/widgets/InputFile'
 ], function(
 		DA, layout, 
-		Toolbar, Button, ButtonGroup, 
-		Nav, Dropdown, NavBar, 
+		Toolbar, 
+		Button, ButtonGroup, 
+		Nav, 
+		Dropdown, NavBar, 
 		ProgressBar, 
 		Tabs, Tab, 
 		Table, Browser, Pagination, 
-		Container, Fieldset, Form, FormHorizontal, ControlGroup, FormActions, 
-		Control, MultiControl, Input, Checkbox, Select, TextArea, HtmlEditor,
+		Container, Fieldset, Form, FormHorizontal, FormInline,
+		ControlGroup, FormActions, 
+		Control, MultiControl, Input, Checkbox, Select, 
+		TextArea, HtmlEditor,
 		InputFile) {
 	
 	DA.registry.set('plugins.layout', {
@@ -61,6 +65,7 @@ define([
 	DA.Widget.Fieldset = Fieldset;
 	DA.Widget.Form = Form;
 	DA.Widget.FormHorizontal = FormHorizontal;
+	DA.Widget.FormInline = FormInline;
 	DA.Widget.ControlGroup = ControlGroup;
 	DA.Widget.FormActions = FormActions;
 	

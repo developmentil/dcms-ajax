@@ -11,7 +11,8 @@ define(['core/dcms-ajax'], function(DA) {
 		value: null,
 		disabled: null,
 		required: null,
-		emptyValue: ''
+		emptyValue: '',
+		change: null
 	});
 	var proto = Widget.prototype;
 	
@@ -46,6 +47,14 @@ define(['core/dcms-ajax'], function(DA) {
 			return null;
 		
 		return this._elm.val();
+	};
+	
+	proto.val = function(val) {
+		if(val === undefined)
+			return this.isSend() ? this.sendVal() : null;
+		
+		this._elm.val(val);
+		return this;
 	};
 	
 	proto.isSend = function() {
@@ -85,6 +94,19 @@ define(['core/dcms-ajax'], function(DA) {
 		
 		this._elm.val(options.value)
 				.trigger('change.isSend');
+		
+		this._renderChange(options);
+	};
+	
+	proto._renderChange = function(options) {
+		var self = this;
+		if(typeof options.change === 'function') {
+			this._elm.bind('change.control', function(e) {
+				options.change.call(self, e);
+			});
+		} else {
+			this._elm.unbind('change.control');
+		}
 	};
 	
 	return Widget;

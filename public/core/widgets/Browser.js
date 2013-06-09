@@ -32,6 +32,9 @@ define(['core/dcms-ajax',
 				return this.isSorted(sortable);
 				
 			case 'object':
+				if(sortable === null)
+					return !this.isSorted();
+				
 				for(var i in sortable) {
 					var r1 = sortable[i],
 					r2 = this.isSorted(i);
