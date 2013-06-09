@@ -69,11 +69,8 @@ define(['core/dcms-ajax'], function(DA) {
 		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
 		
 		var self = this;
-		elm.bind('change.isSend', function() {			
-			if(self.isSend())
-				elm.attr('name', self.options.name);
-			else
-				elm.removeAttr('name');
+		elm.bind('change.control', function(e) {	
+			self._change(e);
 		});
 		
 		return elm;
@@ -89,24 +86,30 @@ define(['core/dcms-ajax'], function(DA) {
 		callback(null);
 	};
 	
+	proto._change = function(e) {
+		this.emit('change', e);
+			
+		this._renderIsSend(this.options);
+		if(typeof this.options.change === 'function') {
+			this.options.change.apply(this, arguments);
+		}
+		return this;
+	};
+	
 	proto._render = function(options) {
 		Widget.renderElm(this._elm, options);
 		
 		this._elm.val(options.value)
 				.trigger('change.isSend');
 		
-		this._renderChange(options);
+		this._renderIsSend(options);
 	};
 	
-	proto._renderChange = function(options) {
-		var self = this;
-		if(typeof options.change === 'function') {
-			this._elm.bind('change.control', function(e) {
-				options.change.call(self, e);
-			});
-		} else {
-			this._elm.unbind('change.control');
-		}
+	proto._renderIsSend = function(options) {
+		if(this.isSend())
+			this._elm.attr('name', options.name);
+		else
+			this._elm.removeAttr('name');
 	};
 	
 	return Widget;

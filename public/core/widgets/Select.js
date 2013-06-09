@@ -70,11 +70,9 @@ define([
 			.attr('value', opt.value)
 			.text(opt.label);
 		}
-			
-		this._renderOptions(options.options, this._elm);
 		
-		this._elm.trigger('change.isSend');
-		this._renderChange(options);
+		this._renderOptions(options.options, this._elm);
+		this._renderIsSend(options);
 	};
 	
 	proto._renderOptions = function(options, container) {
