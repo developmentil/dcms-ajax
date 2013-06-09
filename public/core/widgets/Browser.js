@@ -10,13 +10,80 @@ define(['core/dcms-ajax',
 		limit: 20,
 		offset: 0,
 		count: null,
+		sortable: false,
+		sortableApi: null,
+		sortableColumn: {},
 		fields: {},
 		entities: [],
-		sort: [],
+		sort: {},
 		tableClass: 'table-hover table-condensed',
 		paginationClass: 'pagination-centered'
 	});
 	var proto = Widget.prototype;
+	
+	proto.isSorted = function() {
+		return Table.prototype.isSorted.apply(this, arguments);
+	};
+	
+	proto.isSortable = function() {
+		var sortable = this.options.sortable;
+		switch(typeof sortable)  {
+			case 'string':
+				return this.isSorted(sortable);
+				
+			case 'object':
+				for(var i in sortable) {
+					var r1 = sortable[i],
+					r2 = this.isSorted(i);
+			
+					if(r1 === r2 || (r1 === true && r2))
+						return true;
+				}
+				return false;
+			
+			case 'function':
+				return sortable(this.options.sort, this.options, this);
+				
+			case 'boolean':
+			default:
+				return sortable;
+		}
+	};
+	
+	proto.rePosition = function(source, target, callback) {
+		var self = this,
+		entities = self.options.entities,
+		entity = entities[source],
+		
+		next = function(err) {
+			if(err) return callback(err);
+			
+			if(Array.isArray(entities)) {
+				entities.splice(source, 1);
+				entities.splice(target, 0, entity);
+				
+				self.render();
+			}
+			
+			callback(err);
+		};
+		
+		if(!entity)
+			return callback(new Error('Invalid source; Browser.rePosition'));
+		
+		if(this.options.sortableApi) {
+			var options = this._apiOptions(this.options.sortableApi);
+			
+			if(!options.type)
+				options.type = 'post';
+			options.data.source = source;
+			options.data.target = source < target ?  target+1 : target;
+			
+			DA.api(options, next);
+		} else {
+			next(null);
+		}
+	};
 	
 	proto._create = function(container, parent, elm) {
 		if(!elm)
@@ -39,6 +106,14 @@ define(['core/dcms-ajax',
 			delete self.options.sort[columnName];
 			self.reload();
 		});
+		this.table.when('sortupdate', function(endPos, startPos, ui, e) {
+			self.rePosition(startPos, endPos, function(err) {
+				if(err) {
+					DA.error('Error on table sorting', err);
+					self.reload();
+				}
+			});
+		});
 		
 		this.pagination = new Pagination(this._getPaginationOptions(this.options));
 		this.pagination.create(elm, this);
@@ -52,10 +127,37 @@ define(['core/dcms-ajax',
 	};
 	
 	proto._getTableOptions = function(options) {
+		var sortable = this.isSortable(),
+		sortableColumn = null, columms;
+
+		if(sortable && options.sortableColumn) {
+			sortableColumn = $.extend({
+				type: 'sortable',
+				name: '_sortable'
+			}, options.sortableColumn);
+		}
+
+		if(Array.isArray(options.fields)) {
+			columms = [];
+			
+			if(sortableColumn)
+				columms.push(sortableColumn);
+			
+			columms.push.apply(columms, options.fields);
+		} else {
+			columms = {};
+			
+			if(sortableColumn)
+				columms[sortableColumn.name] = sortableColumn;
+			
+			$.extend(columms, options.fields);
+		}
+		
 		return $.extend(options.table || {}, {
+			sortable: sortable,
 			sort: options.sort,
 			class: options.tableClass,
-			columns: options.fields,
+			columns: columms,
 			rows: options.entities
 		});
 	};
@@ -68,15 +170,8 @@ define(['core/dcms-ajax',
 		});
 	};
 	
-	proto._load = function(callback) {
-		if(!this.options.api) {
-			callback(null);
-			return;
-		}
-		
-		var self = this,
-				
-		options = {
+	proto._apiOptions = function(api) {
+		var options = {
 			data: {
 				limit: this.options.limit,
 				offset: this.options.offset,
@@ -84,21 +179,30 @@ define(['core/dcms-ajax',
 			}
 		};
 		
-		if(typeof this.options.api === 'string') {
-			options.url = this.options.api;
+		if(typeof api === 'string') {
+			options.url = api;
 		} else {
-			$.extend(true, options, this.options.api);
+			$.extend(true, options, api);
 		}
 		
-		options.success = function(data) {
-			$.extend(self.options, data);
-			
+		return options;
+	};
+	
+	proto._load = function(callback) {
+		if(!this.options.api) {
 			callback(null);
-		};
+			return;
+		}
 		
-		options.error = callback;
+		var self = this,
+		options = this._apiOptions(this.options.api);
 		
-		DA.api(options);
+		DA.api(options, function(err, data) {
+			if(err) return callback(err);
+			
+			$.extend(self.options, data);
+			callback(null);
+		});
 	};
 	
 	proto._render = function(options) {

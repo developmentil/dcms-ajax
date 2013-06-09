@@ -7,6 +7,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	DA.Widget.extend(Widget, {
 		class: 'table-hover',
 		sort: false,
+		sortable: null,
+		sortableOpts: {},
 		columns: null,
 		columnsAlign: 'center',
 		idField: '_id',
@@ -36,10 +38,19 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	};
 	
 	proto.isSorted = function(columnName) {
-		if(typeof columnName === 'undefined')
-			return this.options.sort ? true : false;
+		var sort = this.options.sort;
 		
-		return (this.options.sort && this.options.sort[columnName]) || 0;
+		if(typeof columnName === 'undefined') {
+			if(!sort)
+				return false;
+			
+			if(Array.isArray(sort))
+				return sort.length > 0;
+			
+			return Object.keys(sort).length > 0;
+		}
+		
+		return (sort && sort[columnName]) || 0;
 	};
 	
 	proto.sort = function(columnName, value) {
@@ -57,6 +68,48 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 			elm = $('<table class="table" />');
 		
 		return Widget.super_.prototype._create.call(this, container, parent, elm);
+	};
+	
+	proto._initSortable = function(elm, options) {
+		var self = this,
+		bUpdate = 'sortupdate.table',
+		bStart = 'sortstart.table';
+
+		elm.unbind(bStart);
+		elm.unbind(bUpdate);
+		
+		if(!options.sortable) {
+			if(this._elm.hasClass('ui-sortable'))
+				this._elm.sortable('destroy');
+			
+			return;
+		}
+		
+		require(['jquery-ui'], function() {
+			var startIndex = -1;
+
+			elm.sortable($.extend({
+				appendTo: 'parent',
+				axis: 'y',
+//				cancel: '.unsortable',
+				delay: 150,
+				forceHelperSize: true,
+				forcePlaceholderSize: true,
+				handle: '.sortable-handler',
+				items: '> tbody > tr'
+			}, options.sortableOpts))
+
+			.bind(bStart, function(e, ui) {
+				startIndex = ui.item.index();
+				
+				self.emit('sortstart', startIndex, ui, e);
+			})
+			.bind(bUpdate, function(e, ui) {
+				self.emit('sortupdate', ui.item.index(), startIndex, ui, e);
+				
+				startIndex = -1;
+			});
+		});
 	};
 	
 	proto._defineColumn = function(column, i) {
@@ -143,6 +196,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 				}
 			})(options.rows[i]);
 		}
+		
+		this._initSortable(this._elm, options);
 	};
 	
 	proto._columnLabelRender = function(column) {
@@ -151,7 +206,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		
 		var self = this, th = $('<th />'),
 		columnName = column.name,
-		sorted = this.isSorted(columnName);
+		sortName = column.sortName || columnName,
+		sorted = this.isSorted(sortName);
 
 		if(column.align)
 			th.css('textAlign', column.align);
@@ -171,11 +227,11 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 				e.preventDefault();
 				
 				if(!sorted)
-					self.sort(columnName, 1);
+					self.sort(sortName, 1);
 				else if(sorted > 0)
-					self.sort(columnName, -1);
+					self.sort(sortName, -1);
 				else
-					self.unsort(columnName);
+					self.unsort(sortName);
 			});
 		} else {
 			th.text(column.label);
@@ -207,6 +263,14 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		}
 	};
 	
+	proto._renderSortable = function(td, value, row) {
+		var icon = this.icon || 'icon-resize-vertical';
+		
+		$('<i class="sortable-handler" />')
+		.prependTo(td)
+		.addClass(icon.class || icon);
+	};
+	
 	proto._renderWidget = function(td, value, row) {
 		var widget = row.__instance || this.instance,
 		options = this.options || {};
@@ -227,8 +291,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 			
 			widget.render();
 		} else {
-			widget.create(td)
-			.render(options);
+			widget.create(td);
+			widget.render(options);
 		}
 	};
 	
