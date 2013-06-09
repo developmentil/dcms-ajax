@@ -14,6 +14,8 @@ define(['core/dcms-ajax',
 	});
 	var proto = Widget.prototype;
 	
+	Control.types.container = Widget;
+	
 	proto.data = function(key, value) {
 		switch(typeof key) {
 			case 'undefined':
@@ -50,6 +52,9 @@ define(['core/dcms-ajax',
 	
 	proto.insert = function(control) {
 		if(!(control instanceof DA.Widget)) {
+			if(control.wrapper === true && this.options.wrapper) {
+				control.wrapper = this.options.wrapper;
+			}
 			control = Control.create(control);
 		}
 		

@@ -14,6 +14,8 @@ define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
 	});
 	var proto = Widget.prototype;
 	
+	Control.types.group = Widget;
+	
 	proto._create = function(container, parent, elm) {
 		if(!elm)
 			elm = $('<div class="control-group" />');
