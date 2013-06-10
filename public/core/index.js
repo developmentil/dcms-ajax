@@ -19,7 +19,7 @@ define([
 	
 	'core/widgets/Container', 'core/widgets/Fieldset', 
 	'core/widgets/Form', 'core/widgets/FormHorizontal' , 'core/widgets/FormInline', 
-	'core/widgets/ControlGroup', 'core/widgets/FormActions',
+	'core/widgets/Controls', 'core/widgets/ControlGroup', 'core/widgets/FormActions',
 	
 	'core/widgets/Control', 'core/widgets/MultiControl',
 	'core/widgets/Input', 'core/widgets/Checkbox', 'core/widgets/Select',
@@ -35,7 +35,7 @@ define([
 		Tabs, Tab, 
 		Table, Browser, Pagination, 
 		Container, Fieldset, Form, FormHorizontal, FormInline,
-		ControlGroup, FormActions, 
+		Controls, ControlGroup, FormActions, 
 		Control, MultiControl, Input, Checkbox, Select, 
 		TextArea, HtmlEditor,
 		InputFile) {
@@ -69,6 +69,7 @@ define([
 	DA.Widget.Form = Form;
 	DA.Widget.FormHorizontal = FormHorizontal;
 	DA.Widget.FormInline = FormInline;
+	DA.Widget.Controls = Controls;
 	DA.Widget.ControlGroup = ControlGroup;
 	DA.Widget.FormActions = FormActions;
 	

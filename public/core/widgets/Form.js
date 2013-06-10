@@ -12,12 +12,19 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 	var proto = Widget.prototype;
 	
 	proto.create = function() {
+		var controls = this.options.controls;
+		this.options.controls = [];
+		
 		var elm = Widget.super_.prototype.create.apply(this, arguments);
 		
 		for(var i in this.options.fieldsets) {
 			this.insertFieldset(this.options.fieldsets[i]);
 		}
 		this.options.fieldsets = [];
+		
+		for(var i in controls) {
+			this.insert(controls[i]);
+		}
 		
 		return elm;
 	};

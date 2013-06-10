@@ -14,8 +14,6 @@ define(['core/dcms-ajax',
 	});
 	var proto = Widget.prototype;
 	
-	Control.types.container = Widget;
-	
 	proto.data = function(key, value) {
 		switch(typeof key) {
 			case 'undefined':

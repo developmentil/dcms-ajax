@@ -8,9 +8,9 @@
  */
 
 define([
-	'jquery', 'core/libs/sammy',
+	'jquery', 'core/libs/sammy', 'i18n!core/nls/core',
 	'core/SignalsEmitter', 'core/Registry', 'core/Widget'
-], function($, Sammy, SignalsEmitter, Registry, Widget) {
+], function($, Sammy, i18n, SignalsEmitter, Registry, Widget) {
 	
 	var DA = 
 	window.DA = new SignalsEmitter();
@@ -23,8 +23,9 @@ define([
 	DA.plugins = {};
 	
 	DA.registry = new Registry();
-	DA.registry.set('locale', requirejs.s.contexts._.config.locale);
-	DA.registry.set('dir', 'ltr');
+	DA.registry.set('locale', i18n.Locale);
+	DA.registry.set('dir', i18n.Locale.direction);
+	DA.registry.set('currency', i18n.Currency);
 	
 	DA.registry.set('plugins', {});
 	DA.registry.set('modules', []);

@@ -263,6 +263,32 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		}
 	};
 	
+	proto._renderNumber = function(td, value, row) {
+		var num = this.isInt ? parseInt(value) : parseFloat(value);
+		if(this.fixed !== undefined)
+			num = num.toFixed(this.fixed);
+		
+		td.text(num);
+	};
+	
+	proto._defineColumnCurrency = function(column, i) {
+		column = $.extend({
+			currency: DA.registry.get('currency.symbol'),
+			fixed: 2
+		}, column);
+			
+		return column;
+	};
+	
+	proto._renderCurrency = function(td, value, row) {
+		var num = parseInt(value).toFixed(this.fixed);
+		
+		if(this.currency)
+			num += ' ' + this.currency;
+		
+		td.text(num);
+	};
+	
 	proto._renderSortable = function(td, value, row) {
 		var icon = this.icon || 'icon-resize-vertical';
 		
