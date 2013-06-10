@@ -38,6 +38,26 @@ define(['core/dcms-ajax'], function(DA) {
 		return elm;
 	};
 	
+	proto.entityVal = function() {
+		var name = this.options.name,
+		entity = this._parent && this._parent.options.entity;
+
+		if(!name)
+			return entity;
+		
+		name = name.replace(/\[([\w\.]+)\]/g, '.$1');
+		var keys = name.split('.');
+		
+		for(var i = 0; i < keys.length; i++) {
+			if(!entity)
+				return null;
+			
+			entity = entity[keys[i]];
+		}
+
+		return entity;
+	};
+	
 	proto.isVal = function(val) {
 		return (this.options.value == val);
 	};
@@ -77,11 +97,9 @@ define(['core/dcms-ajax'], function(DA) {
 	};
 	
 	proto._load = function(callback) {
-		var name = this.options.name,
-		entity = this._parent && this._parent.options.entity;
-
-		if(entity && typeof entity[name] !== 'undefined')
-			this.options.value = entity[name];
+		var value = this.entityVal();
+		if(value !== undefined)
+			this.options.value = value;
 		
 		callback(null);
 	};

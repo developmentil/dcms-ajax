@@ -65,7 +65,9 @@ define(['core/dcms-ajax',
 		
 		if(this.options.wrapper) {
 			if(control instanceof Control || control.options.wrappable) {
-				control = new this.options.wrapper(control);
+				control = new this.options.wrapper({
+					controls: [control]
+				});
 			}
 		}
 		
