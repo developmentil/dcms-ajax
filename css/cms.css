@@ -120,10 +120,15 @@ body.rtl .mce-menu-align .mce-menu-shortcut {
 }
 
 
-/*** fileinput ***/
+/*** fileupload ***/
 
 .widget-fileupload {
 	display: inline;
+}
+
+.widget-fileupload > span.btn {
+	position: relative;
+	overflow: hidden;
 }
 
 .widget-fileupload > span.btn > input.file-input {
