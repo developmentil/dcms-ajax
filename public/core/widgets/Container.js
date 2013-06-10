@@ -30,7 +30,7 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 			widget = DA.Widget.create(widget);
 		}
 		
-		if(this._children.length && this.options.glue)
+		if(this.options.glue && this._children.length)
 			this._container.append(this.options.glue);
 			
 		widget.create(this._container, this);

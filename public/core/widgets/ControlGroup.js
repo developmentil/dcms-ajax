@@ -1,16 +1,20 @@
-define(['core/widgets/ControlsContainer'], function(ControlsContainer) {
+define([
+	'core/widgets/ControlsContainer', 'core/widgets/Control'
+], function(ControlsContainer, Control) {
 	
 	function Widget(controls) {
 		if(!Array.isArray(controls))
 			controls = [controls];
 		
-		Widget.super_.call(this, $.extend({
-			controls: controls
-		}, controls[0].options));
+		var options = $.extend({}, controls[0].options);
+		options.controls = controls;
+		
+		Widget.super_.call(this, options);
 	};
 	ControlsContainer.extend(Widget, {
 		wrapperLabel: null,
-		label: null
+		label: null,
+		glue: ' '
 	});
 	var proto = Widget.prototype;
 	
