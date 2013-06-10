@@ -14,7 +14,7 @@ define({
 	Select: {
 		emptyLabel: '~ ללא ~'
 	},
-	InputFile: {
+	FileUpload: {
 		selectFile: 'בחירת קובץ...',
 		selectFiles: 'בחירת קבצים...',
 		del: 'מחק'

@@ -1,9 +1,10 @@
-define(['core/dcms-ajax'], function(DA) {
+define(['core/dcms-ajax', 'core/widgets/Control'], function(DA, Control) {
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
 	DA.Widget.extend(Widget, {
+		wrappable: true,
 		type: null,
 		url: null,
 		label: null,
@@ -11,6 +12,9 @@ define(['core/dcms-ajax'], function(DA) {
 		toggle: null
 	});
 	var proto = Widget.prototype;
+	
+	Control.types.button = 
+	Control.types.submit = Widget;
 	
 	Widget.create = function(options, elm) {
 		var type = options.type || (options.url ? 'link' : 'button');

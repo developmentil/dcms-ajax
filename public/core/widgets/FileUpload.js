@@ -2,7 +2,7 @@ define([
 	'core/widgets/Control', 'core/nls/index', 
 	'core/widgets/Button', 'core/widgets/Input', 'core/widgets/ProgressBar'
 ], function(Control, i18n, Button, Input, ProgressBar) {
-	i18n = i18n.widgets.InputFile;
+	i18n = i18n.widgets.FileUpload;
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
@@ -31,7 +31,7 @@ define([
 	});
 	var proto = Widget.prototype;
 	
-	Control.types.inputfile = Widget;
+	Control.types.fileupload = Widget;
 	
 	Widget.setupPlugin = function(element, options, widget) {
 		require(['jquery-iframe-transport', 'jquery-fileupload'], function() {
@@ -111,7 +111,7 @@ define([
 	
 	proto._create = function(container, parent, elm) {
 		if(!elm)
-			elm = $('<div class="widget-fileinput" />');
+			elm = $('<div class="widget-fileupload" />');
 		
 		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
 		

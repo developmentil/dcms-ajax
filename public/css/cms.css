@@ -1,0 +1,171 @@
+
+body {
+	background: #444;
+	padding-top: 40px;
+}
+
+body.rtl {
+	direction: rtl;
+}
+
+
+/*** NavBar ***/
+
+#navbar > .navbar-inner {
+	padding: 0 10px;
+}
+
+
+/*** Tabs ***/
+
+#tabs {
+	margin: 0 10px;
+	position: relative;
+}
+
+#tabs > .nav-tabs {
+	margin: 0;
+	padding: 20px 0 0;
+	border-bottom: none;
+	background: #444;
+	position: fixed;
+	width: 100%;
+	z-index: 1000;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#tabs > .nav-tabs > li > a {
+	padding: 4px 8px;
+	color: #fff;
+}
+
+#tabs > .nav-tabs > li > a:hover,
+#tabs > .nav-tabs > .active > a {
+	color: #555;
+}
+
+#tabs > .nav-tabs > .active > a:focus {
+	outline: none;
+	color: #0088cc;
+}
+
+#tabs > .nav-tabs .close:before {
+	content: " \00a0 ";
+}
+
+#tabs > .nav-tabs .close {
+	float: none;
+	display: inline-block;
+	vertical-align: middle;
+	color: #fff;
+	text-shadow: none;
+}
+
+#tabs > .nav-tabs > li:hover .close,
+#tabs > .nav-tabs > .active .close {
+	color: #000;
+	text-shadow: 0 1px 0 #fff;
+}
+
+#tabs > .tab-content {
+	margin: 50px 0 10px;
+}
+
+#tabs > .tab-content > .tab-pane {
+	padding: 25px 20px 20px;
+	background: #fff;
+	border-radius: 0 0 4px 4px;
+	min-height: 500px;
+/*	-moz-box-sizing: border-box;
+    box-sizing: border-box;*/
+}
+
+#tabs > .tab-content > .tab-pane:before {
+	content: "";
+	position: fixed;
+	display: block;
+	width: 98%;
+	height: 5px;
+	background: #fff;
+	top: 90px;
+	left: 10px;
+	z-index: 1000;
+}
+
+body.rtl #tabs > .tab-content > .tab-pane:before {
+	left: auto;
+	right: 10px;
+}
+
+
+/*** Table ***/
+
+.sortable-handler {
+	cursor: pointer;
+}
+
+.widget-fileinput > span.btn {
+    position: relative;
+	overflow: hidden;
+}
+
+
+/*** TinyMCE ***/
+
+body.rtl .mce-menu-align .mce-menu-shortcut {
+	left: 0;
+	right: auto;
+}
+
+
+/*** fileinput ***/
+
+.widget-fileupload {
+	display: inline;
+}
+
+.widget-fileupload > span.btn > input.file-input {
+	cursor: pointer;
+    direction: ltr;
+    font-size: 23px;
+    margin: 0;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(-300px, 0px) scale(4);
+}
+
+.widget-fileupload > .progress {
+    display: inline-block;
+	width: 200px;
+	margin: 0 1em;
+	vertical-align: middle;
+}
+
+.widget-fileupload > .files {
+	margin: 0 -20px;
+}
+
+.widget-fileupload > .files .file {
+	display: inline-block;
+	min-width: 250px;
+	margin: 20px;
+	padding: 1em;
+	background: #fafafa;
+	border: 1px solid #eee;
+	border-radius: 4px;
+}
+
+.widget-fileupload > .files .file-image {
+	display: block;
+	float: right;
+	margin-left: 1em;
+}
+
+.widget-fileupload > .files .file-name {
+	display: block;
+	margin-bottom: 10px;
+}

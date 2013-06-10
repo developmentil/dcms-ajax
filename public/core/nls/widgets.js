@@ -15,7 +15,7 @@ define({
 		Select: {
 			emptyLabel: '~ none ~'
 		},
-		InputFile: {
+		FileUpload: {
 			selectFile: 'Select file...',
 			selectFiles: 'Select files...',
 			del: 'Delete'
