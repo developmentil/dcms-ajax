@@ -162,12 +162,17 @@ body.rtl .mce-menu-align .mce-menu-shortcut {
 	background: #fafafa;
 	border: 1px solid #eee;
 	border-radius: 4px;
+	vertical-align: top;
 }
 
 .widget-fileupload > .files .file-image {
-	display: block;
-	float: right;
-	margin-left: 1em;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.widget-fileupload > .files .file-content {
+	display: inline-block;
+	vertical-align: top;
 }
 
 .widget-fileupload > .files .file-name {

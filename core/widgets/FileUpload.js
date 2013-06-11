@@ -224,12 +224,16 @@ define([
 					maxHeight: this.options.imageMaxHeight
 				})
 			);
+			
+			elm.append(' ');
 		}
+		
+		var content = $('<span class="file-content" />').appendTo(elm);
 		
 		$('<a class="file-name" target="_blank" />')
 				.attr('href', url)
 				.text(name)
-				.appendTo(elm);
+				.appendTo(content);
 		
 		Button.create({
 			class: 'btn-danger btn-mini',
@@ -254,7 +258,7 @@ define([
 					}
 				});
 			}
-		}).appendTo(elm);
+		}).appendTo(content);
 	};	
 	
 	return Widget;
