@@ -59,7 +59,7 @@ define([
 			, group);
 		}
 		
-		if(options.required === false) {
+		if(options.required !== null) {
 			var opt = $.extend({
 				label: options.emptyLabel,
 				value: options.emptyValue

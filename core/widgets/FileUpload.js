@@ -133,11 +133,6 @@ define([
 		this.file.destroy();
 		this.file = null;
 		
-		$.each(this.hiddens, function(i, hidden) {
-			hidden.destroy();
-		});
-		this.hiddens = [];
-		
 		Widget.super_.prototype._destroy.apply(this, arguments);
 	};
 	
@@ -203,7 +198,7 @@ define([
 				
 		url = file.url || file,
 		name = file.name || url.match(/[^\/]+$/)[0],
-		value = file.value || file.url,
+		value = file.value || url,
 		isImage = ((file.type && file.type.substr(0, 6) === 'image/') || 
 				(url.match(/\.(png|jpe?g|gif)$/i) !== null)),
 		
@@ -225,7 +220,9 @@ define([
 				})
 			);
 			
-			elm.append(' ');
+			elm.css({
+				minHeight: this.options.imageMaxHeight
+			}).append(' ');
 		}
 		
 		var content = $('<span class="file-content" />').appendTo(elm);
