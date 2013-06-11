@@ -103,13 +103,19 @@ define([
 	
 	/*** Api ***/
 	
-	 DA.api = function(options, callback) {
+	 DA.api = function(options, data, callback) {
 		if(typeof options === 'string')
 			options = {url: options};
+		
+		if(typeof data === 'function') {
+			callback = data;
+			data = null;
+		}
 		 
-		options = $.extend({
+		options = $.extend(true, {
 			type: 'GET',
 			dataType: 'json',
+			data: data || {},
 			success: $.noop, //function(data, statusCode, textStatus, jqXHR) {}
 			error: $.noop //function(statusCode, textStatus, jqXHR, errorThrown) {},
 		}, options);

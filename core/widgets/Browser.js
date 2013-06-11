@@ -129,6 +129,14 @@ define(['core/dcms-ajax',
 		return elm;
 	};
 	
+	proto._destroy = function() {
+		this.table.destroy();
+		this.table = null;
+		
+		this.pagination.destroy();
+		this.pagination = null;
+	};
+	
 	proto._getTableOptions = function(options) {
 		var sortable = this.isSortable(),
 		sortableColumn = null, columms;
