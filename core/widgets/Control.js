@@ -105,6 +105,8 @@ define(['core/dcms-ajax'], function(DA) {
 	};
 	
 	proto._change = function(e) {
+		this.options.value = this.sendVal();
+		
 		this.emit('change', e);
 			
 		this._renderIsSend(this.options);

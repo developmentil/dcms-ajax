@@ -153,7 +153,6 @@ define([
 	proto._getFileOptions = function(options) {
 		return $.extend(true, {
 			type: 'file',
-			name: this.getInputName(),
 			class: 'file-input',
 			prop: {
 				multiple: options.multiple
