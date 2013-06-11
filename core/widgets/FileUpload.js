@@ -89,10 +89,7 @@ define([
 		$.ajax({
 			type: 'delete',
 			dataType: 'json',
-			url: widget.options.api,
-			data: {
-				file: value
-			},
+			url: widget.options.api + value,
 			success: function(data) {
 				callback(data === true ? null : -1);
 			},
@@ -193,9 +190,9 @@ define([
 		
 		if(options.multiple) {
 			if(Array.isArray(options.value)) {
-				$.each(options.value, function(i, file) {
-					self._renderFile(file, i);
-				});
+				for(var i in options.value) {
+					self._renderFile(options.value[i], i);
+				}
 			}
 		} else if(options.value) {
 			this._renderFile(options.value);
