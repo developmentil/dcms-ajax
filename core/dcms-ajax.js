@@ -24,7 +24,6 @@ define([
 	
 	DA.registry = new Registry();
 	DA.registry.set('locale', i18n.Locale);
-	DA.registry.set('dir', i18n.Locale.direction);
 	DA.registry.set('currency', i18n.Currency);
 	
 	DA.registry.set('plugins', {});

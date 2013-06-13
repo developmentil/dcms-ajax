@@ -30,8 +30,8 @@ define([
 	
 	proto._getEditorOptions = function(options) {
 		return $.extend({
-			language: DA.registry.get('locale'),
-			directionality: DA.registry.get('dir')
+			language: DA.registry.get('locale.locale'),
+			directionality: DA.registry.get('locale.direction')
 		}, options, options.editor);
 	};
 	
