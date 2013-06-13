@@ -21,6 +21,7 @@ define([
 		multiple: false,
 		multipleBrackets: '[]',
 		api: '/api/files',
+		apiData: null,
 		active: false,
 		failed: false,
 		plugin: {},
@@ -38,6 +39,7 @@ define([
 			element.fileupload($.extend({
 				dataType: 'json',
 				url: options.api,
+				data: options.apiData,
 				start: function() {
 					widget.render({
 						failed: false,

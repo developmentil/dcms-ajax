@@ -8,6 +8,8 @@ define([
 	Controls.extend(Widget, {
 		wrappable: false,
 		wrapperLabel: null,
+		help: null,
+		helpBlock: null,
 		label: null
 	});
 	var proto = Widget.prototype;
@@ -46,6 +48,21 @@ define([
 		this.eachChild(function(widget) {
 			widget.render();
 		});
+		
+		this._container
+		.children('span.help-inline,span.help-block').remove();
+		
+		if(options.help) {
+			$('<span class="help-inline" />')
+			.appendTo(this._container)
+			.text(options.help);
+		}
+		
+		if(options.helpBlock) {
+			$('<span class="help-block" />')
+			.appendTo(this._container)
+			.text(options.helpBlock);
+		}
 	};
 	
 	return Widget;
