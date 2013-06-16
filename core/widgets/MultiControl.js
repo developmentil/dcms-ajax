@@ -22,7 +22,18 @@ define(['core/widgets/Control'], function(Control) {
 		if(!this.options.multiple)
 			return Widget.super_.prototype.isVal.apply(this, arguments);
 		
-		return (~this.options.value.indexOf(val));
+		for(var i in this.options.value) {
+			if(this.options.value[i] == val)
+				return true;
+		}
+		return false;
+	};
+	
+	proto._renderIsSend = function(options) {
+		if(options.multiple || this.isSend())
+			this._elm.attr('name', this.getInputName());
+		else
+			this._elm.removeAttr('name');
 	};
 	
 	return Widget;

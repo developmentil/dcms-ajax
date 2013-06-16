@@ -9,6 +9,7 @@ define([
 	};
 	MultiControl.extend(Widget, {
 		api: null,
+		size: null,
 		options: [],
 		optionGroups: [],
 		emptyLabel: i18n.emptyLabel,
@@ -43,6 +44,13 @@ define([
 	
 	proto._render = function(options) {
 		Widget.renderElm(this._elm, options);
+		
+		if(options.multiple !== null)
+			this._elm.prop('multiple', options.multiple);
+		
+		if(options.size !== null)
+			this._elm.attr('size', options.size);
+		
 		this._elm.empty();
 		
 		for(var i in options.optionGroups) {
