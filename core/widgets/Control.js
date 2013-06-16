@@ -101,7 +101,7 @@ define(['core/dcms-ajax'], function(DA) {
 		if(value !== undefined)
 			this.options.value = value;
 		
-		callback(null);
+		setTimeout(callback, 1);
 	};
 	
 	proto._change = function(e) {

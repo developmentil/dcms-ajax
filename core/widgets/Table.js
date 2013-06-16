@@ -28,7 +28,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	proto.getValue = function(entity, key) {
 		var keys = key.split('.');
 		for(var i = 0; i < keys.length; i++) {
-			if(typeof entity !== 'object')
+			if(!entity)
 				return null;
 			
 			entity = entity[keys[i]];

@@ -4,17 +4,21 @@ define([
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
+		
+		if(!this.options.value)
+			this.options.value = [];
 	};
 	MultiControl.extend(Widget, {
 		api: null,
 		options: [],
-		value: [],
+		value: null,
 		inputClass: 'input-small',
 		tagClass: 'label-info',
 		placeholder: null,
 		valueProp: '_id',
 		labelProp: 'name',
 		allowDuplicate: false,
+		closedList: false,
 		multiple: true,
 		typeahead: {}
 	});
@@ -103,6 +107,16 @@ define([
 				self.typeahead.val('');
 			}, 1);
 		});
+		this.typeahead.on('enter', function(entity, label) {
+			if(self.options.closedList)
+				return;
+			
+			self.addTag(entity || label);
+			
+			setTimeout(function() {
+				self.typeahead.val('');
+			}, 1);
+		});
 		
 		return elm;
 	};
@@ -122,7 +136,13 @@ define([
 	};
 	
 	proto._load = function(callback) {
-		this.typeahead.load(callback);
+		var self = this;
+		
+		Widget.super_.prototype._load.call(this, function(err) {
+			if(err) return callback(err);
+			
+			self.typeahead.load(callback);
+		});
 	};
 	
 	proto._render = function(options) {

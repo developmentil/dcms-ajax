@@ -21,6 +21,7 @@ define(['core/widgets/Control', 'core/widgets/Input'], function(Control, Input) 
 	Control.types.typeahead = Widget;
 	
 	proto._create = function(container, parent, elm) {
+		var self = this;
 		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
 		
 		elm.typeahead(this._getTypeaheadOptions(this.options));
@@ -29,6 +30,8 @@ define(['core/widgets/Control', 'core/widgets/Input'], function(Control, Input) 
 			elm.bind('keypress.disableEnter', function(e) {
 				var charCode = e.charCode || e.keyCode;
 				if (charCode === 13) {
+					var label = elm.val();
+					self.emit('enter', self._loadedSource && self._loadedSource[label], label);
 					return false;
 				}
 			});
@@ -37,7 +40,7 @@ define(['core/widgets/Control', 'core/widgets/Input'], function(Control, Input) 
 		return elm;
 	};
 	
-	proto._getTypeaheadOptions = function(options) {		
+	proto._getTypeaheadOptions = function(options) {
 		var self = this,
 		
 		opts = $.extend({}, options, options.typeahead);
@@ -47,7 +50,7 @@ define(['core/widgets/Control', 'core/widgets/Input'], function(Control, Input) 
 			return options.updater ? options.updater.call(this, label) : label;
 		};
 		
-		if(!Array.isArray(options.source) && typeof options.source !== 'function') {
+		if(options.source && !Array.isArray(options.source) && typeof options.source !== 'function') {
 			opts.source = function(query, callback) {
 				DA.api(options.source, {query: query}, function(err, data) {
 					if(err) return callback([]);
