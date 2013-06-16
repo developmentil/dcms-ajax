@@ -24,7 +24,8 @@ define([
 	'core/widgets/Control', 'core/widgets/MultiControl',
 	'core/widgets/Input', 'core/widgets/Checkbox', 'core/widgets/Select',
 	'core/widgets/TextArea', 'core/widgets/HtmlEditor', 
-	'core/widgets/Typeahead', 'core/widgets/FileUpload'
+	'core/widgets/Typeahead', 'core/widgets/Tags', 
+	'core/widgets/FileUpload'
 ], function(
 		DA, layout, 
 		Tag, Toolbar, 
@@ -38,7 +39,7 @@ define([
 		Controls, ControlGroup, FormActions, 
 		Control, MultiControl, Input, Checkbox, Select, 
 		TextArea, HtmlEditor,
-		Typeahead, FileUpload) {
+		Typeahead, Tags, FileUpload) {
 	
 	DA.registry.set('plugins.layout', {
 		_path: false
@@ -81,6 +82,7 @@ define([
 	DA.Widget.TextArea = TextArea;
 	DA.Widget.HtmlEditor = HtmlEditor;
 	DA.Widget.Typeahead = Typeahead;
+	DA.Widget.Tags = Tags;
 	DA.Widget.FileUpload = FileUpload;
 	
 	return DA;

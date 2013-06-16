@@ -179,3 +179,20 @@ body.rtl .mce-menu-align .mce-menu-shortcut {
 	display: block;
 	margin-bottom: 10px;
 }
+
+
+/*** widget-tags ***/
+
+.widget-tags .label {
+	line-height: 18px;
+}
+
+.widget-tags .label .close {
+	padding-left: 8px;
+}
+
+
+body.rtl .widget-tags .label .close {
+	padding-left: 0;
+	padding-right: 8px;
+}

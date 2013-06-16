@@ -13,6 +13,7 @@ define(['core/widgets/Control', 'core/widgets/Input'], function(Control, Input) 
 
 			return item;
 		},
+		disableEnter: false,
 		typeahead: {}
 	});
 	var proto = Widget.prototype;
@@ -24,18 +25,26 @@ define(['core/widgets/Control', 'core/widgets/Input'], function(Control, Input) 
 		
 		elm.typeahead(this._getTypeaheadOptions(this.options));
 		
+		if(this.options.disableEnter) {
+			elm.bind('keypress.disableEnter', function(e) {
+				var charCode = e.charCode || e.keyCode;
+				if (charCode === 13) {
+					return false;
+				}
+			});
+		}
+		
 		return elm;
 	};
 	
 	proto._getTypeaheadOptions = function(options) {		
 		var self = this,
 		
-		opts = {
-			updater: function(label) {
-				self.emit('select', self._loadedSource && self._loadedSource[label], label);
-				
-				return options.updater ? options.updater.call(this, label) : label;
-			}
+		opts = $.extend({}, options, options.typeahead);
+		opts.updater = function(label) {
+			self.emit('select', self._loadedSource && self._loadedSource[label], label);
+
+			return options.updater ? options.updater.call(this, label) : label;
 		};
 		
 		if(!Array.isArray(options.source) && typeof options.source !== 'function') {
@@ -58,7 +67,7 @@ define(['core/widgets/Control', 'core/widgets/Input'], function(Control, Input) 
 			opts.source = options.source;
 		}
 		
-		return $.extend(opts, options, options.typeahead);
+		return opts;
 	};
 	
 	return Widget;

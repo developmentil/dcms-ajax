@@ -1,13 +1,13 @@
 define([
-	'core/widgets/Control', 'core/nls/index', 
+	'core/widgets/MultiControl', 'core/widgets/Control', 'core/nls/index', 
 	'core/widgets/Button', 'core/widgets/Input', 'core/widgets/ProgressBar'
-], function(Control, i18n, Button, Input, ProgressBar) {
+], function(MultiControl, Control, i18n, Button, Input, ProgressBar) {
 	i18n = i18n.widgets.FileUpload;
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	Control.extend(Widget, {
+	MultiControl.extend(Widget, {
 		btnClass: 'btn-success',
 		btnIcon: 'icon-upload icon-white',
 		btnLabel: null,
@@ -18,8 +18,6 @@ define([
 		imageMaxWidth: 80,
 		imageMaxHeight: 80,
 		percentage: 0,
-		multiple: false,
-		multipleBrackets: '[]',
 		api: '/api/files',
 		apiData: null,
 		active: false,
@@ -163,15 +161,6 @@ define([
 			barClass: (!options.failed ? options.barClass : options.barFailedClass),
 			percentage: options.percentage
 		}, options.progress);
-	};
-	
-	proto.getInputName = function() {
-		var name = this.options.name;
-		if(this.options.multiple && this.options.multipleBrackets) {
-			name += this.options.multipleBrackets;
-		}
-		
-		return name;
 	};
 	
 	proto._render = function(options) {	
