@@ -28,11 +28,18 @@ define(['core/widgets/Control', 'core/widgets/Input'], function(Control, Input) 
 		
 		if(this.options.disableEnter) {
 			elm.bind('keypress.disableEnter', function(e) {
-				var charCode = e.charCode || e.keyCode;
+				var charCode = e.keyCode || e.charCode;
 				if (charCode === 13) {
+					self._selected = false;
+					return false;
+				}
+			});
+			
+			elm.bind('keyup.disableEnter', function(e) {
+				var charCode = e.keyCode || e.charCode;
+				if (charCode === 13 && !self._selected) {
 					var label = elm.val();
 					self.emit('enter', self._loadedSource && self._loadedSource[label], label);
-					return false;
 				}
 			});
 		}
@@ -45,6 +52,7 @@ define(['core/widgets/Control', 'core/widgets/Input'], function(Control, Input) 
 		
 		opts = $.extend({}, options, options.typeahead);
 		opts.updater = function(label) {
+			self._selected = true;
 			self.emit('select', self._loadedSource && self._loadedSource[label], label);
 
 			return options.updater ? options.updater.call(this, label) : label;
