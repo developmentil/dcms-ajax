@@ -10,7 +10,7 @@ define(['core/widgets/Control'], function(Control) {
 	var proto = Widget.prototype;
 	
 	proto.getInputName = function() {
-		var name = this.options.name;
+		var name = Widget.super_.prototype.getInputName.apply(this, arguments);
 		if(this.options.multiple && this.options.multipleBrackets) {
 			name += this.options.multipleBrackets;
 		}

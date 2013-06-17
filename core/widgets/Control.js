@@ -18,6 +18,12 @@ define(['core/dcms-ajax'], function(DA) {
 	
 	Widget.types = {};
 	
+	proto.getInputName = function() {
+		var name = this.options.name;
+		name = name.replace(/\[\d+\]/g, '[]');
+		return name;
+	};
+	
 	Widget.create = function(options) {
 		return DA.Widget.create(options, Widget.types[options.type] || Widget.types.default);
 	};
@@ -127,7 +133,7 @@ define(['core/dcms-ajax'], function(DA) {
 	
 	proto._renderIsSend = function(options) {
 		if(this.isSend())
-			this._elm.attr('name', options.name);
+			this._elm.attr('name', this.getInputName());
 		else
 			this._elm.removeAttr('name');
 	};
