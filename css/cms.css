@@ -111,6 +111,15 @@ body.rtl #tabs > .tab-content > .tab-pane:before {
 	overflow: hidden;
 }
 
+.table td .dropdown-menu {
+	text-align: left;
+}
+
+body.rtl .table td .dropdown-menu {
+	text-align: right;
+}
+
+
 
 /*** TinyMCE ***/
 

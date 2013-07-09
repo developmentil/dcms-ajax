@@ -168,12 +168,14 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 					self.eachColumn(options.columns, function(column) {
 						var value = self.getValue(row, column.name),
 
-						td = $('<td />').appendTo(tr);
+						td = Widget.createElm($('<td />').appendTo(tr), column);
 						if(column.align)
 							td.css('textAlign', column.align);
-		
-						if(column.class)
-							td.addClass(column.class);
+						
+						if(column.dir)
+							td.attr('dir', column.dir);
+						
+						Widget.renderElm(td, column);
 
 						if(typeof column.render === 'function')
 							column.render(td, value, row);
