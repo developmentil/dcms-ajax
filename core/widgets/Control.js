@@ -1,10 +1,12 @@
 define(['core/dcms-ajax'], function(DA) {
 	
+	var idSequence = 0;
+	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 		
 		if(this.options.id === null)
-			this.options.id = this.options.name;
+			this.options.id = this.options.name + '-' + (++idSequence);
 	};
 	DA.Widget.extend(Widget, {
 		name: null,

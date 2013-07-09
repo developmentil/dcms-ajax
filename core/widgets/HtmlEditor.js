@@ -28,11 +28,21 @@ define([
 		});
 	};
 	
+	Widget.destroyEditor = function(element) {
+		element.tinymce().destroy();
+	};
+	
 	proto._getEditorOptions = function(options) {
 		return $.extend({
 			language: DA.registry.get('locale.locale'),
 			directionality: DA.registry.get('locale.direction')
 		}, options, options.editor);
+	};
+	
+	proto._destroy = function() {
+		Widget.destroyEditor(this._elm);
+		
+		Widget.super_.prototype._destroy.apply(this, arguments);
 	};
 	
 	proto._render = function(options) {
