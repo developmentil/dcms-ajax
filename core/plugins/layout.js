@@ -10,7 +10,8 @@ define(['core/widgets/NavBar', 'core/widgets/Tabs'], function(NavBar, Tabs) {
 		};
 		DA.tabs = new Tabs({
 			id: 'tabs',
-			closeIcon: true
+			closeIcon: true,
+			rememberScroll: true
 		});
 
 		var navbar = DA.layout.navbar.create('body').hide();

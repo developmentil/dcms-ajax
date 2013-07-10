@@ -8,7 +8,8 @@ define(['core/dcms-ajax', 'core/libs/async',
 	Container.extend(Widget, {
 		navClass: 'nav-tabs',
 		labelMaxLength: 30,
-		closeIcon: false
+		closeIcon: false,
+		rememberScroll: false
 	});
 	var proto = Widget.prototype;
 	
@@ -58,8 +59,16 @@ define(['core/dcms-ajax', 'core/libs/async',
 			tab = Tab.create(tab);
 		}
 		
-		if(tab.options.active)
+		if(tab.options.active) {
+			if(this.options.rememberScroll)
+				this.eachChild(function(tab) {
+					if(!tab.active()) return;
+
+					tab.options.scrollTop = $(window).scrollTop();
+				});
+				
 			this.setActive(tab);
+		}
 		
 		tab = Widget.super_.prototype.insert.call(this, tab);
 		
@@ -90,6 +99,9 @@ define(['core/dcms-ajax', 'core/libs/async',
 		if(!skipUi)
 			this._renderNav();
 		
+		if(typeof tab.options.scrollTop === 'number')
+			$(window).scrollTop(tab.options.scrollTop);
+		
 		return this;
 	};
 	
@@ -105,6 +117,16 @@ define(['core/dcms-ajax', 'core/libs/async',
 		this.nav = new Nav(this._getNavOptions(this.options));
 		var self = this,
 		nav = this.nav.create(elm, this);
+		
+		nav.on('show', 'a[data-toggle="tab"]', function(e) {
+			var curr = $(e.relatedTarget).parent().prevAll().length;
+			
+			if(!self._children[curr])
+				return;
+			
+			if(self.options.rememberScroll)
+				self._children[curr].options.scrollTop = $(window).scrollTop();
+		});
 		
 		nav.on('shown', 'a[data-toggle="tab"]', function(e) {
 			var curr = $(e.target).parent().prevAll().length;
