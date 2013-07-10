@@ -30,7 +30,7 @@ define(['core/widgets/Control'], function(Control) {
 		if(this.options.smartChange) {
 			var self = this, timeout = null;
 			elm.bind('keypress.smartChange', function(e) {
-				 if(e.which <= 32) return;
+				 if(e.which <= 32 && e.which !== 8) return;
 				 
 				 if(timeout)
 					 clearTimeout(timeout);
