@@ -10,7 +10,9 @@ define(['core/widgets/Control'], function(Control) {
 		dir: null,
 		spellcheck: null,
 		autocomplete: null,
-		autofocus: null
+		autofocus: null,
+		smartChange: null,
+		smartChangeTimeout: 200
 	});
 	var proto = Widget.prototype;
 	
@@ -24,6 +26,21 @@ define(['core/widgets/Control'], function(Control) {
 		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
 		
 		elm.attr('type', this.options.type);
+		
+		if(this.options.smartChange) {
+			var self = this, timeout = null;
+			elm.bind('keypress.smartChange', function(e) {
+				 if(e.which <= 32) return;
+				 
+				 if(timeout)
+					 clearTimeout(timeout);
+				 
+				 timeout = setTimeout(function() {
+					 timeout = null;
+					 self.options.smartChange.apply(self, e);
+				 }, self.options.smartChangeTimeout);
+			});
+		}
 		
 		return elm;
 	};
