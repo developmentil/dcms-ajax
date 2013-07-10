@@ -291,6 +291,14 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		td.text(num);
 	};
 	
+	proto._renderDate = function(td, value, row) {
+		var format = this.format 
+				|| DA.registry.get('locale.date') 
+				|| 'mm/dd/yy';
+		
+		td.text($.datepicker.formatDate(format, new Date(value)));
+	};
+	
 	proto._renderSortable = function(td, value, row) {
 		var icon = this.icon || 'icon-resize-vertical';
 		

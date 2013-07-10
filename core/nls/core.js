@@ -3,7 +3,8 @@ define({
 		Locale: {
 			locale: 'en-US',
 			direction: 'ltr',
-			name: 'English'
+			name: 'English',
+			date: 'mm/dd/yy'
 		},
 		Currency: {
 			symbol: '$',

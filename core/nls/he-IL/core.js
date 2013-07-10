@@ -2,7 +2,8 @@ define({
 	Locale: {
 		locale: 'he-IL',
 		direction: 'rtl',
-		name: 'עברית'
+		name: 'עברית',
+		date: 'dd/mm/yy'
 	},
 	Currency: {
 		symbol: '₪',
