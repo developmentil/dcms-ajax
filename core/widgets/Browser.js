@@ -7,7 +7,7 @@ define(['core/dcms-ajax',
 	};
 	DA.Widget.extend(Widget, {
 		api: null,
-		limit: 20,
+		limit: null,
 		offset: 0,
 		count: null,
 		sortable: false,

@@ -178,7 +178,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 						Widget.renderElm(td, column);
 
 						if(typeof column.render === 'function')
-							column.render(td, value, row);
+							column.render(td, value, row, i);
 						else {
 							if(column.nullText)
 								td.text(value || column.nullText);
@@ -253,7 +253,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		return column;
 	};
 	
-	proto._renderBoolean = function(td, value, row) {
+	proto._renderBoolean = function(td, value, row, i) {
 		if(value && value !== '0' && value !== 'false') {
 			td.text(this.trueLabel);
 			if(this.trueClass)
@@ -265,7 +265,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		}
 	};
 	
-	proto._renderNumber = function(td, value, row) {
+	proto._renderNumber = function(td, value, row, i) {
 		var num = this.isInt ? parseInt(value) : parseFloat(value);
 		if(this.fixed !== undefined)
 			num = num.toFixed(this.fixed);
@@ -282,7 +282,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		return column;
 	};
 	
-	proto._renderCurrency = function(td, value, row) {
+	proto._renderCurrency = function(td, value, row, i) {
 		var num = parseInt(value).toFixed(this.fixed);
 		
 		if(this.currency)
@@ -291,7 +291,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		td.text(num);
 	};
 	
-	proto._renderDate = function(td, value, row) {
+	proto._renderDate = function(td, value, row, i) {
 		var format = this.format 
 				|| DA.registry.get('locale.date') 
 				|| 'mm/dd/yy';
@@ -299,7 +299,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		td.text($.datepicker.formatDate(format, new Date(value)));
 	};
 	
-	proto._renderSortable = function(td, value, row) {
+	proto._renderSortable = function(td, value, row, i) {
 		var icon = this.icon || 'icon-resize-vertical';
 		
 		$('<i class="sortable-handler" />')
@@ -307,12 +307,12 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		.addClass(icon.class || icon);
 	};
 	
-	proto._renderWidget = function(td, value, row) {
+	proto._renderWidget = function(td, value, row, i) {
 		var widget = row.__instance || this.instance,
 		options = this.options || {};
 
 		if(typeof options === 'function')
-			options = options(row, value);
+			options = options(row, value, i);
 		
 		if(!widget) {
 			widget = this.widget;
