@@ -6,6 +6,7 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 	ControlsContainer.extend(Widget, {
 		action: '',
 		method: 'post',
+		target: null,
 		fieldsets: [],
 		fieldset: Fieldset
 	});
@@ -47,7 +48,8 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
 		
 		elm.attr('action', this.options.action)
-		.attr('method', this.options.method);
+		.attr('method', this.options.method)
+		.attr('target', this.options.target);
 		
 		return elm;
 	};
