@@ -263,7 +263,7 @@ define([
 		}).appendTo(content);
 		
 		if(this.options.sortable) {
-			$('<i class="icon-resize-horizontal file-handler" />')
+			$('<i class="icon-move file-handler" />')
 			.appendTo(content.append(' '));
 		}
 	};	
