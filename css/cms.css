@@ -163,15 +163,25 @@ body.rtl .mce-menu-align .mce-menu-shortcut {
 	margin: 0 -20px;
 }
 
+.widget-fileupload > .files .file-placeholder,
 .widget-fileupload > .files .file {
 	display: inline-block;
 	min-width: 250px;
 	margin: 20px;
 	padding: 1em;
-	background: #fafafa;
-	border: 1px solid #eee;
 	border-radius: 4px;
 	vertical-align: top;
+}
+
+.widget-fileupload > .files .file {
+	position: relative;
+	background: #fafafa;
+	border: 1px solid #eee;
+}
+
+.widget-fileupload > .files .file-placeholder {
+	border: 1px dashed #ddd;
+	min-height: 50px;
 }
 
 .widget-fileupload > .files .file-image {
@@ -187,6 +197,23 @@ body.rtl .mce-menu-align .mce-menu-shortcut {
 .widget-fileupload > .files .file-name {
 	display: block;
 	margin-bottom: 10px;
+}
+
+.widget-fileupload > .files .file-handler {
+    position: absolute;
+    right: 1em;
+	bottom: 1em;
+    opacity: 0.2;
+	cursor: move;
+}
+
+body.rtl .widget-fileupload > .files .file-handler {
+	right: auto;
+	left: 1em;
+}
+
+.widget-fileupload > .files .file-handler:hover {
+    opacity: 1;
 }
 
 

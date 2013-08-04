@@ -15,6 +15,7 @@ define([
 		progressActiveClass: 'progress-striped active',
 		barClass: '',
 		barFailedClass: 'bar-danger',
+		sortable: true,
 		imageMaxWidth: 80,
 		imageMaxHeight: 80,
 		percentage: 0,
@@ -123,6 +124,14 @@ define([
 		
 		this._files = $('<div class="files" />').appendTo(elm);
 		
+		if(this.options.sortable) {
+			this._files.sortable({
+				items: '> .file',
+				placeholder: 'file-placeholder',
+				handle: '.file-handler'
+			});
+		}
+		
 		return elm;
 	};
 	
@@ -179,8 +188,13 @@ define([
 					self._renderFile(options.value[i], i);
 				}
 			}
+			
 		} else if(options.value) {
 			this._renderFile(options.value);
+		}
+		
+		if(options.multiple && options.sortable) {
+			this._files.sortable('refresh');
 		}
 	};
 	
@@ -247,6 +261,11 @@ define([
 				});
 			}
 		}).appendTo(content);
+		
+		if(this.options.sortable) {
+			$('<i class="icon-resize-horizontal file-handler" />')
+			.appendTo(content.append(' '));
+		}
 	};	
 	
 	return Widget;
