@@ -17,7 +17,7 @@ define([
 		placeholder: null,
 		valueProp: '_id',
 		labelProp: 'name',
-		allowDuplicate: false,
+		unique: false,
 		closedList: false,
 		multiple: true,
 		typeahead: {}
@@ -44,7 +44,7 @@ define([
 	};
 	
 	proto.addTag = function(entity) {
-		if(!this.options.allowDuplicate) {
+		if(!this.options.unique) {
 			var value = (entity[this.options.valueProp] !== undefined) ? 
 						entity[this.options.valueProp] : entity;
 						
@@ -79,7 +79,7 @@ define([
 			if(value == val) {
 				delete this.options.value[i];
 				
-				if(!this.options.allowDuplicate)
+				if(!this.options.unique)
 					break;
 			}
 		};
