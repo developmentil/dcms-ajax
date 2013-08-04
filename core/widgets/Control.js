@@ -127,8 +127,8 @@ define(['core/dcms-ajax'], function(DA) {
 	proto._render = function(options) {
 		Widget.renderElm(this._elm, options);
 		
-		this._elm.val(options.value)
-				.trigger('change.isSend');
+		this.val(options.value);
+		this._elm.trigger('change.isSend');
 		
 		this._renderIsSend(options);
 	};
