@@ -7,6 +7,7 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 		action: '',
 		method: 'post',
 		target: null,
+		enctype: null,
 		fieldsets: [],
 		fieldset: Fieldset
 	});
@@ -49,7 +50,8 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 		
 		elm.attr('action', this.options.action)
 		.attr('method', this.options.method)
-		.attr('target', this.options.target);
+		.attr('target', this.options.target)
+		.attr('enctype', this.options.enctype);
 		
 		return elm;
 	};
