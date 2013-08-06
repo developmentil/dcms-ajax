@@ -22,6 +22,8 @@ define(['core/dcms-ajax'], function(DA) {
 	
 	proto.getInputName = function() {
 		var name = this.options.name;
+		if(!name) return name;
+		
 		name = name.replace(/\[\d+\]/g, '[]');
 		return name;
 	};
