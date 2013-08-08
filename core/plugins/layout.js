@@ -3,13 +3,12 @@ define(['core/nls/index',
 ], function(i18n, NavBar, Tabs) {
 	i18n = i18n.plugins.layout;
 	
-	var contentPos = 1000,
-	contentMenu = {
+	var contentMenu = {
 		label: i18n.ContentManagement,
 		items: []
-	},
+	};
 	
-	plugin = function(DA, options) {
+	return function(DA, options) {
 		DA.registry.set('layout.menus.main', []);
 		DA.registry.set('layout.menus.auth', []);
 		
@@ -18,8 +17,8 @@ define(['core/nls/index',
 		}, options);
 		
 		if(options.defaultMenus) {
-			DA.registry.set('layout.menus.content', contentMenu);
-			DA.registry.push('layout.menus.main', contentPos, contentMenu);
+			DA.registry.set('layout.menus.content', contentMenu.items);
+			DA.registry.push('layout.menus.main', 1000, contentMenu);
 		}
 
 		DA.layout = {
@@ -62,8 +61,4 @@ define(['core/nls/index',
 			callback();
 		});
 	};
-	
-	plugin.CONTENT_MENU = contentPos;
-	
-	return plugin;
 });

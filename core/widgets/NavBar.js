@@ -60,8 +60,9 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 		if(options.brand) {
 			var brand = $('<a class="brand" />')
 			.attr('href', options.brand.url || '#/')
+			.attr('target', options.brand.target)
 			.prependTo(this._inner)
-			.text(options.brand);
+			.text(options.brand.label || options.brand);
 	
 			if(options.brand.click) {
 				brand.click(function(e) {

@@ -3,9 +3,13 @@ define(['core/nls/index',
 ], function(i18n, Modal, FormHorizontal) {
 	i18n = i18n.plugins.auth;
 	var uri = '#/auth',
-	menuPos = 800,
 	
-	plugin = function(DA, options) {
+	accountMenu = {
+		label: i18n.MyAccount,
+		items: []
+	};
+	
+	return function(DA, options) {
 		DA.identity = null;
 		
 		if(typeof options === 'string')
@@ -21,15 +25,13 @@ define(['core/nls/index',
 			controls: null
 		}, options);
 		
-		DA.registry.push('layout.menus.auth', menuPos, {
-			label: i18n.MyAccount,
-			items: []
-		});
+		DA.registry.set('layout.menus.account', accountMenu.items);
+		DA.registry.push('layout.menus.auth', 800, accountMenu);
 		
-		DA.registry.push('layout.menus.auth.' + menuPos + '.items', menuPos, {
+		accountMenu.items[800] = {
 			label: i18n.Logout,
 			click: logout
-		});
+		};
 		
 		var controls = options.controls;
 		if(!controls) {
@@ -116,9 +118,4 @@ define(['core/nls/index',
 			});
 		}
 	};
-	
-	plugin.MY_ACCOUNT_MENU = 
-		plugin.LOGOUT_MENU = menuPos;
-	
-	return plugin;
 });
