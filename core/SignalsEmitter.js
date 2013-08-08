@@ -13,6 +13,12 @@ define(['core/libs/signals'], function(signals) {
 	};
 	
 	proto.addListener = function(event, listener, priority) {
+		if(typeof listener === 'number') {
+			var tmp = priority;
+			priority = listener;
+			listener = tmp;
+		}
+		
 		var signal = this.getSignal(event)
 				.add(listener, null, priority);
 		
@@ -25,6 +31,12 @@ define(['core/libs/signals'], function(signals) {
 	proto.when = proto.addListener;
 	
 	proto.once = function(event, listener, priority) {
+		if(typeof listener === 'number') {
+			var tmp = priority;
+			priority = listener;
+			listener = tmp;
+		}
+		
 		return this.getSignal(event)
 				.addOnce(listener, null, priority);
 	};
@@ -50,13 +62,15 @@ define(['core/libs/signals'], function(signals) {
 		return this;
 	};
 	
-	proto.emit = function(event) {
-		var signal = this.getSignal(event),
-		args = Array.prototype.slice.call(arguments, 1);
+	proto.emitEvent = function(event, args) {
+		var signal = this.getSignal(event);
 		
 		signal.dispatch.apply(signal, args);
-		
 		return this;
+	};
+	
+	proto.emit = function(event) {
+		return this.emitEvent(event, Array.prototype.slice.call(arguments, 1));
 	};
 	
 	proto.trigger = function(event) {

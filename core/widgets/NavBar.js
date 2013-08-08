@@ -3,11 +3,16 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 	function Widget() {
 		Widget.super_.apply(this, arguments);
 	};
-	DA.Widget.extend(Widget);
+	DA.Widget.extend(Widget, {
+		items: [],
+		sideItems: []
+	});
 	var proto = Widget.prototype;
 	
 	
 	proto._create = function(container, parent, elm) {
+		var options = this.options;
+		
 		if(!elm)
 			elm = $('<div class="navbar" />');
 		
@@ -16,8 +21,11 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 		this._inner = $('<div class="navbar-inner" />')
 				.appendTo(elm);
 		
-		this.nav = new Nav(this.options);
+		this.nav = new Nav(this._getNavOptions(options));
 		this.nav.create(this._inner, this);
+		
+		this.sideNav = new Nav(this._getSideNavOptions(options));
+		this.sideNav.create(this._inner, this);
 		
 		return elm;
 	};
@@ -25,6 +33,22 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 	proto._destroy = function() {
 		this.nav.destroy();
 		this.nav = null;
+		
+		this.sideNav.destroy();
+		this.sideNav = null;
+	};
+	
+	proto._getNavOptions = function(options) {
+		return {
+			items: options.items
+		};
+	};
+	
+	proto._getSideNavOptions = function(options) {
+		return {
+			items: options.sideItems,
+			class: 'pull-right'
+		};
 	};
 	
 	proto._render = function(options) {
@@ -47,7 +71,8 @@ define(['core/dcms-ajax', 'core/widgets/Nav'], function(DA, Nav) {
 			}
 		}
 		
-		this.nav.render(options);
+		this.nav.render(this._getNavOptions(options));
+		this.sideNav.render(this._getSideNavOptions(options));
 	};
 	
 	return Widget;

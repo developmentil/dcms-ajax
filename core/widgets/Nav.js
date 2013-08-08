@@ -46,6 +46,9 @@ define(['core/dcms-ajax'], function(DA) {
 		.attr('href', item.url || '#')
 		.text(item.label || item);
 
+		if(item.target)
+			a.attr('target', item.target);
+
 		if(item.toggle)
 			a.attr('data-toggle', item.toggle);
 

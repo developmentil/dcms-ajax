@@ -176,6 +176,7 @@ define([
 						DA.emit('app.after');			
 					});
 	
+					// Index router
 					DA.app.get('#/', function() {
 						DA.trigger('index', function(err) {
 							if(err) throw err;
@@ -211,7 +212,7 @@ define([
 		paths = [], names = [];
 		
 		$.each(plugins, function(name, options) {
-			if(options._path === false)
+			if(options._path === false || DA.plugins[name])
 				return;
 			
 			paths.push(options._path || 'plugins/' + name);

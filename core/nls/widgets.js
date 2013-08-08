@@ -19,6 +19,10 @@ define({
 			selectFile: 'Select file...',
 			selectFiles: 'Select files...',
 			del: 'Delete'
+		},
+		Modal: {
+			OK: 'OK',
+			Cancel: 'Cancel'
 		}
 	},
 	'he-IL': true

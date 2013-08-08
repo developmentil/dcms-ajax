@@ -18,5 +18,9 @@ define({
 		selectFile: 'בחירת קובץ...',
 		selectFiles: 'בחירת קבצים...',
 		del: 'מחק'
+	},
+	Modal: {
+		OK: 'אישור',
+		Cancel: 'ביטול'
 	}
 });

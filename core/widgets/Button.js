@@ -9,7 +9,8 @@ define(['core/dcms-ajax', 'core/widgets/Control'], function(DA, Control) {
 		url: null,
 		label: null,
 		click: null,
-		toggle: null
+		toggle: null,
+		target: null
 	});
 	var proto = Widget.prototype;
 	
@@ -19,12 +20,17 @@ define(['core/dcms-ajax', 'core/widgets/Control'], function(DA, Control) {
 	Widget.create = function(options, elm) {
 		var type = options.type || (options.url ? 'link' : 'button');
 		
-		if(type === 'link')
+		if(type === 'link') {
 			elm = $('<a class="btn" />').attr('href', options.url || '#');
-		else if(type === 'span' || type === 'div')
+			
+			if(options.target)
+				elm.attr('target', options.target);
+			
+		} else if(type === 'span' || type === 'div') {
 			elm = $('<' + type + ' class="btn" />');
-		else
+		} else {
 			elm = $('<button class="btn" />').attr('type', options.type || 'button');
+		}
 		
 		if(options.id)
 			elm.attr('id', options.id);

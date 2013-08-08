@@ -2,10 +2,12 @@ define([
 	'core/dcms-ajax',
 	
 	'core/plugins/layout',
+	'core/plugins/auth',
 	
 	'core/widgets/Tag', 
 	'core/widgets/Toolbar', 
 	'core/widgets/Button', 'core/widgets/ButtonGroup',
+	'core/widgets/Modal', 
 	
 	'core/widgets/Nav', 
 	'core/widgets/Dropdown', 'core/widgets/NavBar',
@@ -27,9 +29,10 @@ define([
 	'core/widgets/Typeahead', 'core/widgets/Tags', 
 	'core/widgets/FileUpload', 'core/widgets/DateInput'
 ], function(
-		DA, layout, 
+		DA, layout, auth,
 		Tag, Toolbar, 
 		Button, ButtonGroup, 
+		Modal,
 		Nav, 
 		Dropdown, NavBar, 
 		ProgressBar, 
@@ -41,16 +44,21 @@ define([
 		TextArea, HtmlEditor,
 		Typeahead, Tags, FileUpload, DateInput) {
 	
-	DA.registry.set('plugins.layout', {
-		_path: false
-	});
+	
+	// Plugins 
+	DA.plugins.auth = auth;
+	
+	DA.registry.set('plugins.layout', {});
 	DA.plugins.layout = layout;
 	
+	
+	// Widgets
 	DA.Widget.Tag = Tag;
 	
 	DA.Widget.Toolbar = Toolbar;
 	DA.Widget.Button = Button;
 	DA.Widget.ButtonGroup = ButtonGroup;
+	DA.Widget.Modal = Modal;
 	
 	DA.Widget.Nav = Nav;
 	DA.Widget.Dropdown = Dropdown;

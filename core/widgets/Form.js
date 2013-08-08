@@ -9,9 +9,19 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 		target: null,
 		enctype: null,
 		fieldsets: [],
-		fieldset: Fieldset
+		fieldset: Fieldset,
+		onSubmit: null
 	});
 	var proto = Widget.prototype;
+	
+	proto.submit = function() {
+		this._elm.submit();
+		return this;
+	};
+	
+	proto.serialize = function() {
+		return this._elm.serialize();
+	};
 	
 	proto.create = function() {
 		var controls = this.options.controls;
@@ -43,15 +53,23 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 	};
 	
 	proto._create = function(container, parent, elm) {
+		var self = this, options = this.options;
+		
 		if(!elm)
 			elm = $('<form />');
 		
 		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
 		
-		elm.attr('action', this.options.action)
-		.attr('method', this.options.method)
-		.attr('target', this.options.target)
-		.attr('enctype', this.options.enctype);
+		elm.attr('action', options.action)
+		.attr('method', options.method)
+		.attr('target', options.target)
+		.attr('enctype', options.enctype)
+		.on('submit.form', function() {
+			self.emitEvent('submit', arguments);
+			
+			if(options.onSubmit)
+				options.onSubmit.apply(self, arguments);
+		});
 		
 		return elm;
 	};

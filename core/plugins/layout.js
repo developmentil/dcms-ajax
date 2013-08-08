@@ -1,6 +1,26 @@
-define(['core/widgets/NavBar', 'core/widgets/Tabs'], function(NavBar, Tabs) {
-	return function(DA) {
+define(['core/nls/index', 
+	'core/widgets/NavBar', 'core/widgets/Tabs'
+], function(i18n, NavBar, Tabs) {
+	i18n = i18n.plugins.layout;
+	
+	var contentPos = 1000,
+	contentMenu = {
+		label: i18n.ContentManagement,
+		items: []
+	},
+	
+	plugin = function(DA, options) {
 		DA.registry.set('layout.menus.main', []);
+		DA.registry.set('layout.menus.auth', []);
+		
+		options = $.extend({
+			defaultMenus: true
+		}, options);
+		
+		if(options.defaultMenus) {
+			DA.registry.set('layout.menus.content', contentMenu);
+			DA.registry.push('layout.menus.main', contentPos, contentMenu);
+		}
 
 		DA.layout = {
 			navbar: new NavBar({
@@ -32,7 +52,8 @@ define(['core/widgets/NavBar', 'core/widgets/Tabs'], function(NavBar, Tabs) {
 		DA.when('runned', function(callback) {
 			DA.layout.navbar.render({
 				brand: DA.registry.get('layout.brand'),
-				items: DA.registry.get('layout.menus.main')
+				items: DA.registry.get('layout.menus.main'),
+				sideItems: DA.registry.get('layout.menus.auth')
 			});
 			navbar.slideDown();
 
@@ -41,4 +62,8 @@ define(['core/widgets/NavBar', 'core/widgets/Tabs'], function(NavBar, Tabs) {
 			callback();
 		});
 	};
+	
+	plugin.CONTENT_MENU = contentPos;
+	
+	return plugin;
 });
