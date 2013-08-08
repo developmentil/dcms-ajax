@@ -9,6 +9,7 @@ define([
 	};
 	MultiControl.extend(Widget, {
 		api: null,
+		sharedApi: 10000,
 		size: null,
 		options: [],
 		optionGroups: [],
@@ -33,7 +34,7 @@ define([
 			if(!self.options.api || err)
 				return callback(err);
 			
-			DA.api(self.options.api, function(err, data) {
+			DA.sharedApi(self.options.sharedApi, self.options.api, function(err, data) {
 				if(err) return callback(err);
 				
 				$.extend(self.options, data);

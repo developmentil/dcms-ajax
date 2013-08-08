@@ -102,7 +102,113 @@ define([
 	
 	/*** Api ***/
 	
-	 DA.api = function(options, data, callback) {
+	var _sharedApis = [], 
+	_sharedApisTimeout = null;
+	
+	DA.sharedApi = function(timeout, options, data, callback) {
+		if(typeof timeout !== 'number') {
+			callback = data;
+			data = options;
+			options = timeout;
+			timeout = 5000;
+		}
+		if(typeof data === 'function') {
+			callback = data;
+			data = null;
+		}
+		
+		if(timeout <= 0)
+			return DA.api(options, data, callback);
+		
+		var now = Date.now(), api;
+		
+		for(var i in _sharedApis) {
+			api = _sharedApis[i];
+			if(api.options !== options || api.data !== data)
+				continue;
+			
+			if(api.ts < now)
+				break;
+			
+			if(options.success && api.success)
+				options.success.apply(api.self, api.success);
+			
+			if(options.error && api.error)
+				options.error.apply(api.self, api.error);
+			
+			if(options.complete)
+				options.complete.apply(api.self, api.complete);
+			
+			if(callback)
+				callback.apply(api.self, api.callback);
+			
+			return this;
+		}
+		
+		api = {
+			ts: now + timeout,
+			options: options,
+			data: data
+		};
+		_sharedApis.push(api);
+		
+		if(!_sharedApisTimeout) {
+			_sharedApisTimeout = setTimeout(function() {
+				_sharedApisTimeout = null;
+				var rm = [], now = Date.now();
+
+				for(var i in _sharedApis) {
+					if(_sharedApis[i].ts < now)
+						rm.push(rm);
+				}
+
+				for(var i in rm) {
+					_sharedApis.splice(rm[i], 1);
+				}
+			}, timeout);
+		}
+		
+		if(typeof options === 'string')
+			options = {url: options};
+		
+		var opts = $.extend(true, {}, options);
+		
+		opts.success = function() {
+			api.self = this;
+			api.success = arguments;
+			
+			if(options.success)
+				options.success.apply(this, arguments);
+		};
+		
+		opts.error = function() {
+			api.self = this;
+			api.error = arguments;
+			
+			if(options.error)
+				options.error.apply(this, arguments);
+		};
+		
+		opts.complete = function() {
+			api.self = this;
+			api.complete = arguments;
+			
+			if(options.complete)
+				options.complete.apply(this, arguments);
+		};
+		
+		DA.api(opts, data, function() {
+			api.self = this;
+			api.callback = arguments;
+			
+			if(callback)
+				callback.apply(this, arguments);
+		});
+		
+		return this;
+	};
+	
+	DA.api = function(options, data, callback) {
 		if(typeof options === 'string')
 			options = {url: options};
 		
