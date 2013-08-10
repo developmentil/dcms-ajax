@@ -45,6 +45,9 @@ define(['core/dcms-ajax'], function(DA) {
 		if(options.required !== null)
 			elm.prop('required', options.required);
 		
+		if(options.title)
+			elm.attr('title', options.title);
+		
 		return elm;
 	};
 	
