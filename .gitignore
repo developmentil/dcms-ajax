@@ -37,6 +37,5 @@ htmls
 .monitor
 node_modules
 dist
-packer
 
 bulid.cmd
