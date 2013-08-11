@@ -8,5 +8,5 @@
 		'dcms-ajax': 'core/index'
     },
     name: 'dcms-ajax',
-    out: 'bin/dcms-ajax.js'
+    out: 'dist/dcms-ajax.js'
 })
