@@ -67,7 +67,7 @@ define([
 				$('<button class="btn dropdown-toggle" data-toggle="dropdown" type="button" />')
 				.text(options.actionsLabel || options.label)
 				.append(' <span class="caret" />')
-				.insertAfter(this._button._elm);
+				.prependTo(this._elm);
 			}
 			
 			this._dropdown.render({
