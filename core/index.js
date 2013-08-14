@@ -27,7 +27,8 @@ define([
 	'core/widgets/Input', 'core/widgets/Checkbox', 'core/widgets/Select',
 	'core/widgets/TextArea', 'core/widgets/HtmlEditor', 
 	'core/widgets/Typeahead', 'core/widgets/Tags', 
-	'core/widgets/FileUpload', 'core/widgets/DateInput'
+	'core/widgets/FileUpload', 'core/widgets/DateInput',
+	'core/widgets/Select2'
 ], function(
 		DA, layout, auth,
 		Tag, Toolbar, 
@@ -42,7 +43,7 @@ define([
 		Controls, ControlGroup, FormActions, 
 		Control, MultiControl, Input, Checkbox, Select, 
 		TextArea, HtmlEditor,
-		Typeahead, Tags, FileUpload, DateInput) {
+		Typeahead, Tags, FileUpload, DateInput, Select2) {
 	
 	
 	// Plugins 
@@ -93,6 +94,7 @@ define([
 	DA.Widget.Tags = Tags;
 	DA.Widget.FileUpload = FileUpload;
 	DA.Widget.DateInput = DateInput;
+	DA.Widget.Select2 = Select2;
 	
 	return DA;
 });

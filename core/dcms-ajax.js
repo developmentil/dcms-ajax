@@ -124,31 +124,68 @@ define([
 		
 		for(var i in _sharedApis) {
 			api = _sharedApis[i];
-			if(api.options !== options || api.data !== data)
+			if(api.options !== options || api.dataJSON !== JSON.stringify(data))
 				continue;
 			
 			if(api.ts < now)
 				break;
 			
-			if(options.success && api.success)
-				options.success.apply(api.self, api.success);
+			setTimeout(function() {
+				if(options.success && api.success)
+					options.success.apply(api.self, api.success);
+
+				if(options.error && api.error)
+					options.error.apply(api.self, api.error);
+
+				if(options.complete)
+					options.complete.apply(api.self, api.complete);
+
+				if(callback)
+					callback.apply(api.self, api.callback);
+			}, 1);
 			
-			if(options.error && api.error)
-				options.error.apply(api.self, api.error);
-			
-			if(options.complete)
-				options.complete.apply(api.self, api.complete);
-			
-			if(callback)
-				callback.apply(api.self, api.callback);
-			
-			return this;
+			return {
+				done: function(callback) {
+					if(!api.success) return;
+					
+					setTimeout(function() {
+						 callback.apply(api.self, api.success);
+					}, 1);
+				},
+						
+				fail: function(callback) {
+					if(!api.error) return;
+					
+					setTimeout(function() {
+						callback.apply(api.self, api.error);
+						callback.call(api.self, api.error[1], api.error[2], api.error[3]);
+					}, 1);
+				},
+						
+				always: function(callback) {					
+					setTimeout(function() {
+						callback.apply(api.self, api.complete);
+					}, 1);
+				},
+						
+				then: function(done, fail) {
+					setTimeout(function() {
+						if(api.success)
+							done.apply(api.self, api.success);
+						else
+							fail.apply(api.self, api.error);
+					}, 1);
+				},
+						
+				abort: $.noop
+			};
 		}
 		
 		api = {
 			ts: now + timeout,
 			options: options,
-			data: data
+			data: data,
+			dataJSON: JSON.stringify(data)
 		};
 		_sharedApis.push(api);
 		
@@ -197,15 +234,13 @@ define([
 				options.complete.apply(this, arguments);
 		};
 		
-		DA.api(opts, data, function() {
+		return DA.api(opts, data, function() {
 			api.self = this;
 			api.callback = arguments;
 			
 			if(callback)
 				callback.apply(this, arguments);
 		});
-		
-		return this;
 	};
 	
 	DA.api = function(options, data, callback) {
