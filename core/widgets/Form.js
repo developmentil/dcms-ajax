@@ -4,6 +4,7 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 		Widget.super_.apply(this, arguments);
 	};
 	ControlsContainer.extend(Widget, {
+		api: null,
 		action: '',
 		method: 'post',
 		target: null,
