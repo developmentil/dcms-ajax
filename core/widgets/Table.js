@@ -166,7 +166,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 				if(options.columns) {
 					// render columns only
 					self.eachColumn(options.columns, function(column) {
-						var value = self.getValue(row, column.name),
+						var value = self.getValue(row, column.displayName || column.name),
 
 						td = Widget.createElm($('<td />').appendTo(tr), column);
 						if(column.align)
@@ -180,8 +180,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 						if(typeof column.render === 'function')
 							column.render(td, value, row, i);
 						else {
-							if(column.nullText)
-								td.text(value || column.nullText);
+							if(column.nullText !== null)
+								td.text(value || column.nullText || '-');
 							else
 								td.text(value);
 						}
@@ -295,6 +295,12 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		var format = this.format 
 				|| DA.registry.get('locale.date') 
 				|| 'mm/dd/yy';
+		
+		value = new Date(value);
+		if(isNaN(value.getTime())) {
+			td.text(this.nullText || '-');
+			return;
+		}
 		
 		td.text($.datepicker.formatDate(format, new Date(value)));
 	};
