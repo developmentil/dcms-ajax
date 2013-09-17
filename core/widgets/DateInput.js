@@ -2,6 +2,8 @@ define(['core/dcms-ajax', 'core/widgets/Control', 'core/widgets/Input'], functio
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
+		
+		this.options.type = 'text';
 	};
 	Input.extend(Widget, {
 		format: DA.registry.get('locale.date') || 'mm/dd/yy',
@@ -9,7 +11,8 @@ define(['core/dcms-ajax', 'core/widgets/Control', 'core/widgets/Input'], functio
 	});
 	var proto = Widget.prototype;
 	
-	Control.types.date = Widget;
+	Control.types.date = Widget; // Deprecated
+	Control.types.datepicker = Widget;
 	
 	proto.parseDate = function(valStr) {
 		return $.datepicker.parseDate(this.options.format, valStr);
