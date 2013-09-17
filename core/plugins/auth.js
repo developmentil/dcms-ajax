@@ -2,9 +2,7 @@ define(['core/nls/index',
 	'core/widgets/Modal', 'core/widgets/FormHorizontal'
 ], function(i18n, Modal, FormHorizontal) {
 	i18n = i18n.plugins.auth;
-	var uri = '#/auth',
-	
-	accountMenu = {
+	var accountMenu = {
 		label: i18n.MyAccount,
 		items: []
 	};
@@ -40,14 +38,22 @@ define(['core/nls/index',
 					name: 'email',
 					placeholder: i18n.Email,
 					dir: 'ltr'
-				}, options.usernameControl), 
+				}, options.usernameControl),
 				
 				$.extend({
 					type: 'password',
 					name: 'password',
 					placeholder: i18n.Password,
 					dir: 'ltr'
-				}, options.passwordControl)
+				}, options.passwordControl),
+				
+				{
+					type: 'submit',
+					wrap: false,
+					css: {
+						display: 'none'
+					}
+				}
 			];
 		}
 		
@@ -78,7 +84,6 @@ define(['core/nls/index',
 			}),
 			
 			form = new FormHorizontal({
-				action: uri + '/login',
 				controls: controls,
 				onSubmit: function(e) {
 					e.preventDefault();
