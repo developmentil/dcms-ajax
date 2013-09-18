@@ -35,9 +35,11 @@ define(['core/nls/index',
 		if(!controls) {
 			controls = [
 				$.extend({
+					id: 'username',
 					name: 'email',
 					placeholder: i18n.Email,
-					dir: 'ltr'
+					dir: 'ltr',
+					autofocus: true
 				}, options.usernameControl),
 				
 				$.extend({
@@ -113,6 +115,12 @@ define(['core/nls/index',
 			
 			modal.insert(form);
 			modal.render();
+			
+			// focus bug HACK FIX
+			var username = $('#username').focus();
+			setTimeout(function() {
+				username.focus();
+			}, 500);
 		};
 		
 		function logout() {
