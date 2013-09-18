@@ -51,7 +51,8 @@ define(['core/nls/index',
 					type: 'submit',
 					wrap: false,
 					css: {
-						display: 'none'
+						position: 'absolute',
+						top: '-1000px'
 					}
 				}
 			];
