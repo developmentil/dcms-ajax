@@ -20,7 +20,12 @@ define(['core/nls/index',
 			cancelUri: '..',
 			usernameControl: {},
 			passwordControl: {},
-			controls: null
+			controls: null,
+			credits: [{
+				name: 'Development IL',
+				image: '/cms/images/logo.png',
+				link: 'http://www.development.co.il'
+			}]
 		}, options);
 		
 		DA.registry.set('layout.menus.account', accountMenu.items);
@@ -73,6 +78,7 @@ define(['core/nls/index',
 		
 		function displayLoginModal(callback) {
 			var modal = new Modal({
+				id: 'auth-modal',
 				title: i18n.LoginTitle,
 				primaryLabel: i18n.Login,
 				close: false,
@@ -112,6 +118,20 @@ define(['core/nls/index',
 			});
 			
 			modal.create('body');
+			
+			if(options.credits) {
+				var credits = $('<div class="credits" />')
+				.appendTo('#auth-modal');
+
+				$.each(options.credits, function(i, credit) {
+					$('<a target="_blank" />').appendTo(credits)
+					.attr('href', credit.link || '#')
+					.append($('<img />').attr({
+						src: credit.image,
+						alt: credit.name || ''
+					}));
+				});
+			}
 			
 			modal.insert(form);
 			modal.render();
