@@ -92,6 +92,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 				appendTo: 'parent',
 				axis: 'y',
 //				cancel: '.unsortable',
+				scroll: true,
+				scrollSensitivityType: 100,
 				delay: 150,
 				forceHelperSize: true,
 				forcePlaceholderSize: true,
