@@ -101,6 +101,17 @@ define(['core/dcms-ajax'], function(DA) {
 				item.dblclick(e);
 			});
 		}
+
+		if(item.middleclick) {
+			a.mouseup(function(e) {
+				if(e.which != 2) return;
+				
+				if(!item.useDefault)
+					e.preventDefault();
+				
+				item.middleclick(e);
+			});
+		}
 		
 		return li;
 	};
