@@ -181,6 +181,9 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 						if(column.dir)
 							td.attr('dir', column.dir);
 						
+						if(column.primary)
+							td.addClass('primary');
+						
 						Widget.renderElm(td, column);
 
 						if(typeof column.render === 'function')

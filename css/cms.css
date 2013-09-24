@@ -118,6 +118,10 @@ body.rtl .table td .dropdown-menu {
 	text-align: right;
 }
 
+td.primary {
+	color: #000;
+}
+
 
 
 /*** TinyMCE ***/
