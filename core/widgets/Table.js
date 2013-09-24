@@ -120,8 +120,13 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		if(!column.name)
 			column.name = i;
 		
-		if(column.align === undefined)
+		if(column.align && column.alignLabel === undefined) {
+			column.alignLabel = this.options.columnsAlign;
+		} else if(column.align === undefined) {
 			column.align = this.options.columnsAlign;
+			if(column.alignLabel === undefined)
+				column.alignLabel = column.align;
+		}
 		
 		if(column.type) {
 			var type = column.type.charAt(0).toUpperCase() + column.type.slice(1),
@@ -212,8 +217,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		sortName = column.sortName || columnName,
 		sorted = this.isSorted(sortName);
 
-		if(column.align)
-			th.css('textAlign', column.align);
+		if(column.alignLabel)
+			th.css('textAlign', column.alignLabel);
 		
 		if(column.class)
 			th.addClass(column.class);
