@@ -173,8 +173,11 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 					// render columns only
 					self.eachColumn(options.columns, function(column) {
 						var value = self.getValue(row, column.displayName || column.name),
-
 						td = Widget.createElm($('<td />').appendTo(tr), column);
+						
+						if(column.filter)
+							value = column.filter(value, row, i);
+						
 						if(column.align)
 							td.css('textAlign', column.align);
 						
