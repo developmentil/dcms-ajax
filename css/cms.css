@@ -1,7 +1,6 @@
 
 body {
 	background: #444;
-	padding-top: 40px;
 }
 
 body.rtl {
@@ -19,16 +18,23 @@ body.rtl {
 /*** Tabs ***/
 
 #tabs {
-	margin: 0 10px;
-	position: relative;
+	padding: 90px 10px 10px;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 #tabs > .nav-tabs {
 	margin: 0;
-	padding: 20px 0 0;
+	padding: 20px 10px 0;
 	border-bottom: none;
 	background: #444;
-	position: fixed;
+	position: absolute;
+	top: 40px;
+	left: 0;
 	width: 100%;
 	z-index: 1000;
 	-webkit-box-sizing: border-box;
@@ -70,33 +76,26 @@ body.rtl {
 }
 
 #tabs > .tab-content {
-	margin: 50px 0 10px;
+	height: 100%;
+	background: #fff;
+	padding: 7px 3px;
+	border-radius: 0 0 4px 4px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#tabs > .tab-content:empty {
+	display: none;
 }
 
 #tabs > .tab-content > .tab-pane {
-	padding: 25px 20px 20px;
-	background: #fff;
-	border-radius: 0 0 4px 4px;
-	min-height: 500px;
-/*	-moz-box-sizing: border-box;
-    box-sizing: border-box;*/
-}
-
-#tabs > .tab-content > .tab-pane:before {
-	content: "";
-	position: fixed;
-	display: block;
-	width: 98%;
-	height: 5px;
-	background: #fff;
-	top: 90px;
-	left: 10px;
-	z-index: 1000;
-}
-
-body.rtl #tabs > .tab-content > .tab-pane:before {
-	left: auto;
-	right: 10px;
+	padding: 15px;
+	height: 100%;
+	overflow: auto;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 

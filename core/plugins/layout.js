@@ -29,8 +29,7 @@ define(['core/nls/index',
 		};
 		DA.tabs = new Tabs({
 			id: 'tabs',
-			closeIcon: true,
-			rememberScroll: true
+			closeIcon: true
 		});
 
 		var navbar = DA.layout.navbar.create('body').hide();
