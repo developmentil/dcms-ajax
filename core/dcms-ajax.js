@@ -81,15 +81,32 @@ define([
 	
 	DA.ui = {
 		error: function(options, callback) {
-			callback(alert('Error: ' + options));
+			if(!callback) callback = $.noop;
+			
+			if(typeof options === 'string')
+				options = {content: options};
+			
+			callback(alert('Error: ' + options.content));
 		},
 		alert: function(options, callback) {
-			callback(alert(options));
+			if(!callback) callback = $.noop;
+			
+			if(typeof options === 'string')
+				options = {content: options};
+			
+			callback(alert(options.content));
 		},
 		confirm: function(options, callback) {
-			callback(confirm(options));
+			if(!callback) callback = $.noop;
+			
+			if(typeof options === 'string')
+				options = {content: options};
+			
+			callback(confirm(options.content));
 		},
 		prompt: function(options, callback) {
+			if(!callback) callback = $.noop;
+			
 			if(typeof options === 'string')
 				options = {content: options, defaultValue: ''};
 			else
@@ -273,6 +290,8 @@ define([
 				callback.call(this, new Error(textStatus || statusCode), statusCode, textStatus, jqXHR, errorThrown);
 			};
 		}
+		
+		DA.emitEvent('api', arguments);
 
 		return $.ajax($.extend({}, options, {
 			success: function(data, textStatus, jqXHR) {
@@ -298,7 +317,6 @@ define([
 			}
 		}));
     };
-	
 	
 	
     /*** Bootstrap ***/

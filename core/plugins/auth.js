@@ -15,7 +15,8 @@ define(['core/nls/index',
 		
 		options = $.extend({
 			api: null,
-//			idle: 600000, // reminer each 10 min.
+			timeout: 3600 * 1000, // 1 hour
+			idle: 1200 * 1000, // 20 minutes
 			priority: 1000000,
 			cancelUri: '..',
 			usernameControl: {},
@@ -66,14 +67,47 @@ define(['core/nls/index',
 		}
 		
 		
-		DA.when('runned', function(callback) {
+		DA.when('runned', function(callback) {			
 			DA.api(options.api, function(err, data) {
 				if(err || !data) return displayLoginModal(callback);
 				
-				DA.identity = data;
+				loggedIn(data);
 				callback();
 			});
 		}, options.priority);
+		
+		
+	
+	
+		var _timeout = null, _idle = null;
+
+		DA.autoLogout = function(stop) {
+			if(_timeout) clearTimeout(_timeout);
+			if(_idle) clearTimeout(_idle);
+
+			if(stop || !DA.identity) return;
+
+			_idle = setTimeout(function() {
+				_idle = null;
+				
+				DA.ui.confirm({
+					title: i18n.IdleTitle,
+					content: i18n.IdleMsg,
+					primaryLabel: i18n.Continue,
+					cancelLabel: i18n.Logout
+				}, function(result) {
+					if(!result) return logout();
+					
+					DA.api(options.api, function(err, data) {
+						if(err || !data) return logout();
+					});
+				});
+			}, options.idle);
+
+			_timeout = setTimeout(function() {
+				logout(true);
+			}, options.timeout);
+		};
 		
 		
 		function displayLoginModal(callback) {
@@ -103,7 +137,7 @@ define(['core/nls/index',
 						url: options.api + '/login',
 						data: this.serialize(),
 						success: function(data) {
-							DA.identity = data;
+							loggedIn(data);
 							
 							modal.destroy();
 							callback();
@@ -143,11 +177,24 @@ define(['core/nls/index',
 			}, 500);
 		};
 		
-		function logout() {
+		function loggedIn(identity) {
+			DA.identity = identity;
+			
+			DA.autoLogout();
+			
+			DA.on('api', function() {
+				DA.autoLogout();
+			});
+		}
+		
+		function logout(reload) {
 			DA.api({
 				url: options.api + '/logout',
 				success: function() {
-					window.location = options.cancelUri;
+					if(!reload)
+						window.location = options.cancelUri;
+					else
+						window.location.reload();
 				}
 			});
 		}
