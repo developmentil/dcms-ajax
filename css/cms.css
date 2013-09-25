@@ -122,6 +122,12 @@ td.primary {
 	color: #000;
 }
 
+.table .no-result {
+	text-align: center;
+	padding: 20px 0;
+	color: #999;
+}
+
 
 
 /*** TinyMCE ***/

@@ -12,7 +12,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		columns: null,
 		columnsAlign: 'center',
 		idField: '_id',
-		rows: []
+		rows: [],
+		noResult: true
 	});
 	var proto = Widget.prototype;
 	
@@ -145,7 +146,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	proto._render = function(options) {
 		Widget.super_.prototype._render.apply(this, arguments);
 		
-		var self = this, tr;
+		var self = this, tr, count = 0, columns = 0;
 		this._elm.empty();
 		
 		if(options.columns) {
@@ -153,6 +154,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 			tr = $('<tr />').appendTo(this._thead);
 			
 			this.eachColumn(options.columns, function(column) {
+				columns++;
+				
 				self._columnLabelRender(column)
 				.appendTo(tr)
 				.attr('data-name', column.name);
@@ -162,53 +165,62 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		this._tbody = $('<tbody />').appendTo(this._elm);
 		
 		// use for..in to ignore undefined items
-		for(var i in options.rows) {
-			(function(row) {
-				var id = row[options.idField] || i,
-				
-				tr = $('<tr />').appendTo(self._tbody)
-				.attr('data-id', id);
-		
-				if(options.columns) {
-					// render columns only
-					self.eachColumn(options.columns, function(column) {
-						var value = self.getValue(row, column.displayName || column.name),
-						td = Widget.createElm($('<td />').appendTo(tr), column);
-						
-						if(column.filter)
-							value = column.filter(value, row, i);
-						
-						if(column.align)
-							td.css('textAlign', column.align);
-						
-						if(column.dir)
-							td.attr('dir', column.dir);
-						
-						if(column.primary)
-							td.addClass('primary');
-						
-						Widget.renderElm(td, column);
+		for(var i in options.rows) { (function(row, i) {
+			count++;
+			
+			var id = row[options.idField] || i,
 
-						if(typeof column.render === 'function')
-							column.render(td, value, row, i);
-						else {
-							if(column.nullText !== null)
-								td.text(value || column.nullText || '-');
-							else
-								td.text(value);
-						}
-					});
-				} else {
-					// render all row props
-					for(var j in row) {
-						var td = $('<td />').appendTo(tr)
-						.text(row[j]);
-				
-						if(options.columnsAlign)
-							td.css('textAlign', options.columnsAlign);
+			tr = $('<tr />').appendTo(self._tbody)
+			.attr('data-id', id);
+
+			if(options.columns) {
+				// render columns only
+				self.eachColumn(options.columns, function(column) {
+					var value = self.getValue(row, column.displayName || column.name),
+					td = Widget.createElm($('<td />').appendTo(tr), column);
+
+					if(column.filter)
+						value = column.filter(value, row, i);
+
+					if(column.align)
+						td.css('textAlign', column.align);
+
+					if(column.dir)
+						td.attr('dir', column.dir);
+
+					if(column.primary)
+						td.addClass('primary');
+
+					Widget.renderElm(td, column);
+
+					if(typeof column.render === 'function')
+						column.render(td, value, row, i);
+					else {
+						if(column.nullText !== null)
+							td.text(value || column.nullText || '-');
+						else
+							td.text(value);
 					}
+				});
+			} else {
+				// render all row props
+				for(var j in row) {
+					var td = $('<td />').appendTo(tr)
+					.text(row[j]);
+
+					if(options.columnsAlign)
+						td.css('textAlign', options.columnsAlign);
 				}
-			})(options.rows[i]);
+			}
+		})(options.rows[i], i); }
+	
+		if(!count && options.noResult && columns) {
+			tr = $('<tr />').appendTo(self._tbody);
+	
+			$('<td />').appendTo(tr)
+			.attr('colspan', columns)
+			.addClass('no-result')
+			.text(i18n.NoResult);
 		}
 		
 		this._initSortable(this._elm, options);

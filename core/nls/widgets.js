@@ -2,7 +2,8 @@ define({
 	root: {
 		Table: {
 			Yes: 'Yes',
-			No: 'No'
+			No: 'No',
+			NoResult: 'No results found'
 		},
 		FormActions: {
 			Save: 'Save changes',

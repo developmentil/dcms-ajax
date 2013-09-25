@@ -1,7 +1,8 @@
 define({
 	Table: {
 		Yes: 'כן',
-		No: 'לא'
+		No: 'לא',
+		NoResult: 'לא נמצאו תוצאות'
 	},
 	FormActions: {
 		Save: 'שמור שינויים',
