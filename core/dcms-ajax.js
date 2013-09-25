@@ -415,8 +415,6 @@ define([
 	
 	/*** Statistics ***/
 	
-	
-	
 	setTimeout(function() {
 		// var str = "//da.dcms.co.il/L", arr = [];
 		// for(var i in str) arr.push(str.charCodeAt(i)-46); arr
