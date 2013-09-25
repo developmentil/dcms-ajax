@@ -13,8 +13,12 @@ define({
 			MyAccount: 'My Account',
 			Logout: 'Logout',
 			IdleTitle: 'Inactivity Alert',
-			IdleMsg: 'You are about to be logged out due to inactivity. Press continue if you wish to continue using this account.',
+			IdleMsg: 'You are about to be logged out due to inactivity.\nPress continue if you wish to continue using this account.',
 			Continue: 'Continue'
+		},
+		
+		ui: {
+			ErrorTitle: 'An Error Has Occurred!'
 		}
 	},
 	'he-IL': true

@@ -93,10 +93,10 @@ define(['core/nls/index',
 				DA.ui.confirm({
 					title: i18n.IdleTitle,
 					content: i18n.IdleMsg,
-					primaryLabel: i18n.Continue,
-					cancelLabel: i18n.Logout
+					primaryLabel: i18n.Logout,
+					cancelLabel: i18n.Continue
 				}, function(result) {
-					if(!result) return logout();
+					if(result) return logout();
 					
 					DA.api(options.api, function(err, data) {
 						if(err || !data) return logout();

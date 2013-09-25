@@ -3,6 +3,7 @@ define([
 	
 	'core/plugins/layout',
 	'core/plugins/auth',
+	'core/plugins/ui',
 	
 	'core/widgets/Tag', 
 	'core/widgets/Toolbar', 
@@ -30,7 +31,7 @@ define([
 	'core/widgets/FileUpload', 'core/widgets/DateInput',
 	'core/widgets/Select2'
 ], function(
-		DA, layout, auth,
+		DA, layout, auth, ui,
 		Tag, Toolbar, 
 		Button, ButtonGroup, 
 		Modal,
@@ -46,11 +47,14 @@ define([
 		Typeahead, Tags, FileUpload, DateInput, Select2) {
 	
 	
-	// Plugins 
-	DA.plugins.auth = auth;
-	
+	// Plugins
 	DA.registry.set('plugins.layout', {});
 	DA.plugins.layout = layout;
+	
+	DA.plugins.auth = auth;
+	
+	DA.registry.set('plugins.ui', {});
+	DA.plugins.ui = ui;
 	
 	
 	// Widgets

@@ -110,7 +110,7 @@ define([
 			if(typeof options === 'string')
 				options = {content: options, defaultValue: ''};
 			else
-				options = $({content: 'DEFAULT CONTENT', defaultValue: ''}, options);
+				options = $.extend({content: 'DEFAULT CONTENT', defaultValue: ''}, options);
 				
 			callback(prompt(options.content, options.defaultValue));
 		}

@@ -32,7 +32,8 @@ define(['core/nls/index',
 		onHide: null,
 		onHidden: null,
 		onShown: null,
-		onShow: null
+		onShow: null,
+		onDestroy: null
 	});
 	var proto = Widget.prototype;
 	
@@ -67,15 +68,19 @@ define(['core/nls/index',
 		this._container = $('<div class="modal-body" />').appendTo(elm);
 		if(options.body)
 			this._container.append(options.body);
-		else if(options.content)
-			this._container.append($('<p />').text(options.content));
+		else if(options.content) {
+			var ps = options.content.toString().split(/\r?\n/g);
+			$.each(ps, function(i, p) {
+				self._container.append($('<p />').text(p));
+			});
+		}
 		
 		this._footer = $('<div class="modal-footer" />').appendTo(elm);
 		
 		elm = Widget.super_.prototype._create.call(this, container, parent, elm);
 		elm
 		.on('hidden', function() {
-			self.emit('hidden');
+			self.emit('hidden', self._action);
 			
 			if(options.onHidden)
 				options.onHidden.apply(self, arguments);
@@ -97,6 +102,7 @@ define(['core/nls/index',
 		})
 		.on('show', function() {
 			self.emit('show');
+			self._action = null;
 			
 			if(options.onShow)
 				options.onShow.apply(self, arguments);
@@ -145,16 +151,6 @@ define(['core/nls/index',
 		if(!actions) {
 			actions = [];
 			
-			if(options.primary) {
-				actions.push($.extend({
-					type: 'submit',
-					class: 'btn-primary',
-					label: options.primaryLabel,
-					click: options.primaryClick,
-					dismiss: options.primaryDismiss
-				}, options.save));
-			}
-			
 			if(options.cancel) {
 				actions.push($.extend({
 					label: options.cancelLabel,
@@ -162,23 +158,38 @@ define(['core/nls/index',
 					dismiss: options.cancelDismiss
 				}, options.cancel));
 			}
+			
+			if(options.primary) {
+				actions.push($.extend({
+					type: 'submit',
+					class: 'btn-primary',
+					label: options.primaryLabel,
+					click: options.primaryClick,
+					dismiss: options.primaryDismiss
+				}, options.primary));
+			}
 		}
 		
-		var self = this,
-		dismiss = function() {
-			self.hide();
-		};
+		var self = this;
 		
 		// use for..in to ignore undefined items
-		for(var i in actions) {(function(action) {
+		for(var i in actions) {(function(action, i) {
+			if(parseInt(i) == i)
+				i = parseInt(i);
+			
 			if(action.dismiss !== false) {
-				if(!action.click)
-					action.click = dismiss;
-				else {
+				if(!action.click) {
+					action.click = function() {
+						self._action = i;
+						self.hide();
+					};
+				} else {
 					var oldClick = action.click;
 					action.click = function() {
 						oldClick.apply(this, arguments);
-						dismiss();
+						
+						self._action = i;
+						self.hide();
 					};
 				}
 			}
@@ -186,7 +197,7 @@ define(['core/nls/index',
 			self._footer
 			.append(Button.create(action))
 			.append(' ');
-		})(actions[i]);}
+		})(actions[i], i);}
 	};
 	
 	return Widget;
