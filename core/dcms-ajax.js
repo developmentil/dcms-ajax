@@ -322,6 +322,8 @@ define([
     /*** Bootstrap ***/
 	
 	DA.bootstrap = function() {
+		TestCompatibility();
+		
 		_requireAll(function(err) {
 			if(err) {
 				throw err;
@@ -329,22 +331,22 @@ define([
 			
 			DA.trigger('initiated', function(err) {
 				if(err) throw err;
-				
+
 				$(function() {
 					DA.app.after(function() {
 						DA.emit('app.after');			
 					});
-	
+
 					// Index router
 					DA.app.get('#/', function() {
 						DA.trigger('index', function(err) {
 							if(err) throw err;
 						});
 					});
-					
+
 					DA.trigger('runned', function(err) {
 						if(err) throw err;
-						
+
 						DA.app.run('#/');
 					});
 				});
@@ -410,6 +412,16 @@ define([
 		requirejs(paths, function() {
 			callback(null);
 		}, callback);
+	}
+	
+	
+	/*** Compatibility Test ***/
+	
+	function TestCompatibility() {
+		var isIE = (navigator && navigator.userAgent && navigator.userAgent.indexOf(' MSIE ') > -1);
+		if(!isIE) return;
+
+		alert(i18n.Compat.alert);
 	}
 	
 	
