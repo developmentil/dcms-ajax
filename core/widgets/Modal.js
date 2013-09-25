@@ -13,7 +13,7 @@ define(['core/nls/index',
 	};
 	Container.extend(Widget, {
 		headerId: null,
-		title: null,
+		title: '',
 		class: 'fade',
 		content: null,
 		body: null,
