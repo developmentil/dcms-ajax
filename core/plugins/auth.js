@@ -67,7 +67,7 @@ define(['core/nls/index',
 		}
 		
 		
-		DA.when('runned', function(callback) {			
+		DA.when('bootstrap.modules', function(callback) {			
 			DA.api(options.api, function(err, data) {
 				if(err || !data) return displayLoginModal(callback);
 				
@@ -75,8 +75,6 @@ define(['core/nls/index',
 				callback();
 			});
 		}, options.priority);
-		
-		
 	
 	
 		var _timeout = null, _idle = null;
