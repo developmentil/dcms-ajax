@@ -34,7 +34,27 @@ define([
 	
 	/*** App ***/
 	
+	
 	DA.app = Sammy();
+	
+	var _raiseErrors = true;
+	window.onerror = function(e, err) {
+		if(!_raiseErrors) return;
+		
+		setTimeout(function() {
+			_raiseErrors = true;
+		}, 1000);
+		
+		if(err && !err.content)
+			err.content = err.message;
+		
+		_raiseErrors = false;
+		DA.ui.error(err, function() {
+			setTimeout(function() {
+				_raiseErrors = true;
+			}, 1000);
+		});
+	};
 	
 	DA.error = function(message, original_error) {
 		DA.app.error(message, original_error);
@@ -155,7 +175,7 @@ define([
 		return $('body').hasClass('loading');
 	};
 	
-	var _sharedApis = [], 
+	var _sharedApis = [],
 	_sharedApisTimeout = null;
 	
 	DA.sharedApi = function(timeout, options, data, callback) {
@@ -310,7 +330,7 @@ define([
 			dataType: 'json',
 			data: data || {},
 			success: $.noop, //function(data, statusCode, textStatus, jqXHR) {}
-			error: $.noop //function(statusCode, textStatus, jqXHR, errorThrown) {},
+			error: null // function(statusCode, textStatus, jqXHR, errorThrown) {}
 		}, options);
 
 		if(callback) {
@@ -322,8 +342,12 @@ define([
 			};
 
 			options.error = function(statusCode, textStatus, jqXHR, errorThrown) {
-				error.apply(this, arguments);
+				if(error) error.apply(this, arguments);
 				callback.call(this, new Error(textStatus || statusCode), statusCode, textStatus, jqXHR, errorThrown);
+			};
+		} else if(!options.error) {
+			options.error = function(statusCode, textStatus, jqXHR, errorThrown) {
+				DA.error(textStatus, errorThrown);
 			};
 		}
 		

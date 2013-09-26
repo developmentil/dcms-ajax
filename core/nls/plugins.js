@@ -18,7 +18,11 @@ define({
 		},
 		
 		ui: {
-			ErrorTitle: 'An Error Has Occurred!'
+			AlertTitle: 'Alert',
+			ErrorTitle: 'An Error Has Occurred!',
+			ErrorMsg: 'An error occurred during the execution of the application.\nMake sure that you are connected to the Internet and try refreshing the page.',
+			Continue: 'Continue',
+			Reset: 'Reset'
 		}
 	},
 	'he-IL': true

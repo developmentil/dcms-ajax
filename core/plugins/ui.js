@@ -6,7 +6,8 @@ define(['core/nls/index',
 	return function(DA, options) {
 		
 		DA.ui.alert = function(options, callback) {
-			showModal({
+			setupModal({
+				title: i18n.AlertTitle,
 				cancel: null
 			}, options, callback);
 		};
@@ -14,21 +15,34 @@ define(['core/nls/index',
 		DA.ui.error = function(options, callback) {
 			showModal({
 				title: i18n.ErrorTitle,
-				cancel: null
-			}, options, callback);
+				content: i18n.ErrorMsg,
+				cancelLabel: i18n.Continue,
+				primaryLabel: i18n.Reset,
+				primary: {
+					icon: 'icon-refresh icon-white'
+				},
+				cancelClick: callback,
+				primaryClick: function() {
+					window.location.reload();
+				}
+			});
 		};
 		
 		DA.ui.confirm = function(options, callback) {
-			showModal({}, options, callback);
+			setupModal({}, options, callback);
 		};
 	};
 	
-	function showModal(def, options, callback) {
-		if(typeof options === 'string')
+	function setupModal(def, options, callback) {
+		if(!options || typeof options !== 'object')
 			options = {content: options};
 		
 		options = $.extend(def, options);
 			
+		return showModal(options, callback);
+	};
+	
+	function showModal(options, callback) {
 		var modal = new Modal(options);
 		
 		if(callback)
