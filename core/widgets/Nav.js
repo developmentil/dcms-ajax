@@ -83,15 +83,17 @@ define(['core/dcms-ajax'], function(DA) {
 
 		if(item.disabled)
 			li.addClass('disabled');
-
-		if(item.click) {
-			a.click(function(e) {
+		
+		a.click(function(e) {
+			a.closest('.dropdown-menu').trigger('click');
+			
+			if(item.click) {
 				if(!item.useDefault)
 					e.preventDefault();
 				
 				item.click(e);
-			});
-		}
+			}
+		});
 
 		if(item.dblclick) {
 			a.dblclick(function(e) {
