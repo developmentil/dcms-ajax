@@ -124,6 +124,8 @@ define(['core/dcms-ajax', 'core/nls/index',
 				}
 			}),
 			
+			isLoading = DA.isLoading(),
+			
 			form = new FormHorizontal({
 				controls: controls,
 				onSubmit: function(e) {
@@ -136,6 +138,8 @@ define(['core/dcms-ajax', 'core/nls/index',
 						data: this.serialize(),
 						success: function(data) {
 							loggedIn(data);
+			
+							DA.loading();
 							
 							modal.destroy();
 							callback();
@@ -173,6 +177,8 @@ define(['core/dcms-ajax', 'core/nls/index',
 			}));
 			
 			modal.render();
+			
+			DA.loading(false);
 			
 			// focus bug HACK FIX
 			var username = $('#username').focus();

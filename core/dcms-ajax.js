@@ -136,6 +136,25 @@ define([
 	
 	/*** Api ***/
 	
+	var _loadingRefcount = 0;
+	DA.loading = function(flag, force) {
+		if(flag === undefined)
+			flag = true;
+		
+		if(!force) {
+			_loadingRefcount += (flag ? 1 : -1);
+		} else {
+			_loadingRefcount = 0;
+		}
+		
+		$('body').toggleClass('loading', _loadingRefcount > 0);
+		return _loadingRefcount;
+	};
+	
+	DA.isLoading = function() {
+		return $('body').hasClass('loading');
+	};
+	
 	var _sharedApis = [], 
 	_sharedApisTimeout = null;
 	
@@ -308,10 +327,13 @@ define([
 			};
 		}
 		
+		DA.loading();
 		DA.emitEvent('api', arguments);
 
 		return $.ajax($.extend({}, options, {
 			success: function(data, textStatus, jqXHR) {
+				DA.loading(false);
+				
 				if(!data || typeof data.status !== 'number') {
 					if(console && console.error)
 						console.error("Api Error: Invalid format");
@@ -327,6 +349,8 @@ define([
 				return options.success(data.data, data.status, data.msg, jqXHR);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
+				DA.loading(false);
+				
 				return options.error(textStatus || -1, null, {
 					jqXHR: jqXHR,
 					errorThrown: errorThrown
@@ -390,6 +414,8 @@ define([
 	}
 	
 	function _requirePlugins(callback) {
+		DA.loading();
+		
 		var plugins = DA.registry.get('plugins'),
 		paths = [], names = [];
 		
@@ -402,6 +428,8 @@ define([
 		});
 		
 		requirejs(paths, function() {
+			DA.loading(false);
+			
 			var args = arguments;
 			
 			$.each(names, function(i, name) {
@@ -420,12 +448,20 @@ define([
 			}
 			
 			callback(null);
-		}, callback);
+		}, function() {
+			DA.loading(false);
+			callback.apply(this, arguments);
+		});
 	}
 	
 	function _requireModules(callback) {
+		DA.loading();
+		
 		DA.trigger('bootstrap.modules', function(err) {
-			if(err) return callback(err);
+			if(err) {
+				DA.loading(false);
+				return callback(err);
+			}
 
 			var paths = [];
 
@@ -434,8 +470,13 @@ define([
 			});
 
 			requirejs(paths, function() {
+				DA.loading(false);
+				
 				callback(null);
-			}, callback);
+			}, function() {
+				DA.loading(false);
+				callback.apply(this, arguments);
+			});
 		});
 	}
 	
