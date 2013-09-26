@@ -49,56 +49,59 @@ define([
 	
 	// Plugins
 	DA.registry.set('plugins.layout', {});
-	DA.plugins.layout = layout;
-	
-	DA.plugins.auth = auth;
-	
 	DA.registry.set('plugins.ui', {});
-	DA.plugins.ui = ui;
+	
+	$.extend(DA.plugins, {
+		layout: layout,
+		auth: auth,
+		ui: ui
+	});
 	
 	
 	// Widgets
-	DA.Widget.Tag = Tag;
-	
-	DA.Widget.Toolbar = Toolbar;
-	DA.Widget.Button = Button;
-	DA.Widget.ButtonGroup = ButtonGroup;
-	DA.Widget.Modal = Modal;
-	
-	DA.Widget.Nav = Nav;
-	DA.Widget.Dropdown = Dropdown;
-	DA.Widget.NavBar = NavBar;
-	
-	DA.Widget.ProgressBar = ProgressBar;
-	
-	DA.Widget.Tabs = Tabs;
-	DA.Widget.Tab = Tab;
-	
-	DA.Widget.Table = Table;
-	DA.Widget.Browser = Browser;
-	DA.Widget.Pagination = Pagination;
-	
-	DA.Widget.Container = Container;
-	DA.Widget.Fieldset = Fieldset;
-	DA.Widget.Form = Form;
-	DA.Widget.FormHorizontal = FormHorizontal;
-	DA.Widget.FormInline = FormInline;
-	DA.Widget.Controls = Controls;
-	DA.Widget.ControlGroup = ControlGroup;
-	DA.Widget.FormActions = FormActions;
-	
-	DA.Widget.Control = Control;
-	DA.Widget.MultiControl = MultiControl;
-	DA.Widget.Input = Input;
-	DA.Widget.Checkbox = Checkbox;
-	DA.Widget.Select = Select;
-	DA.Widget.TextArea = TextArea;
-	DA.Widget.HtmlEditor = HtmlEditor;
-	DA.Widget.Typeahead = Typeahead;
-	DA.Widget.Tags = Tags;
-	DA.Widget.FileUpload = FileUpload;
-	DA.Widget.DateInput = DateInput;
-	DA.Widget.Select2 = Select2;
+	$.extend(DA.Widget, {
+		Tag: Tag,
+				
+		Toolbar: Toolbar,
+		Button: Button,
+		ButtonGroup: ButtonGroup,
+		Modal: Modal,
+		
+		Nav: Nav,
+		Dropdown: Dropdown,
+		NavBar: NavBar,
+		
+		ProgressBar: ProgressBar,
+		
+		Tabs: Tabs,
+		Tab: Tab,
+		
+		Table: Table,
+		Browser: Browser,
+		Pagination: Pagination,
+		
+		Container: Container,
+		Fieldset: Fieldset,
+		Form: Form,
+		FormHorizontal: FormHorizontal,
+		FormInline: FormInline,
+		Controls: Controls,
+		ControlGroup: ControlGroup,
+		FormActions: FormActions,
+		
+		Control: Control,
+		MultiControl: MultiControl,
+		Input: Input,
+		Checkbox: Checkbox,
+		Select: Select,
+		TextArea: TextArea,
+		HtmlEditor: HtmlEditor,
+		Typeahead: Typeahead,
+		Tags: Tags,
+		FileUpload: FileUpload,
+		DateInput: DateInput,
+		Select2: Select2
+	});
 	
 	return DA;
 });
