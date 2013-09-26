@@ -170,7 +170,7 @@ define(['core/dcms-ajax', 'core/libs/async',
 				};
 				
 				item.closeIcon = {
-					click: item.dblclick
+					click: item.middleclick
 				};
 			}
 			
