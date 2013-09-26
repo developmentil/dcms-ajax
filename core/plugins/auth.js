@@ -1,6 +1,6 @@
-define(['core/nls/index', 
-	'core/widgets/Modal', 'core/widgets/FormHorizontal'
-], function(i18n, Modal, FormHorizontal) {
+define(['core/dcms-ajax', 'core/nls/index', 
+	 'core/widgets/Modal', 'core/widgets/FormHorizontal', 'core/widgets/Tag'
+], function(DA, i18n, Modal, FormHorizontal, Tag) {
 	i18n = i18n.plugins.auth;
 	var accountMenu = {
 		label: i18n.MyAccount,
@@ -166,6 +166,12 @@ define(['core/nls/index',
 			}
 			
 			modal.insert(form);
+			
+			modal.insert(new Tag({
+				class: 'powered-by',
+				content: 'Powered by DCMS-Ajax ' + DA.version
+			}));
+			
 			modal.render();
 			
 			// focus bug HACK FIX

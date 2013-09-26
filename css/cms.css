@@ -245,8 +245,11 @@ body.rtl .widget-tags .label .close {
 
 /*** Auth-Modal ***/
 
-#auth-modal:after {
-	content: "Powered by DCMS-Ajax 1.0.0";
+#auth-modal .modal-body {
+	position: static;
+}
+
+#auth-modal .powered-by {
 	position: absolute;
 	bottom: -27px;
 	left: 50%;
