@@ -266,17 +266,27 @@ define(['core/dcms-ajax', 'core/nls/index',
 		
 		this.table.render(this._getTableOptions(options));
 		
-		if(this.summary) {
-			this.summary.text(i18n.Summary
-					.replace(':from', options.offset + 1)
-					.replace(':to', Math.min(options.offset + options.limit, options.count))
-					.replace(':total', options.count)
-					.replace(':pages', Math.ceil(options.count / options.limit))
-			);
+		if(options.count || options.count === null) {
+			if(this.summary) {
+				this.summary.show().text(i18n.Summary
+						.replace(':from', options.offset + 1)
+						.replace(':to', Math.min(options.offset + options.limit, options.count))
+						.replace(':total', options.count)
+						.replace(':pages', Math.ceil(options.count / options.limit))
+				);
+			}
+
+			if(this.limits) {
+				this.limits._elm.show();
+				this.limits.render(this._getLimitsOptions(options));
+			}
+		} else {
+			if(this.summary)
+				this.summary.hide();
+			
+			if(this.limits)
+				this.limits._elm.hide();
 		}
-		
-		if(this.limits)
-			this.limits.render(this._getLimitsOptions(options));
 		
 		this.pagination.render(this._getPaginationOptions(options));
 	};
