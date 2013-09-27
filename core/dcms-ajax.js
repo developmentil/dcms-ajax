@@ -41,10 +41,6 @@ define([
 	window.onerror = function(e, err) {
 		if(!_raiseErrors) return;
 		
-		setTimeout(function() {
-			_raiseErrors = true;
-		}, 1000);
-		
 		if(err && !err.content)
 			err.content = err.message;
 		

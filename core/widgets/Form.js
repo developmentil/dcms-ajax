@@ -11,9 +11,35 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 		enctype: null,
 		fieldsets: [],
 		fieldset: Fieldset,
-		onSubmit: null
+		onSubmit: null,
+		validate: null,
+		novalidate: null
 	});
 	var proto = Widget.prototype;
+	
+	Widget.parsley = {
+		successClass: 'success',
+        errorClass: 'error',
+		errors: {
+			classHandler: function(el) {
+				return $(el).closest('.control-group');
+			},
+			errorsWrapper: '<span class="help-inline"></span>',
+			errorElem: '<span></span>'
+		},
+		validateIfUnchanged: true,
+		validators: {},
+		messages: {}
+	};
+	
+	Widget.validate = function(element, options) {
+		require(['parsley'], function() {
+			if(element.data('parsleyForm'))
+				element.parsley('destroy');
+
+			element.parsley($.extend(true, {}, Widget.parsley, options.parsley));
+		});
+	};
 	
 	proto.submit = function() {
 		this._elm.submit();
@@ -95,6 +121,18 @@ define(['core/widgets/ControlsContainer', 'core/widgets/Fieldset'], function(Con
 			$.extend(self.options, data);
 			next(null);
 		});
+	};
+	
+	proto._render = function(options) {
+		Widget.super_.prototype._render.apply(this, arguments);
+		
+		if(options.novalidate || (options.validate && options.novalidate !== false))
+			this._elm.attr('novalidate', 'novalidate');
+		else
+			this._elm.removeAttr('novalidate');
+		
+		if(options.validate)
+			Widget.validate(this._elm, options);
 	};
 	
 	return Widget;

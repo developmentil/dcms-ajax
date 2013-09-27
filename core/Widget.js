@@ -83,6 +83,9 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		if(options.attr)
 			elm.attr(options.attr);
 		
+		if(options.data)
+			elm.bind(options.data);
+		
 		if(options.prop)
 			elm.attr(options.prop);
 		
@@ -98,7 +101,8 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		css: null,
 		attr: null,
 		prop: null,
-		bind: null
+		bind: null,
+		data: null
 	};
 	
 	

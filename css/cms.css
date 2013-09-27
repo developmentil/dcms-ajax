@@ -191,7 +191,11 @@ body.rtl .mce-menu-align .mce-menu-shortcut {
 }
 
 .widget-fileupload > .files {
-	margin: 0 -20px;
+	margin-left: -20px;
+}
+body.rtl .widget-fileupload > .files {
+	margin-left: 0;
+	margin-right: -20px;
 }
 
 .widget-fileupload > .files .file-placeholder,
@@ -308,4 +312,13 @@ body.rtl #auth-modal .credits {
 body.rtl #auth-modal .credits > * {
 	margin-right: 0;
 	margin-left: 10px;
+}
+
+
+/*** Input Validated ***/
+
+.control-group.error input.parsley-validated {
+    color: #b94a48 !important;
+    background-color: #f2dede !important;
+    border: 1px solid #EED3D7 !important;
 }
