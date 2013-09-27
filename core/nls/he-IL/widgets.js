@@ -4,6 +4,10 @@ define({
 		No: 'לא',
 		NoResult: 'לא נמצאו תוצאות'
 	},
+	Browser: {
+		Summary: 'תוצאות :from-:to מתוך :total (:pages עמודים)',
+		DisplayLimit: ':limit תוצאות לדף'
+	},
 	FormActions: {
 		Save: 'שמור שינויים',
 		Cancel: 'ביטול'

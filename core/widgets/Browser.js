@@ -1,6 +1,7 @@
-define(['core/dcms-ajax', 
-	'core/widgets/Table', 'core/widgets/Pagination'
-], function(DA, Table, Pagination) {
+define(['core/dcms-ajax', 'core/nls/index',
+	'core/widgets/Table', 'core/widgets/Pagination', 'core/widgets/Select'
+], function(DA, i18n, Table, Pagination, Select) {
+	i18n = i18n.widgets.Browser;
 	
 	function Widget() {
 		Widget.super_.apply(this, arguments);
@@ -17,7 +18,13 @@ define(['core/dcms-ajax',
 		entities: [],
 		sort: {},
 		tableClass: 'table-hover table-condensed',
-		paginationClass: 'pagination-centered'
+		pagination: {},
+		paginationClass: 'pagination-centered',
+		limits: {},
+		limitsClass: 'browser-limits',
+		limitsOptions: [10, 20, 50, 100],
+		summary: true,
+		summaryClass: 'browser-summary'
 	});
 	var proto = Widget.prototype;
 	
@@ -118,6 +125,25 @@ define(['core/dcms-ajax',
 			});
 		});
 		
+		if(this.options.summary) {
+			this.summary = $('<div />').appendTo(elm)
+			.addClass(this.options.summaryClass);
+		} else {
+			this.summary = null;
+		}
+		
+		if(this.options.limitsOptions) {
+			this.limits = new Select(this._getLimitsOptions(this.options));
+			this.limits.create(elm, this);
+		
+			this.limits.on('change', function() {
+				self.options.limit = self.limits.val();
+				self.reload();
+			});
+		} else {
+			this.limits = null;
+		}
+		
 		this.pagination = new Pagination(this._getPaginationOptions(this.options));
 		this.pagination.create(elm, this);
 		
@@ -132,6 +158,11 @@ define(['core/dcms-ajax',
 	proto._destroy = function() {
 		this.table.destroy();
 		this.table = null;
+		
+		this.summary = null;
+		
+		this.limits.destroy();
+		this.limits = null;
 		
 		this.pagination.destroy();
 		this.pagination = null;
@@ -181,6 +212,20 @@ define(['core/dcms-ajax',
 		});
 	};
 	
+	proto._getLimitsOptions = function(options) {
+		var opts = {};
+		$.each(options.limitsOptions, function(i, v) {
+			opts[v] = i18n.DisplayLimit.replace(':limit', v);
+		});
+		
+		return $.extend(options.limits || {}, {
+			name: 'limit',
+			class: options.limitsClass,
+			options: opts,
+			value: options.limit
+		});
+	};
+	
 	proto._apiOptions = function(api) {
 		var options = {
 			data: {
@@ -220,6 +265,19 @@ define(['core/dcms-ajax',
 		Widget.super_.prototype._render.apply(this, arguments);
 		
 		this.table.render(this._getTableOptions(options));
+		
+		if(this.summary) {
+			this.summary.text(i18n.Summary
+					.replace(':from', options.offset + 1)
+					.replace(':to', Math.min(options.offset + options.limit, options.count))
+					.replace(':total', options.count)
+					.replace(':pages', Math.ceil(options.count / options.limit))
+			);
+		}
+		
+		if(this.limits)
+			this.limits.render(this._getLimitsOptions(options));
+		
 		this.pagination.render(this._getPaginationOptions(options));
 	};
 	

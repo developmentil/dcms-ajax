@@ -6,7 +6,7 @@ define(['core/dcms-ajax'], function(DA) {
 		Widget.super_.apply(this, arguments);
 		
 		if(this.options.id === null)
-			this.options.id = this.options.name + '-' + (++idSequence);
+			this.options.id = (this.options.name || 'control') + '-' + (++idSequence);
 	};
 	DA.Widget.extend(Widget, {
 		name: null,

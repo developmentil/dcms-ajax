@@ -133,6 +133,24 @@ td.primary {
 }
 
 
+/*** Browser ***/
+
+.browser-limits {
+	float: right;
+	width: 140px;
+}
+body.rtl .browser-limits {
+	float: left;
+}
+
+.browser-summary {
+	float: left;
+	color: #999;
+}
+body.rtl .browser-summary {
+	float: right;
+}
+
 
 /*** TinyMCE ***/
 

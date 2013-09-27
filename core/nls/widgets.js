@@ -5,6 +5,10 @@ define({
 			No: 'No',
 			NoResult: 'No results found'
 		},
+		Browser: {
+			Summary: 'Results :from-:to of :total (:pages Pages)',
+			DisplayLimit: ':limit results per page'
+		},
 		FormActions: {
 			Save: 'Save changes',
 			Cancel: 'Cancel'
