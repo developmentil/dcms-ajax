@@ -24,7 +24,7 @@ define(['core/dcms-ajax', 'core/nls/index',
 			controls: null,
 			credits: [{
 				name: 'Development IL',
-				image: '/cms/images/logo.png',
+				image: '/cms/images/development-il.png',
 				link: 'http://www.development.co.il'
 			}]
 		}, options);
@@ -80,13 +80,15 @@ define(['core/dcms-ajax', 'core/nls/index',
 		var _timeout = null, _idle = null;
 
 		DA.autoLogout = function(stop) {
+			if(_idle === -1) return;
+			
 			if(_timeout) clearTimeout(_timeout);
 			if(_idle) clearTimeout(_idle);
 
 			if(stop || !DA.identity) return;
 
 			_idle = setTimeout(function() {
-				_idle = null;
+				_idle = -1;
 				
 				DA.ui.confirm({
 					title: i18n.IdleTitle,
@@ -96,6 +98,7 @@ define(['core/dcms-ajax', 'core/nls/index',
 				}, function(result) {
 					if(result) return logout();
 					
+					_idle = null;					
 					DA.api(options.api, function(err, data) {
 						if(err || !data) return logout();
 					});
@@ -123,8 +126,6 @@ define(['core/dcms-ajax', 'core/nls/index',
 					form.submit();
 				}
 			}),
-			
-			isLoading = DA.isLoading(),
 			
 			form = new FormHorizontal({
 				controls: controls,
@@ -195,18 +196,17 @@ define(['core/dcms-ajax', 'core/nls/index',
 			DA.on('api', function() {
 				DA.autoLogout();
 			});
-		}
+		};
 		
 		function logout(reload) {
 			DA.api({
-				url: options.api + '/logout',
-				success: function() {
-					if(!reload)
-						window.location = options.cancelUri;
-					else
-						window.location.reload();
-				}
+				url: options.api + '/logout'
+			}, function() {
+				if(!reload)
+					window.location = options.cancelUri;
+				else
+					window.location.reload();
 			});
-		}
+		};
 	};
 });

@@ -36,6 +36,6 @@ nbproject
 htmls
 .monitor
 node_modules
-dist
 
 bulid.cmd
+bin

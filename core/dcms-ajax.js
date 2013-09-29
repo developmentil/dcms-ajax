@@ -341,10 +341,6 @@ define([
 				if(error) error.apply(this, arguments);
 				callback.call(this, new Error(textStatus || statusCode), statusCode, textStatus, jqXHR, errorThrown);
 			};
-		} else if(!options.error) {
-			options.error = function(statusCode, textStatus, jqXHR, errorThrown) {
-				DA.error(textStatus, errorThrown);
-			};
 		}
 		
 		DA.loading();
@@ -370,6 +366,11 @@ define([
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				DA.loading(false);
+				
+				if(!options.error) {
+					DA.error(textStatus, errorThrown);
+					return;
+				}
 				
 				return options.error(textStatus || -1, null, {
 					jqXHR: jqXHR,
