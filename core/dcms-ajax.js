@@ -351,13 +351,19 @@ define([
 				DA.loading(false);
 				
 				if(!data || typeof data.status !== 'number') {
-					if(console && console.error)
-						console.error("Api Error: Invalid format");
+					textStatus = 'Api Error: Invalid format';
+					if(!options.error) {
+						DA.error(textStatus, new Error(textStatus));
+						return;
+					}
 
 					return options.error(-1, (data && data.msg) || textStatus, jqXHR);
 				} else if(typeof data.data === 'undefined') {
-					if(console && console.error)
-						console.error("Api Error: " + data.status + " " + (data.msg || textStatus));
+					textStatus = 'Api Error: ' + data.status + ' ' + (data.msg || textStatus);
+					if(!options.error) {
+						DA.error(textStatus, new Error(textStatus));
+						return;
+					}
 
 					return options.error(data.status || -1, data.msg || textStatus, jqXHR);
 				}
