@@ -31,14 +31,16 @@ define([
 			return Widget.super_.prototype.isVal.apply(this, arguments);
 		
 		var entity, i, value;
-		for(i in this.options.value) {
-			entity = this.options.value[i];
-			value = (entity[this.options.valueProp] !== undefined) ? 
-						entity[this.options.valueProp] : entity;
-						
-			if(value == val)
-				return true;
-		};
+		if(this.options.value) {
+			for(i in this.options.value) {
+				entity = this.options.value[i];
+				value = (entity[this.options.valueProp] !== undefined) ? 
+							entity[this.options.valueProp] : entity;
+
+				if(value == val)
+					return true;
+			};
+		}
 		
 		return false;
 	};
@@ -57,7 +59,11 @@ define([
 			}
 		}
 		
-		this.options.value.push(entity);
+		if(this.options.value)
+			this.options.value.push(entity);
+		else
+			this.options.value = [entity];
+		
 		this.render();
 		
 		return this;
@@ -149,11 +155,13 @@ define([
 		Widget.super_.prototype._render.apply(this, arguments);
 		
 		this._tags.empty();
-		for(var i in options.value) {
-			if(!options.value[i]) continue;
-			
-			this._renderTag(options.value[i], options, i);
-			this._tags.append(' ');
+		if(options.value) {
+			for(var i in options.value) {
+				if(!options.value[i]) continue;
+
+				this._renderTag(options.value[i], options, i);
+				this._tags.append(' ');
+			}
 		}
 		
 		this.typeahead.render(this._getTypeaheadOptions(options));
