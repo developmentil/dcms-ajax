@@ -15,6 +15,8 @@ define([
 			"insertdatetime media table contextmenu paste directionality"
 		],
 		toolbar: "insertfile undo redo | styleselect | bold italic | ltr rtl | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+		relative_urls: false,
+		remove_script_host: true,
 		editor: {}
 	});
 	var proto = Widget.prototype;
