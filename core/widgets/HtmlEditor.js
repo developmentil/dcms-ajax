@@ -9,40 +9,80 @@ define([
 		cols: null,
 		rows: null,
 		wrap: null,
-		plugins: [
-			"advlist autolink lists link image charmap print preview anchor",
-			"searchreplace visualblocks code fullscreen",
-			"insertdatetime media table contextmenu paste directionality"
-		],
-		toolbar: "insertfile undo redo | styleselect | bold italic | ltr rtl | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-		relative_urls: false,
-		remove_script_host: true,
-		editor: {}
+		editor: 'CKEditor',
+		options: {}
 	});
 	var proto = Widget.prototype;
 	
 	Control.types.htmleditor = Widget;
 	
-	Widget.launchEditor = function(element, options) {
-		require(['tinymce', 'jquery-tinymce'], function() {
-			tinymce.dom.Event.domLoaded = true;
-			element.tinymce(options);
-		});
+	Widget.editors = {
+		TinyMCE: {
+			defaults: function() {
+				return {
+					language: DA.registry.get('locale.locale'),
+					directionality: DA.registry.get('locale.direction'),
+					plugins: [
+						"advlist autolink lists link image charmap print preview anchor",
+						"searchreplace visualblocks code fullscreen",
+						"insertdatetime media table contextmenu paste directionality"
+					],
+					toolbar: "insertfile undo redo | styleselect | bold italic | ltr rtl | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+					relative_urls: false,
+					remove_script_host: true
+				};
+			},
+	
+			launch: function(element, options, callback) {
+				require(['tinymce', 'jquery-tinymce'], function() {
+					tinymce.dom.Event.domLoaded = true;
+					element.tinymce(options);
+					callback();
+				});
+			},
+	
+			destroy: function(element) {
+				element.tinymce().destroy();
+			}
+		},
+		
+		CKEditor: {
+			defaults: function() {
+				return {
+					language: DA.registry.get('locale.locale')
+				};
+			},
+	
+			launch: function(element, options, callback) {
+				require(['ckeditor', 'jquery-ckeditor'], function() {
+					element.ckeditor(callback, options);
+				});
+			},
+	
+			destroy: function(element) {
+				element.ckeditor().editor.destroy();
+			}
+		}
 	};
 	
-	Widget.destroyEditor = function(element) {
-		element.tinymce().destroy();
+	proto.editorProxy = function(method, args) {
+		var editor = Widget.editors[this.options.editor];
+		return editor[method].apply(this, args || []);
 	};
 	
 	proto._getEditorOptions = function(options) {
-		return $.extend({
-			language: DA.registry.get('locale.locale'),
-			directionality: DA.registry.get('locale.direction')
-		}, options, options.editor);
+		var defaults = this.editorProxy('defaults');
+		
+		for(var i in defaults) {
+			if(options[i] !== undefined)
+				defaults[i] = options[i];
+		}
+		
+		return $.extend(defaults, options.options);
 	};
 	
 	proto._destroy = function() {
-		Widget.destroyEditor(this._elm);
+		this.editorProxy('destroy');
 		
 		Widget.super_.prototype._destroy.apply(this, arguments);
 	};
@@ -50,7 +90,7 @@ define([
 	proto._render = function(options) {
 		Widget.super_.prototype._render.apply(this, arguments);
 		
-		Widget.launchEditor(this._elm, this._getEditorOptions(options));
+		this.editorProxy('launch', [this._elm, this._getEditorOptions(options), $.noop]);
 	};
 	
 	return Widget;
