@@ -34,7 +34,7 @@ define([
 			},
 	
 			launch: function(element, options, callback) {
-				require(['tinymce', 'jquery-tinymce'], function() {
+				require(['jquery-tinymce'], function() {
 					tinymce.dom.Event.domLoaded = true;
 					element.tinymce(options);
 					callback();
@@ -54,7 +54,7 @@ define([
 			},
 	
 			launch: function(element, options, callback) {
-				require(['ckeditor', 'jquery-ckeditor'], function() {
+				require(['jquery-ckeditor'], function() {
 					element.ckeditor(callback, options);
 				});
 			},
@@ -82,7 +82,7 @@ define([
 	};
 	
 	proto._destroy = function() {
-		this.editorProxy('destroy');
+		this.editorProxy('destroy', [this._elm]);
 		
 		Widget.super_.prototype._destroy.apply(this, arguments);
 	};
