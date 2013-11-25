@@ -6,6 +6,7 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 		this._children = [];
 	};
 	DA.Widget.extend(Widget, {
+		tag: 'div',
 		children: [],
 		glue: null
 	});
@@ -74,6 +75,13 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 		});
 		
 		async.series(tasks, callback);
+	};
+	
+	proto._create = function(container, parent, elm) {
+		if(!elm)
+			elm = $('<' + this.options.tag + ' />');
+		
+		return Widget.super_.prototype._create.call(this, container, parent, elm);
 	};
 	
 	proto._render = function(options) {

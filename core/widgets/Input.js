@@ -7,6 +7,7 @@ define(['core/widgets/Control'], function(Control) {
 		type: 'text',
 		maxlength: null,
 		placeholder: null,
+		readonly: null,
 		dir: null,
 		spellcheck: null,
 		autocomplete: null,
@@ -59,6 +60,9 @@ define(['core/widgets/Control'], function(Control) {
 		
 		if(options.placeholder)
 			this._elm.attr('placeholder', options.placeholder);
+		
+		if(options.readonly !== null)
+			this._elm.prop('readonly', options.readonly);
 		
 		if(options.autocomplete !== null)
 			this._elm.prop('autocomplete', options.autocomplete);
