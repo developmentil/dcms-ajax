@@ -94,7 +94,7 @@ define([
 		Input: Input,
 		Checkbox: Checkbox,
 		Select: Select,
-		TextArea: TextArea,
+		TextArea: TextArea, Textarea: TextArea,
 		HtmlEditor: HtmlEditor,
 		Typeahead: Typeahead,
 		Tags: Tags,
