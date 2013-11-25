@@ -34,7 +34,7 @@ define(['core/dcms-ajax'], function(DA) {
 	
 	proto._render = function(options) {
 		Widget.super_.prototype._render.apply(this, arguments);
-		this._elm.empty().removeClass('progress-striped active');
+		this._elm.empty();
 		
 		$.each(options.bars, function(i, bar) {
 			Widget.createBar(bar)
