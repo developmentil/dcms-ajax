@@ -328,7 +328,7 @@ define([
 			error: null // function(statusCode, errorThrown, jqXHR, textStatus) {}
 		}, options);
 
-		if(callback) { // function(err, [data], statusCode, jqXHR, textStatus) {}
+		if(callback) { // function(err, data, statusCode, jqXHR, textStatus) {}
 			var success = options.success, error = options.error;
 
 			options.success = function(data, statusCode, statusMsg, jqXHR, textStatus) {
@@ -338,7 +338,7 @@ define([
 
 			options.error = function(statusCode, errorThrown, jqXHR, textStatus) {
 				if(error) error.apply(this, arguments);
-				callback.call(this, new Error(errorThrown || textStatus), statusCode, jqXHR, textStatus);
+				callback.call(this, new Error(errorThrown || textStatus), jqXHR.errorData, statusCode, jqXHR, textStatus);
 			};
 		}
 		
@@ -375,10 +375,12 @@ define([
 				
 				var statusCode = -1;
 		
-				if(jqXHR && jqXHR.responseText) {
+				if(jqXHR.responseText) {
 					try {
 						var data = JSON.parse(jqXHR.responseText);
-						if(data) {							
+						if(data) {
+							jqXHR.errorData = data;
+							
 							if(typeof data.status === 'number') {
 								statusCode = data.status;
 								if(data.msg) errorThrown = data.msg;
@@ -390,7 +392,7 @@ define([
 				}
 				
 				if(!options.error) {
-					DA.error(errorThrown, jqXHR);
+					DA.error(errorThrown, jqXHR.errorData || jqXHR);
 					return;
 				}
 				
