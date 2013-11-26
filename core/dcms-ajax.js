@@ -227,7 +227,6 @@ define([
 					
 					setTimeout(function() {
 						callback.apply(api.self, api.error);
-						callback.call(api.self, api.error[1], api.error[2], api.error[3]);
 					}, 1);
 				},
 						
