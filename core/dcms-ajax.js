@@ -328,17 +328,25 @@ define([
 			error: null // function(statusCode, errorThrown, jqXHR, textStatus) {}
 		}, options);
 
-		if(callback) { // function(err, data, statusCode, jqXHR, textStatus) {}
+		if(callback) { // function(err, data, status, jqXHR, textStatus) {}
 			var success = options.success, error = options.error;
 
 			options.success = function(data, statusCode, statusMsg, jqXHR, textStatus) {
 				success.apply(this, arguments);
-				callback.call(this, null, data, statusCode, jqXHR, textStatus);
+				
+				callback.call(this, 
+						null, data, 
+						{code: statusCode, msg: statusMsg}, jqXHR, textStatus
+				);
 			};
 
 			options.error = function(statusCode, errorThrown, jqXHR, textStatus) {
 				if(error) error.apply(this, arguments);
-				callback.call(this, new Error(errorThrown || textStatus), jqXHR.errorData, statusCode, jqXHR, textStatus);
+				
+				callback.call(this, 
+						new Error(errorThrown || textStatus), jqXHR.errorData, 
+						{code: statusCode, msg: errorThrown}, jqXHR, textStatus
+				);
 			};
 		}
 		
