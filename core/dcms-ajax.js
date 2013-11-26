@@ -325,21 +325,21 @@ define([
 			type: 'GET',
 			dataType: 'json',
 			data: data || {},
-			success: $.noop, //function(data, statusCode, textStatus, jqXHR) {}
-			error: null // function(statusCode, textStatus, jqXHR, errorThrown) {}
+			success: $.noop, //function(data, statusCode, statusMsg, jqXHR, textStatus) {}
+			error: null // function(statusCode, errorThrown, jqXHR, textStatus) {}
 		}, options);
 
-		if(callback) {
+		if(callback) { // function(err, [data], statusCode, jqXHR, textStatus) {}
 			var success = options.success, error = options.error;
 
-			options.success = function(data, statusCode, textStatus, jqXHR) {
+			options.success = function(data, statusCode, statusMsg, jqXHR, textStatus) {
 				success.apply(this, arguments);
-				callback.call(this, null, data, statusCode, textStatus, jqXHR);
+				callback.call(this, null, data, statusCode, jqXHR, textStatus);
 			};
 
-			options.error = function(statusCode, textStatus, jqXHR, errorThrown) {
+			options.error = function(statusCode, errorThrown, jqXHR, textStatus) {
 				if(error) error.apply(this, arguments);
-				callback.call(this, new Error(textStatus || statusCode), statusCode, textStatus, jqXHR, errorThrown);
+				callback.call(this, new Error(errorThrown || textStatus), statusCode, jqXHR, textStatus);
 			};
 		}
 		
@@ -349,39 +349,53 @@ define([
 		return $.ajax($.extend({}, options, {
 			success: function(data, textStatus, jqXHR) {
 				DA.loading(false);
+				var errorThrown = null;
 				
 				if(!data || typeof data.status !== 'number') {
-					textStatus = 'Api Error: Invalid format';
+					errorThrown = 'Api Error: Invalid format';
 					if(!options.error) {
-						DA.error(textStatus, new Error(textStatus));
+						DA.error(errorThrown, new Error(errorThrown));
 						return;
 					}
 
-					return options.error(-1, (data && data.msg) || textStatus, jqXHR);
+					return options.error(-1, (data && data.msg) || errorThrown, jqXHR, textStatus);
 				} else if(typeof data.data === 'undefined') {
-					textStatus = 'Api Error: ' + data.status + ' ' + (data.msg || textStatus);
+					errorThrown = 'Api Error: ' + data.status + ' ' + (data.msg || textStatus);
 					if(!options.error) {
-						DA.error(textStatus, new Error(textStatus));
+						DA.error(errorThrown, new Error(errorThrown));
 						return;
 					}
 
-					return options.error(data.status || -1, data.msg || textStatus, jqXHR);
+					return options.error(data.status || -1, data.msg || errorThrown, jqXHR, textStatus);
 				}
 
-				return options.success(data.data, data.status, data.msg, jqXHR);
+				return options.success(data.data, data.status, data.msg, jqXHR, textStatus);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				DA.loading(false);
 				
+				var statusCode = -1;
+		
+				if(jqXHR && jqXHR.responseText) {
+					try {
+						var data = JSON.parse(jqXHR.responseText);
+						if(data) {							
+							if(typeof data.status === 'number') {
+								statusCode = data.status;
+								if(data.msg) errorThrown = data.msg;
+							} else if(data.error === 'object') {
+								errorThrown = data.error.message;
+							}
+						}
+					} catch(e) {}
+				}
+				
 				if(!options.error) {
-					DA.error(textStatus, errorThrown);
+					DA.error(errorThrown, jqXHR);
 					return;
 				}
 				
-				return options.error(textStatus || -1, null, {
-					jqXHR: jqXHR,
-					errorThrown: errorThrown
-				});
+				return options.error(statusCode, errorThrown, jqXHR, textStatus);
 			}
 		}));
     };
