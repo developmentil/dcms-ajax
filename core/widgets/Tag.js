@@ -5,8 +5,8 @@ define(['core/dcms-ajax'], function(DA) {
 	};
 	DA.Widget.extend(Widget, {
 		tag: 'div',
-		content: null,
-		html: null
+		content: '',
+		html: false
 	});
 	var proto = Widget.prototype;
 	
@@ -23,7 +23,7 @@ define(['core/dcms-ajax'], function(DA) {
 		
 		if(!options.html)
 			this._elm.text(options.content);
-		else
+		else if(options.content)
 			this._elm.append(options.content);
 	};
 	

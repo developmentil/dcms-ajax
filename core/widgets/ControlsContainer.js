@@ -72,6 +72,10 @@ define(['core/dcms-ajax',
 		return Widget.super_.prototype.insert.call(this, control);
 	};
 	
+	proto.control = function(name) {
+		return this._controls[name];
+	};
+	
 	proto.remove = function(control) {
 		if(!Widget.super_.prototype.remove.apply(this, arguments))
 			return false;

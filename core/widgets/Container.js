@@ -41,6 +41,13 @@ define(['core/dcms-ajax', 'core/libs/async'], function(DA, async) {
 		return widget;
 	};
 	
+	proto.chidren = function(i) {
+		if(i < 0)
+			i += this._children.length;
+		
+		return this._children[i];
+	};
+	
 	proto.eachChild = function(fn) {
 		for(var i in this._children) {
 			fn(this._children[i], i);
