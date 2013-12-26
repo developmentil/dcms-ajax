@@ -46,8 +46,13 @@ define(['core/dcms-ajax', 'core/widgets/Control', 'core/widgets/Input'], functio
 		if(typeof val === 'string')
 			val = new Date(val);
 		
-		this._hidden.val(val.toISOString());
-		this._elm.val(this.formatDate(val));
+		if(!val || isNaN(val.getTime())) {
+			this._hidden.val('');
+			this._elm.val('');
+		} else {
+			this._hidden.val(val.toISOString());
+			this._elm.val(this.formatDate(val));
+		}
 		
 		return this;
 	};
