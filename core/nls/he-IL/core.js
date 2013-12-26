@@ -3,7 +3,8 @@ define({
 		locale: 'he-IL',
 		direction: 'rtl',
 		name: 'עברית',
-		date: 'dd/mm/yy'
+		date: 'dd/mm/yy',
+		time: 'HH:ii:ss'
 	},
 	Currency: {
 		symbol: '₪',

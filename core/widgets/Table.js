@@ -232,7 +232,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		
 		var self = this, th = $('<th />'),
 		columnName = column.name,
-		sortName = column.sortName || columnName,
+		sortName = column.sortBy || column.sortName || columnName,
 		sorted = this.isSorted(sortName);
 
 		if(column.alignLabel)
@@ -289,6 +289,14 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		}
 	};
 	
+	proto._defineColumnNumber = function(column, i) {
+		column = $.extend({
+			dir: 'ltr'
+		}, column);
+		
+		return column;
+	};
+	
 	proto._renderNumber = function(td, value, row, i) {
 		var num = this.isInt ? parseInt(value) : parseFloat(value);
 		if(this.fixed !== undefined)
@@ -300,7 +308,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	proto._defineColumnCurrency = function(column, i) {
 		column = $.extend({
 			currency: DA.registry.get('currency.symbol'),
-			fixed: 2
+			fixed: 2,
+			dir: 'ltr'
 		}, column);
 			
 		return column;
@@ -327,6 +336,31 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		}
 		
 		td.text($.datepicker.formatDate(format, new Date(value)));
+	};
+	
+	proto._renderTime = function(td, value, row, i) {
+		var format = this.format 
+				|| DA.registry.get('locale.time') 
+				|| 'HH:ii:ss',
+				
+		lendingZero = function(i) {
+			return (i < 10 ? '0' + i : i);
+		};
+		
+		value = new Date(value);
+		if(isNaN(value.getTime())) {
+			td.text(this.nullText || '-');
+			return;
+		}
+		
+		format = format.replace(/HH/g, lendingZero(value.getHours()));
+		format = format.replace(/hh/g, lendingZero(value.getHours() % 12 || 12));
+		format = format.replace(/ii/g, lendingZero(value.getMinutes()));
+		format = format.replace(/ss/g, lendingZero(value.getSeconds()));
+		format = format.replace(/a/g, value.getHours() < 12 ? 'am' : 'pm');
+		format = format.replace(/A/g, value.getHours() < 12 ? 'AM' : 'PM');
+		
+		td.text(format);
 	};
 	
 	proto._renderSortable = function(td, value, row, i) {

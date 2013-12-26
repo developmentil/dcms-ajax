@@ -4,7 +4,8 @@ define({
 			locale: 'en-US',
 			direction: 'ltr',
 			name: 'English',
-			date: 'mm/dd/yy'
+			date: 'mm/dd/yy',
+			time: 'HH:ii:ss'
 		},
 		Currency: {
 			symbol: '$',
