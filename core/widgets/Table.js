@@ -307,7 +307,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	};
 	
 	proto._renderCurrency = function(td, value, row, i) {
-		var num = parseInt(value).toFixed(this.fixed);
+		var num = parseFloat(value).toFixed(this.fixed);
 		
 		if(this.currency)
 			num += ' ' + this.currency;
