@@ -69,6 +69,9 @@ define([
 				transport: function(ajax) {
 					return DA.sharedApi(options.sharedApi, ajax);
 				},
+				data: function(term, page) {
+					return {q: term, p: page};
+				},
 				quietMillis: options.quietMillis,
 				results: function(data) {
 					var results = [];
