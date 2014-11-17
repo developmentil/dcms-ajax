@@ -5,8 +5,9 @@
 1. Update version on `dcms-ajax.js` license.
 2. Update version on `dcms-ajax.js` code.
 3. Build the code (see below)
-4. Commit changes.
-5. Tag the new version on git.
+4. Remove Others license nodes from `dcms-ajax.js` dist file
+5. Commit changes.
+6. Tag the new version on git.
 
 
 ## Build The Code
