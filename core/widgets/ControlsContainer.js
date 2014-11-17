@@ -49,6 +49,8 @@ define(['core/dcms-ajax',
 	};
 	
 	proto.insert = function(control) {
+		var self = this;
+		
 		if(!(control instanceof DA.Widget)) {
 			if(control.wrapper === true && this.options.wrapper) {
 				control.wrapper = this.options.wrapper;
@@ -59,6 +61,14 @@ define(['core/dcms-ajax',
 		if(control instanceof Control) {
 			if(control.options.name)
 				this._controls[control.options.name] = control;
+		} else if(control instanceof Container) {
+			control.eachChild(function(widget) {
+				if(widget instanceof Control)
+					return;
+				
+				if(widget.options.name)
+					self._controls[widget.options.name] = widget;
+			});
 		}
 		
 		if(this.options.wrapper && control.options.wrap !== false) {
