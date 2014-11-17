@@ -49,8 +49,6 @@ define(['core/dcms-ajax',
 	};
 	
 	proto.insert = function(control) {
-		var self = this;
-		
 		if(!(control instanceof DA.Widget)) {
 			if(control.wrapper === true && this.options.wrapper) {
 				control.wrapper = this.options.wrapper;
@@ -58,28 +56,19 @@ define(['core/dcms-ajax',
 			control = Control.create(control);
 		}
 		
-		if(control instanceof Control) {
-			if(control.options.name)
-				this._controls[control.options.name] = control;
-		} else if(control instanceof Container) {
-			control.eachChild(function(widget) {
-				if(widget instanceof Control)
-					return;
-				
-				if(widget.options.name)
-					self._controls[widget.options.name] = widget;
-			});
-		}
-		
-		if(this.options.wrapper && control.options.wrap !== false) {
-			if(control instanceof Control || control.options.wrappable) {
-				control = new this.options.wrapper({
-					controls: [control]
+		var widget = control;
+		if(this.options.wrapper && widget.options.wrap !== false) {
+			if(widget instanceof Control || widget.options.wrappable) {
+				widget = new this.options.wrapper({
+					controls: [widget]
 				});
 			}
 		}
 		
-		return Widget.super_.prototype.insert.call(this, control);
+		widget = Widget.super_.prototype.insert.call(this, widget);
+		this._insertControl(control);
+		
+		return widget;
 	};
 	
 	proto.control = function(name) {
@@ -101,6 +90,21 @@ define(['core/dcms-ajax',
 			elm = $('<div />');
 		
 		return Widget.super_.prototype._create.call(this, container, parent, elm);
+	};
+	
+	proto._insertControl = function(control) {
+		var self = this;
+		
+		if(control instanceof Control) {
+			if(control.options.name)
+				this._controls[control.options.name] = control;
+		} else if(control instanceof Container) {
+			control.eachChild(function(widget) {
+				self._insertControl(widget);
+			});
+		}
+		
+		return control;
 	};
 	
 	proto._load = function() {
