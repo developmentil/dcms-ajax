@@ -8,6 +8,16 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		this._markAsLoaded = null;
 		
 		this.options = $.extend({}, this.defaults, options || {});
+		
+		if(typeof this.options.preload === 'function')
+			this.when('preload', this.options.preload);
+		
+		if(typeof this.options.load === 'function')
+			this.when('load', this.options.load);
+		
+		if(typeof this.options.render === 'function')
+			this.on('render', this.options.render);
+		
 	};
 	util.inherits(Widget, SignalsEmitter);
 	var proto = Widget.prototype;
@@ -102,7 +112,10 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		attr: null,
 		prop: null,
 		bind: null,
-		data: null
+		data: null,
+		preload: null,
+		load: null,
+		render: null
 	};
 	
 	
@@ -157,18 +170,22 @@ define(['core/libs/util', 'core/SignalsEmitter'], function(util, SignalsEmitter)
 		}
 		
 		var self = this;
-		this._load(function(err) {
+		this.trigger('preload', function(err) {
 			if(err) return callback(err);
-			
-			self.trigger('load', function(err) {
+		
+			self._load(function(err) {
 				if(err) return callback(err);
-				
-				self._markAsLoaded = true;
 
-				if(!noRender)
-					self.render();
+				self.trigger('load', function(err) {
+					if(err) return callback(err);
 
-				callback();
+					self._markAsLoaded = true;
+
+					if(!noRender)
+						self.render();
+
+					callback();
+				});
 			});
 		});
 		

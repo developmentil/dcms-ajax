@@ -20,7 +20,7 @@ define(['core/libs/signals'], function(signals) {
 		}
 		
 		var signal = this.getSignal(event)
-				.add(listener, null, priority);
+				.add(listener, this, priority);
 		
 		this.emit('newListener', event, listener, priority);
 		
@@ -38,12 +38,12 @@ define(['core/libs/signals'], function(signals) {
 		}
 		
 		return this.getSignal(event)
-				.addOnce(listener, null, priority);
+				.addOnce(listener, this, priority);
 	};
 	
 	proto.removeListener = function(event, listener) {
 		this.getSignal(event)
-				.remove(listener, null);
+				.remove(listener, this);
 		
 		this.emit('removeListener', event, listener);
 		return this;
