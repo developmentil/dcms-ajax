@@ -324,6 +324,23 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		td.text(num);
 	};
 	
+	proto._renderFullDate = function(td, value, row, i) {
+		var format = this.format 
+				|| (DA.registry.get('locale.date') + ' ' + DA.registry.get('locale.time')) 
+				|| 'mm/dd/yy HH:ii:ss';
+		
+		value = new Date(value);
+		if(isNaN(value.getTime())) {
+			td.text(this.nullText || '-');
+			return;
+		}
+		
+		format = $.datepicker.formatDate(format, value);
+		format = formatTime(format, value);
+		
+		td.text(format);
+	};
+	
 	proto._renderDate = function(td, value, row, i) {
 		var format = this.format 
 				|| DA.registry.get('locale.date') 
@@ -335,17 +352,12 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 			return;
 		}
 		
-		td.text($.datepicker.formatDate(format, new Date(value)));
+		td.text($.datepicker.formatDate(format, value));
 	};
 	
 	proto._renderTime = function(td, value, row, i) {
 		var format = this.format 
-				|| DA.registry.get('locale.time') 
-				|| 'HH:ii:ss',
-				
-		lendingZero = function(i) {
-			return (i < 10 ? '0' + i : i);
-		};
+				|| DA.registry.get('locale.time');
 		
 		value = new Date(value);
 		if(isNaN(value.getTime())) {
@@ -353,14 +365,7 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 			return;
 		}
 		
-		format = format.replace(/HH/g, lendingZero(value.getHours()));
-		format = format.replace(/hh/g, lendingZero(value.getHours() % 12 || 12));
-		format = format.replace(/ii/g, lendingZero(value.getMinutes()));
-		format = format.replace(/ss/g, lendingZero(value.getSeconds()));
-		format = format.replace(/a/g, value.getHours() < 12 ? 'am' : 'pm');
-		format = format.replace(/A/g, value.getHours() < 12 ? 'AM' : 'PM');
-		
-		td.text(format);
+		td.text(formatTime(format, value));
 	};
 	
 	proto._renderSortable = function(td, value, row, i) {
@@ -397,4 +402,23 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	};
 	
 	return Widget;
+	
+	
+	function formatTime(format, date) {
+		var lendingZero = function(i) {
+			return (i < 10 ? '0' + i : i);
+		};
+		
+		if(!format)
+			format = 'HH:ii:ss';
+		
+		format = format.replace(/HH/g, lendingZero(date.getHours()));
+		format = format.replace(/hh/g, lendingZero(date.getHours() % 12 || 12));
+		format = format.replace(/ii/g, lendingZero(date.getMinutes()));
+		format = format.replace(/ss/g, lendingZero(date.getSeconds()));
+		format = format.replace(/a/g, date.getHours() < 12 ? 'am' : 'pm');
+		format = format.replace(/A/g, date.getHours() < 12 ? 'AM' : 'PM');
+		
+		return format;
+	}
 });
