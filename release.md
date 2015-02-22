@@ -1,4 +1,4 @@
-# How to build a new version?
+# How to release a new version?
 
 ## Code Checkups
 

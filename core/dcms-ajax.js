@@ -4,7 +4,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  * @Author Moshe Simantov
- * @Version 1.2.0
+ * @Version 1.2.1
  */
 
 define([
@@ -15,7 +15,7 @@ define([
 	var DA = 
 	window.DA = new SignalsEmitter();
 	
-	DA.version = '1.2.0';
+	DA.version = '1.2.1';
 	
 	
 	/*** INIT ***/
