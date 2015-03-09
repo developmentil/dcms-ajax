@@ -24,7 +24,11 @@ define(['core/dcms-ajax', 'core/nls/index',
 		limitsClass: 'browser-limits',
 		limitsOptions: [10, 20, 50, 100],
 		summary: true,
-		summaryClass: 'browser-summary'
+		summaryClass: 'browser-summary',
+		edit: null,
+		saveApi: null,
+		saveIdPostfix: null,
+		saveOnReload: true
 	});
 	var proto = Widget.prototype;
 	
@@ -95,6 +99,67 @@ define(['core/dcms-ajax', 'core/nls/index',
 		}
 	};
 	
+	proto.isEdit = function() {
+		return this.options.edit ? true : false;
+	};
+	
+	proto.edit = function(flag) {
+		this.options.edit = flag;
+		this.table.edit(!flag);
+		
+		return this;
+	};
+	
+	proto.toggleEdit = function(toggle) {
+		if(toggle === undefined)
+			toggle = !this.options.edit;
+		
+		this.table.edit(this.options.edit);
+		
+		if(this.options.edit && !toggle)
+			this.save();
+		
+		this.options.edit = toggle;
+		return this;
+	};
+	
+	proto.saveReload = function(callback) {
+		if(!this.options.edit || !this.options.saveOnReload || !this.options.saveApi)
+			return this.reload(false, callback);
+		
+		var self = this;
+		this.save(function(err) {
+			if(err) return callback.apply(self, arguments);
+			
+			self.reload(false, callback);
+		});
+	};
+	
+	proto.save = function(callback) {
+		if(!this.options.saveApi) {
+			callback(new Error('`saveApi` not defined'));
+			return this;
+		}
+		
+		var options = $.extend({
+			type: 'post'
+		}, (typeof this.options.saveApi === 'string' 
+				? {url: this.options.saveApi}
+				: this.options.saveApi));
+		
+		if(!options.data)
+			options.data = {};
+		
+		options.data.rows = this.table.data(true, this.options.saveIdPostfix);
+		if($.isEmptyObject(options.data.rows)) {
+			setTimeout(callback, 1);
+			return this;
+		}
+			
+		DA.api(options, callback);
+		return this;
+	};
+	
 	proto._create = function(container, parent, elm) {
 		if(!elm)
 			elm = $('<div class="browser" />');
@@ -110,17 +175,17 @@ define(['core/dcms-ajax', 'core/nls/index',
 				self.options.sort = {};
 			
 			self.options.sort[columnName] = value;
-			self.reload();
+			self.saveReload();
 		});
 		this.table.when('unsort', function(columnName) {
 			delete self.options.sort[columnName];
-			self.reload();
+			self.saveReload();
 		});
 		this.table.when('sortupdate', function(endPos, startPos, ui, e) {
 			self.rePosition(startPos, endPos, function(err) {
 				if(err) {
 					DA.error('Error on table sorting', err);
-					self.reload();
+					self.saveReload();
 				}
 			});
 		});
@@ -138,7 +203,7 @@ define(['core/dcms-ajax', 'core/nls/index',
 		
 			this.limits.on('change', function() {
 				self.options.limit = self.limits.val();
-				self.reload();
+				self.saveReload();
 			});
 		} else {
 			this.limits = null;
@@ -149,7 +214,7 @@ define(['core/dcms-ajax', 'core/nls/index',
 		
 		this.pagination.on('change', function(page) {
 			self.options.offset = (page - 1) * self.options.limit;
-			self.reload();
+			self.saveReload();
 		});
 		
 		return elm;
@@ -200,7 +265,8 @@ define(['core/dcms-ajax', 'core/nls/index',
 			sort: options.sort,
 			class: options.tableClass,
 			columns: columms,
-			rows: options.entities
+			rows: options.entities,
+			edit: options.edit
 		});
 	};
 	

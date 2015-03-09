@@ -53,7 +53,7 @@ define(['core/dcms-ajax'], function(DA) {
 	
 	proto.entityVal = function() {
 		var name = this.options.name,
-		entity = this._parent && this._parent.options.entity;
+		entity = this._parent ? this._parent.options.entity : undefined;
 
 		if(!name)
 			return entity;

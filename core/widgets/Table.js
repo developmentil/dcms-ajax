@@ -1,4 +1,4 @@
-define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
+define(['core/dcms-ajax', 'core/nls/index', 'core/widgets/Control'], function(DA, i18n, Control) {
 	i18n = i18n.widgets.Table;
 	
 	function Widget() {
@@ -13,7 +13,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		columnsAlign: 'center',
 		idField: '_id',
 		rows: [],
-		noResult: true
+		noResult: true,
+		edit: null
 	});
 	var proto = Widget.prototype;
 	
@@ -62,6 +63,36 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 	proto.unsort = function(columnName) {
 		this.emit('unsort', columnName);
 		return this;
+	};
+	
+	proto.isEdit = function() {
+		return this.options.edit ? true : false;
+	};
+	
+	proto.edit = function(stop) {
+		this.render({
+			edit: !stop
+		});
+			
+		return this;
+	};
+	
+	proto.data = function(changesOnly, keyPostfix) {
+		if(!keyPostfix)
+			keyPostfix = '';
+		
+		var data = {}, row, id;
+		for(var i in this.options.rows) {
+			if(!this.options.rows[i]._changes && changesOnly) continue;
+			
+			row = this.options.rows[i];
+			id = row[this.options.idField] || i;
+			
+			data[id + keyPostfix] = changesOnly ? row._changes : row;
+			delete row._changes;
+		}
+		
+		return data;
 	};
 	
 	proto._create = function(container, parent, elm) {
@@ -132,12 +163,21 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		if(column.type) {
 			var type = column.type.charAt(0).toUpperCase() + column.type.slice(1),
 			defineMethod = '_defineColumn' + type,
-			renderMethod = '_render' + type;
+			filterMethod = '_filter' + type,
+			renderMethod = '_render' + type,
+			editRenderMethod = '_editRender' + type;
 			
 			if(typeof this[defineMethod] === 'function')
 				column = this[defineMethod](column, i);
+			
+			if(!column.filter && typeof this[filterMethod] === 'function')
+				column.filter = this[filterMethod];
+			
 			if(!column.render && typeof this[renderMethod] === 'function')
 				column.render = this[renderMethod];
+			
+			if(!column.editor && typeof this[editRenderMethod] === 'function')
+				column.editor = this[editRenderMethod];
 		}
 		
 		return column;
@@ -176,7 +216,8 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 			if(options.columns) {
 				// render columns only
 				self.eachColumn(options.columns, function(column) {
-					var value = self.getValue(row, column.displayName || column.name),
+					var key = column.displayName || column.name,
+					value = self.getValue(row, key),
 					td = Widget.createElm($('<td />').appendTo(tr), column);
 
 					if(column.filter)
@@ -193,13 +234,30 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 
 					Widget.renderElm(td, column);
 
-					if(typeof column.render === 'function')
-						column.render(td, value, row, i);
-					else {
-						if(column.nullText !== null)
-							td.text(value || column.nullText || '-');
-						else
-							td.text(value);
+					if(!options.edit || !column.control) {
+						if(typeof column.render === 'function')
+							column.render(td, value, row, i);
+						else {
+							self._defaultRender.call(column, td, value, row, i);
+						}
+					} else {
+						var opts = column.control;
+						if(typeof opts === 'function') {
+							opts = opts(value, row, i);
+						} else {
+							if(typeof opts === 'string')
+								opts = {type: opts};
+							else if(typeof opts !== 'object')
+								opts = {};
+								
+							opts.value = value;
+						}
+						
+						if(typeof column.editor === 'function')
+							column.editor(td, opts, row, key);
+						else {
+							self._defaultEditor.call(column, td, opts, row, key);
+						}
 					}
 				});
 			} else {
@@ -266,19 +324,49 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		return th;
 	};
 	
+	proto._defaultRender = function(td, value, row, i) {
+		if(this.nullText !== null)
+			td.text(value || this.nullText || '-');
+		else
+			td.text(value);
+	};
+	
+	proto._defaultEditor = function(td, opts, row, key) {
+		var control = Control.create(opts);
+		
+		control.on('change', function() {
+			if(!row._changes)
+				row._changes = {};
+						
+			row._changes[key] 
+					= row[key] 
+					= control.sendVal();
+		});
+		
+		control.create(td);
+		control.load();
+	};
+	
 	proto._defineColumnBoolean = function(column, i) {
 		column = $.extend({
 			trueLabel: i18n.Yes,
 			falseLabel: i18n.No,
 			trueClass: 'text-success',
-			falseClass: 'text-error'
+			falseClass: 'text-error',
+			invert: false
 		}, column);
 			
 		return column;
 	};
 	
+	proto._filterBoolean = function(value, row, i) {
+		return (value && value !== '0' && value !== 'false');
+	};
+	
 	proto._renderBoolean = function(td, value, row, i) {
-		if(value && value !== '0' && value !== 'false') {
+		var flag = this.invert ? !value : value;
+		
+		if(flag) {
 			td.text(this.trueLabel);
 			if(this.trueClass)
 				td.addClass(this.trueClass);
@@ -297,12 +385,23 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		return column;
 	};
 	
-	proto._renderNumber = function(td, value, row, i) {
-		var num = this.isInt ? parseInt(value) : parseFloat(value);
-		if(this.fixed !== undefined)
-			num = num.toFixed(this.fixed);
+	proto._filterNumber = function(value, row, i) {
+		if(!value)
+			return null;
 		
-		td.text(num);
+		return this.isInt ? parseInt(value, 10) : parseFloat(value, 10);
+	};
+	
+	proto._renderNumber = function(td, value, row, i) {
+		if(typeof value !== 'number') {
+			td.text(this.nullText || '-');
+			return;
+		}
+		
+		if(typeof this.fixed === 'number')
+			value = value.toFixed(this.fixed);
+		
+		td.text(value);
 	};
 	
 	proto._defineColumnCurrency = function(column, i) {
@@ -315,8 +414,20 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		return column;
 	};
 	
+	proto._filterCurrency = function(value, row, i) {
+		if(!value)
+			return null;
+		
+		return parseFloat(value, 10);
+	};
+	
 	proto._renderCurrency = function(td, value, row, i) {
-		var num = parseFloat(value).toFixed(this.fixed);
+		if(typeof value !== 'number') {
+			td.text(this.nullText || '-');
+			return;
+		}
+		
+		var num = value.toFixed(this.fixed);
 		
 		if(this.currency)
 			num += ' ' + this.currency;
@@ -324,12 +435,15 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		td.text(num);
 	};
 	
+	proto._filterFullDate = function(value, row, i) {
+		return new Date(value);
+	};
+	
 	proto._renderFullDate = function(td, value, row, i) {
 		var format = this.format 
 				|| (DA.registry.get('locale.date') + ' ' + DA.registry.get('locale.time')) 
 				|| 'mm/dd/yy HH:ii:ss';
 		
-		value = new Date(value);
 		if(isNaN(value.getTime())) {
 			td.text(this.nullText || '-');
 			return;
@@ -341,12 +455,15 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		td.text(format);
 	};
 	
+	proto._filterDate = function(value, row, i) {
+		return new Date(value);
+	};
+	
 	proto._renderDate = function(td, value, row, i) {
 		var format = this.format 
 				|| DA.registry.get('locale.date') 
 				|| 'mm/dd/yy';
 		
-		value = new Date(value);
 		if(isNaN(value.getTime())) {
 			td.text(this.nullText || '-');
 			return;
@@ -355,11 +472,14 @@ define(['core/dcms-ajax', 'core/nls/index'], function(DA, i18n) {
 		td.text($.datepicker.formatDate(format, value));
 	};
 	
+	proto._filterTime = function(value, row, i) {
+		return new Date(value);
+	};
+	
 	proto._renderTime = function(td, value, row, i) {
 		var format = this.format 
 				|| DA.registry.get('locale.time');
 		
-		value = new Date(value);
 		if(isNaN(value.getTime())) {
 			td.text(this.nullText || '-');
 			return;

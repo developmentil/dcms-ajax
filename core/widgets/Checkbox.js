@@ -21,7 +21,7 @@ define([
 	};
 	
 	proto.sendVal = function() {
-		if(this.input && this.input.prop('checked'))
+		if(this.input && this.input._elm.prop('checked'))
 			return this.options.checkedValue;
 		
 		if(this.hidden)
@@ -47,6 +47,10 @@ define([
 			self.hidden.render({
 				disabled: (self.options.required === false || $(this).prop('checked'))
 			});
+		});
+		
+		elm.bind('change.control', function(e) {	
+			self._change(e);
 		});
 		
 		elm.append(' ');
