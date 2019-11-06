@@ -5,6 +5,7 @@
  * Proprietary and confidential
  * @Author Moshe Simantov
  * @Version 1.3.0
+ * @source https://github.com/developmentil/dcms-ajax.git
  */
 
 define([
